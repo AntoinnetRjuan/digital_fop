@@ -8,9 +8,9 @@ import Register from './components/Register';
 import Menu from './components/Menu';
 import 'react-toastify/dist/ReactToastify.css';
 import ResetPassword from './components/ResetPassword';
-import Documents from './components/AfficherDocs';
 
 const App = () => {
+   
     return (
         <>
           
@@ -24,7 +24,6 @@ const App = () => {
                     <Route path='/resetpassword' element={<ResetPassword/>}/>
                     <Route path='/dashboard' element={<Dashboard/>}/>
                 </Routes>
-            <Documents/>
            </Router>       
         </>
     );

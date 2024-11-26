@@ -1,176 +1,98 @@
-// import React, { useState , useEffect} from 'react';
-// import { Link, useNavigate } from 'react-router-dom';
-// import {useDispatch, useSelector} from 'react-redux'
-// import { login, reset } from '../features/auth/authSlice'
-// import { toast } from 'react-toastify';
-
-// function Login() {
-//     const [formData, setFormData] = useState({
-//         "email":"",
-//         "password":"",
-//     })
-
-//     const { email, password } = formData
-
-//     const dispatch = useDispatch()
-//     const navigate = useNavigate()
-//     const {user, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth)
-
-//     const handleChange = (e) => {
-//         setFormData((prev) => ({
-//             ...prev,
-//             [e.target.name]:e.target.value
-//         })
-//         )
-//     }
-
-//     const handleSubmit = (e) => {
-//         e.preventDefault()
-//             const userData = {
-//                 email, 
-//                 password, 
-//             }
-//             dispatch(login(userData))
-//     }
-//     useEffect(()=>{
-//         if (isError) {
-//             toast.error(message)
-//         }
-
-//         if (isSuccess || user) {
-//             navigate("/dashboard")
-//             toast.success("Bienvenue dans le dashboard admin")
-//         }
-//         dispatch(reset())
-//     }, [isError, isSuccess, user, message, navigate])
-//     return (
-//         <div>
-//             <h1>Connexion</h1>
-//             <form className="flex flex-col space-y-4">
-//                 <input
-//                     type="text"
-//                     placeholder="Email"
-//                     name='email'
-//                     value={email}
-//                     onChange={handleChange}
-//                 />
-//                 <input
-//                     type="password"
-//                     placeholder="Mot de passe"
-//                     value={password}
-//                     onChange={handleChange}
-//                     name='password'
-//                 />
-//                 <button type="submit" onClick={handleSubmit}>Se connecter</button>
-//             </form>
-//             <Link to={"/resetpassword"}>oublier mot de passe?</Link>
-//         </div>
-//     );
-// }
-
-// export default Login;
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { login, reset } from "../features/auth/authSlice";
-import { toast } from "react-toastify";
-import axios from "axios";
+import React, { useState , useEffect} from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux'
+import { login, reset } from '../features/auth/authSlice'
+import { toast } from 'react-toastify';
 
 function Login() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+    const [formData, setFormData] = useState({
+        "email":"",
+        "password":"",
+    })
 
-  const { email, password } = formData;
+    const { email, password } = formData
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  );
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const {user, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth)
 
-  // Mise à jour des champs
-  const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  // Gestion de la connexion
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      // Étape 1 : Authentification via Redux (ou directement via Axios)
-      const userData = { email, password };
-      dispatch(login(userData)); // Votre action Redux
-
-      // Étape 2 : Vérifiez si l'utilisateur est superutilisateur
-      const loginResponse = await axios.post("http://localhost:8000/api/token/", {
-        username: email,
-        password,
-      });
-
-      localStorage.setItem("accessToken", loginResponse.data.access);
-      localStorage.setItem("refreshToken", loginResponse.data.refresh);
-
-      const userResponse = await axios.get("http://localhost:8000/api/check-superuser/", {
-        headers: {
-          Authorization: `Bearer ${loginResponse.data.access}`,
-        },
-      });
-
-      if (userResponse.data.is_superuser) {
-        window.location.href = "http://localhost:8000/admin/";
-      } else {
-        navigate("/dashboard");
-        toast.success("Bienvenue dans le dashboard admin");
-      }
-    } catch (error) {
-      console.error("Erreur de connexion :", error);
-      toast.error("Identifiants incorrects ou problème de connexion.");
-    }
-  };
-
-  // Gestion des effets après tentative de connexion via Redux
-  useEffect(() => {
-    if (isError) {
-      toast.error(message);
+    const handleChange = (e) => {
+        setFormData((prev) => ({
+            ...prev,
+            [e.target.name]:e.target.value
+        })
+        )
     }
 
-    if (isSuccess || user) {
-      navigate("/dashboard");
-      toast.success("Bienvenue dans le dashboard admin");
+    const handleSubmit = (e) => {
+        e.preventDefault()
+            const userData = {
+                email, 
+                password, 
+            }
+            dispatch(login(userData))
     }
+    useEffect(()=>{
+        if (isError) {
+            toast.error(message)
+        }
 
-    dispatch(reset());
-  }, [isError, isSuccess, user, message, navigate, dispatch]);
-
-  return (
-    <div>
-      <h1>Connexion</h1>
-      <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Email"
-          name="email"
-          value={email}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          placeholder="Mot de passe"
-          name="password"
-          value={password}
-          onChange={handleChange}
-        />
-        <button type="submit">Se connecter</button>
-      </form>
-      <Link to="/resetpassword">oublier mot de passe?</Link>
-    </div>
-  );
+        if (isSuccess || user) {
+            navigate("/dashboard")
+            toast.success("Bienvenue dans le dashboard admin")
+        }
+        dispatch(reset())
+    }, [isError, isSuccess, user, message, navigate])
+    return (
+        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+            <div className="w-full max-w-sm bg-white rounded-lg shadow-lg p-6">
+                <h1 className="text-2xl font-semibold text-center text-gray-800 mb-4">Login</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-4">
+                        <input
+                            type="email"
+                            name="email"
+                            value={email}
+                            onChange={handleChange}
+                            placeholder="Email"
+                            className="w-full px-4 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <input
+                            type="password"
+                            name="password"
+                            value={password}
+                            onChange={handleChange}
+                            placeholder="Password"
+                            className="w-full px-4 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        />
+                    </div>
+                    <div className="flex items-center justify-between mb-4">
+                        <label className="flex items-center text-sm">
+                            <input type="checkbox" className="mr-2 text-indigo-500 focus:ring-indigo-400" />
+                            Remember me
+                        </label>
+                        <a href="/resetpassword" className="text-sm text-indigo-500 hover:underline">
+                            Forgot password?
+                        </a>
+                    </div>
+                    <button
+                        type="submit"
+                        className="w-full px-4 py-2 text-sm font-medium text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                        Login
+                    </button>
+                </form>
+                <p className="mt-4 text-sm text-center text-gray-600">
+                    Don't have an account?{' '}
+                    <a href="/register" className="text-indigo-500 hover:underline">
+                        Register
+                    </a>
+                </p>
+            </div>
+        </div>
+    );
 }
 
 export default Login;
