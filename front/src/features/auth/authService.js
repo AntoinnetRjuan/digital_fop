@@ -8,8 +8,6 @@ const ACTIVATE_URL = `${BACKEND_DOMAIN}/api/v1/auth/users/activation/`
 const RESET_PASSWORD_URL = `${BACKEND_DOMAIN}/api/v1/auth/users/reset_password/`
 const RESET_PASSWORD_CONFIRM_URL = `${BACKEND_DOMAIN}/api/v1/auth/users/reset_password_cofirm/`
 
-
-
 //Register user
 
 const register = async (userData) => {
@@ -24,18 +22,22 @@ const register = async (userData) => {
 
 //Login user
 
+const axiosInstance = axios.create({
+    baseURL: BACKEND_DOMAIN,
+    withCredentials: true, // Inclure les cookies
+    headers: {
+      "Content-Type": "application/json",
+    },
+});
+
 const login = async (userData) => {
-    const config = {
-        headers:{
-            "Content-type": "application/json"
-        }
-    }
-    const response = await axios.post(LOGIN_URL,userData,config)
+    const response = await axiosInstance.post("/api/v1/auth/jwt/create/", userData);
+    
     if (response.data) {
-        localStorage.setItem("user", JSON.stringify(response.data))
+      localStorage.setItem("user", JSON.stringify(response.data));
     }
-    return response.data
-}
+    return response.data;
+};
 
 
 //Logout

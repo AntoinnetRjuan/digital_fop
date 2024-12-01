@@ -8,6 +8,11 @@ import Register from './components/Register';
 import Menu from './components/Menu';
 import 'react-toastify/dist/ReactToastify.css';
 import ResetPassword from './components/ResetPassword';
+import axios from 'axios';
+import AjouterDocument from './components/AddDocs';
+import EditDocument from './components/EditDoc';
+
+axios.defaults.withCredentials = true;
 
 const App = () => {
    
@@ -23,6 +28,8 @@ const App = () => {
                     <Route path='/login' element={<Login/>}/>
                     <Route path='/resetpassword' element={<ResetPassword/>}/>
                     <Route path='/dashboard' element={<Dashboard/>}/>
+                    <Route path='/AjoutDoc' element={<AjouterDocument/>}/>
+                    <Route path="/edit/:id" element={<EditDocument />} />
                 </Routes>
            </Router>       
         </>

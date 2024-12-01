@@ -12,8 +12,9 @@ const SearchBar = ({ onSearch }) => {
             searchBy,
             searchValue: searchBy === "date" ? { startDate, endDate } : searchValue,
         };
-        onSearch(critere); // Envoyer les critères de recherche au parent
+        onSearch(critere);
     };
+
 
     return (
         <div className="flex flex-col items-center w-full p-4 bg-white shadow-lg rounded-lg max-w-4xl mx-auto">
@@ -29,6 +30,7 @@ const SearchBar = ({ onSearch }) => {
                     <option value="type">Type</option>
                     <option value="date">Date (Début et Fin)</option>
                     <option value="reference">Référence</option>
+                    <option value="journal">Journal Officiel</option>
                 </select>
 
                 {/* Champ de saisie pour le texte ou les dates */}

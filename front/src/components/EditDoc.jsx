@@ -1,7 +1,11 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useParams,useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const AjouterDocument = () => {
+const EditDocument = () => {
+    const { id: documentId } = useParams();
+    const navigate = useNavigate();
   const [formData, setFormData] = useState({
     type: "",
     objet: "",
@@ -14,48 +18,85 @@ const AjouterDocument = () => {
   });
 
   const [domaines, setDomaines] = useState([]);
+
+  // Récupérer les domaines depuis l'API
   useEffect(() => {
-    // Récupérer les domaines depuis l'API
-    axios.get("http://localhost:8000/api/domaines/")
-      .then(response => setDomaines(response.data))
-      .catch(error => console.error("Erreur lors de la récupération des domaines :", error));
+    axios
+      .get("http://localhost:8000/api/domaines/")
+      .then((response) => setDomaines(response.data))
+      .catch((error) =>
+        console.error("Erreur lors de la récupération des domaines :", error)
+      );
   }, []);
 
+  // Récupérer les données actuelles du document
+  useEffect(() => {
+    if (documentId) {
+        axios
+          .get(`http://localhost:8000/api/documents/${documentId}/`)
+          .then((response) => setFormData(response.data))
+          .catch((error) =>
+            console.error("Erreur lors de la récupération du document :", error)
+          );
+      }
+  }, [documentId]);
+
+  // Gérer les changements dans les champs du formulaire
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
+  // Gérer les changements dans le champ de fichier
   const handleFileChange = (e) => {
-    setFormData({ ...formData, fichier: e.target.files[0] });
+    setFormData({
+      ...formData,
+      fichier: e.target.files[0], // Ajoute le fichier sélectionné
+    });
   };
 
+  // Soumettre le formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = new FormData();
-  
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.access;
+    if (!token) {
+      toast.error("Token non trouvé. Veuillez vous connecter.");
+      return;
+    }
+
+    // Créer une instance FormData pour inclure le fichier
+    const formDataToSend = new FormData();
     Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key]);
+      formDataToSend.append(key, formData[key]);
     });
-    
-    await axios
-      .post("http://localhost:8000/api/documents/", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        alert("Document ajouté avec succès !");
-      })
-      .catch((error) => {
-        console.error("Erreur lors de l'ajout :", error.response || error);
-      });
+
+    try {
+      const response = await axios.patch(
+        `http://localhost:8000/api/documents/${documentId}/`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data", //Pour l'upload de fichiers
+          },
+        }
+      );
+      toast.success("Document modifié avec succès :", response.data);
+      navigate("/dashboard");
+      //onClose(); // Fermer le formulaire après la modification
+    } catch (error) {
+      console.error(error.response || error);
+      toast.error(`Erreur lors de la modification : ${error.response?.data?.message || error.message}`);
+    }
   };
-  
 
   return (
     <div className="w-full max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6 mt-16">
-      <h2 className="text-lg font-bold mb-4 text-center">Ajouter un Document</h2>
+      <h2 className="text-lg font-bold mb-4 text-center">Modification du Document</h2>
       <form
         className="flex flex-col gap-4"
         onSubmit={handleSubmit}
@@ -76,15 +117,17 @@ const AjouterDocument = () => {
             <option value="">Choisissez un type</option>
             <option value="constitution">Constitution</option>
             <option value="traité internationaux">Traité Internationaux</option>
-            {/* Ajoutez plus d'options */}
+            <option value="convention">Convention</option>
+            <option value="lois organiques">Lois Organiques</option>
+            <option value="lois ordinaires">Lois Ordinaires</option>
+            <option value="ordonnances">Ordonnances</option>
+            <option value="decrets">Décrets</option>
           </select>
         </div>
 
         {/* Objet */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">
-            Objet
-          </label>
+          <label className="block text-gray-700 font-medium mb-2">Objet</label>
           <input
             type="text"
             name="objet"
@@ -98,9 +141,7 @@ const AjouterDocument = () => {
 
         {/* Référence */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">
-            Référence
-          </label>
+          <label className="block text-gray-700 font-medium mb-2">Référence</label>
           <input
             type="text"
             name="reference"
@@ -114,9 +155,7 @@ const AjouterDocument = () => {
 
         {/* Date */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">
-            Date
-          </label>
+          <label className="block text-gray-700 font-medium mb-2">Date</label>
           <input
             type="date"
             name="date"
@@ -129,9 +168,7 @@ const AjouterDocument = () => {
 
         {/* Conseil */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">
-            Conseil
-          </label>
+          <label className="block text-gray-700 font-medium mb-2">Conseil</label>
           <select
             name="conseil"
             value={formData.conseil}
@@ -146,16 +183,14 @@ const AjouterDocument = () => {
 
         {/* Domaine */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">
-            Domaine
-          </label>
+          <label className="block text-gray-700 font-medium mb-2">Domaine</label>
           <select
             name="domaine"
             value={formData.domaine}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           >
-            <option value="aucun">Aucun</option>
+            <option value="">Choisissez un domaine</option>
             {domaines.map((domaine) => (
               <option key={domaine.id} value={domaine.id}>
                 {domaine.nom}
@@ -166,9 +201,7 @@ const AjouterDocument = () => {
 
         {/* Accès */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">
-            Accès
-          </label>
+          <label className="block text-gray-700 font-medium mb-2">Accès</label>
           <select
             name="acces"
             value={formData.acces}
@@ -183,9 +216,7 @@ const AjouterDocument = () => {
 
         {/* Fichier */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">
-            Fichier
-          </label>
+          <label className="block text-gray-700 font-medium mb-2">Fichier</label> 
           <input
             type="file"
             name="fichier"
@@ -195,16 +226,16 @@ const AjouterDocument = () => {
           />
         </div>
 
-        {/* Bouton Ajouter */}
+        {/* Bouton Modifier */}
         <button
           type="submit"
           className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
         >
-          Ajouter
+          Modifier
         </button>
       </form>
     </div>
   );
 };
 
-export default AjouterDocument;
+export default EditDocument;

@@ -32,17 +32,23 @@ function Login() {
             }
             dispatch(login(userData))
     }
-    useEffect(()=>{
+    useEffect(() => {
         if (isError) {
-            toast.error(message)
+            toast.error(message);
         }
-
+    
         if (isSuccess || user) {
-            navigate("/dashboard")
-            toast.success("Bienvenue dans le dashboard admin")
+            if (user.redirect_url === "/admin") {
+                window.location.href = "http://localhost:8000/admin";
+            } else {
+                navigate("/dashboard");
+                toast.success("Bienvenue sur le tableau de bord !");
+            }
         }
-        dispatch(reset())
-    }, [isError, isSuccess, user, message, navigate])
+    
+        dispatch(reset());
+    }, [isError, isSuccess, user, message, navigate]);
+    
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="w-full max-w-sm bg-white rounded-lg shadow-lg p-6">
@@ -71,21 +77,21 @@ function Login() {
                     <div className="flex items-center justify-between mb-4">
                         <label className="flex items-center text-sm">
                             <input type="checkbox" className="mr-2 text-indigo-500 focus:ring-indigo-400" />
-                            Remember me
+                            Se souvenir de moi
                         </label>
                         <a href="/resetpassword" className="text-sm text-indigo-500 hover:underline">
-                            Forgot password?
+                            Mot de passe oublier?
                         </a>
                     </div>
                     <button
                         type="submit"
                         className="w-full px-4 py-2 text-sm font-medium text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     >
-                        Login
+                        Se connecter
                     </button>
                 </form>
                 <p className="mt-4 text-sm text-center text-gray-600">
-                    Don't have an account?{' '}
+                    Vous voulez creer un compte?{' '}
                     <a href="/register" className="text-indigo-500 hover:underline">
                         Register
                     </a>

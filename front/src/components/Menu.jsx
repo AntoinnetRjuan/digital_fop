@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
 import { logout, reset } from '../features/auth/authSlice'
 import { toast } from 'react-toastify'
@@ -22,50 +22,50 @@ const Menu = () => {
     {user ? (
       <>
         <li>
-          <NavLink
+          <Link
             to={"/"}
             onClick={handleLogout}
             className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
           >
             Déconnecter
-          </NavLink>
+          </Link>
         </li>
       </>
     ) : (
       <>
         {/* Ajout des nouvelles options */}
         <li>
-          <NavLink
+          <Link
             to={"/"}
             className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
           >
             Accueil
-          </NavLink>
+          </Link>
         </li>
         <li>
-          <NavLink
+          <Link
             to={"/theme"}
             className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
           >
             Accès par thème
-          </NavLink>
+          </Link>
         </li>
         <li>
-          <NavLink
+          <Link
             to={"/statuts"}
             className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
           >
-            Statuts particuliers
-          </NavLink>
+            Statuts
+          </Link>
         </li>
         
         <li>
-          <NavLink
+          <Link
             to={"/login"}
             className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
           >
             Se connecter
-          </NavLink>
+          </Link>
         </li>
       </>
     )}

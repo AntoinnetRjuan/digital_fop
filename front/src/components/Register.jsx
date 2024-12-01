@@ -50,8 +50,8 @@ const Register = () => {
         }
 
         if (isSuccess || user) {
-            navigate("/")
-            toast.success("an activation mail has been sent to your email,please check your email")
+            window.location.href = "/login";
+            toast.success("l'inscription effectué avec succes,maintenant attendez le confirmation du superadmin")
         }
         dispatch(reset())
     }, [isError, isSuccess, user, message, navigate])
