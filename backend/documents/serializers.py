@@ -1,0 +1,25 @@
+from .models import Document,Domaine
+from rest_framework import serializers
+from django.core.files.storage import default_storage
+from django.conf import settings
+
+class DomaineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Domaine
+        fields = '__all__'
+
+class DocumentSerializer(serializers.ModelSerializer):
+    domaine = serializers.PrimaryKeyRelatedField(queryset=Domaine.objects.all())
+    content = serializers.SerializerMethodField()
+    pdf_url = serializers.SerializerMethodField()
+    class Meta:
+        model = Document
+        fields = '__all__'
+    def get_content(self, obj):
+        return obj.extract_content()
+    def get_pdf_url(self, obj):
+        if obj.fichier.name.endswith('.docx'):
+            pdf_path = obj.fichier.name.replace('.docx', '.pdf')
+            if default_storage.exists(pdf_path):
+                return f"{settings.MEDIA_URL}{pdf_path}"
+        return None
