@@ -1,3 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Play:wght@400;700&family=Poppins:wght@200;400&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+h1{
+    @apply text-2xl font-bold;
+ }
+
+ p{
+    @apply mt-1.5 text-sm;
+ }
+
+.clip-hidden{
+    clip-path: ellipse(0 0 at 0% 0%);
+    opacity: 0;
+    
+}
+
+.clip-visible{
+    clip-path: ellipse(1900px 1900px at 0% 0%);
+
+}
+#back,
+#forward{
+    @apply absolute z-[5]  -translate-y-2/4 text-gray-100 hover:scale-125 cursor-pointer duration-[0.4s] ease-out px-0 py-2.5
+    border-0 top-2/4;
+}
+.content{
+    @apply text-[aliceblue] absolute w-[400px] z-[5] text-center  backdrop-blur-[2px] duration-[1s] px-0 py-[15px]  bottom-0 top-24;
+    /* background: #ffffff22; */
+}
+/* .content{
+    @apply text-[aliceblue] absolute w-[400px] z-[5] text-center backdrop-blur-[2px] duration-[1s] px-0 py-[15px] left-0 bottom-0 top-20;
+    background: #ffffff22;
+} */

@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router,Routes,Route } from "react-router-dom";
+import React, { useContext, useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from 'react-toastify'
 import Login from './components/Login';
 import Dashboard from './components/Dashboard'
@@ -11,27 +11,46 @@ import ResetPassword from './components/ResetPassword';
 import axios from 'axios';
 import AjouterDocument from './components/AddDocs';
 import EditDocument from './components/EditDoc';
-
+import { userContext } from './components/Context';
+import CorpsForm from './components/AjoutCorps';
+import ProtectedRoute from './components/ProtectedRoute';
+import ResetPasswordConfirmPage from './components/ResetPasswordConfirmPage';
+import Header from './components/Header';
+import Footer from './components/Footer';
 axios.defaults.withCredentials = true;
 
 const App = () => {
-   
+    const { user, setUser, setSelectedDomaine } = useContext(userContext)
+    const [token] = useState(JSON.parse(localStorage.getItem('user')))
+    useEffect(() => {
+        if (token) {
+            setUser(token)
+        }
+    }, [])
+
     return (
         <>
-          
-           <ToastContainer/>
-           <Router>
-           <Menu/>
-                <Routes>  
-                    <Route path="/" element={<Accueil/>} />
-                    <Route path='/register' element={<Register/>}/>
-                    <Route path='/login' element={<Login/>}/>
-                    <Route path='/resetpassword' element={<ResetPassword/>}/>
-                    <Route path='/dashboard' element={<Dashboard/>}/>
-                    <Route path='/AjoutDoc' element={<AjouterDocument/>}/>
-                    <Route path="/edit/:id" element={<EditDocument />} />
-                </Routes>
-           </Router>       
+            <div className='bg-gray-900'>
+                <Header/>
+                <ToastContainer />
+                <Router>
+                    <Menu user={user} onSelectDomaine={setSelectedDomaine} />
+                    <Routes>
+                        <Route path="/" element={<Accueil />} />
+                        <Route path='/register' element={<Register />} />
+                        <Route path='/login' element={<Login />} />
+                        <Route path='/resetpassword' element={<ResetPassword />} />
+                        <Route path='/password/reset/confirm/:uid/:token' element={<ResetPasswordConfirmPage />} />
+                        <Route path='/dashboard' element={<ProtectedRoute isAuthenticated={user.refresh}><Dashboard /></ProtectedRoute>} />
+                        <Route path='/AjoutDoc' element={<ProtectedRoute isAuthenticated={user.refresh}><AjouterDocument /></ProtectedRoute>} />
+                        <Route path="/edit/:id" element={<ProtectedRoute isAuthenticated={user.refresh}><EditDocument /></ProtectedRoute>} />
+                        <Route path='/AjoutCorps' element={<ProtectedRoute isAuthenticated={user.refresh}><CorpsForm /></ProtectedRoute>} />
+                        <Route path='*' element={<Accueil />} />
+                    </Routes>
+                </Router>
+                <Footer/>
+            </div>
+
         </>
     );
 };

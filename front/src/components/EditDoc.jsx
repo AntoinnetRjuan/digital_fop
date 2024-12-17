@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams,useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { getCsrfToken } from "./Utils";
+import axiosInstance from "./AxiosConfig";
 
 const EditDocument = () => {
     const { id: documentId } = useParams();
@@ -13,7 +15,7 @@ const EditDocument = () => {
     date: "",
     conseil: "",
     domaine: "",
-    acces: "",
+    status: "",
     fichier: null,
   });
 
@@ -64,7 +66,7 @@ const EditDocument = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const token = user?.access;
     if (!token) {
-      toast.error("Token non trouvé. Veuillez vous connecter.");
+      toast.error("Vous n'etes pas connecté. Veuillez vous connecter.");
       return;
     }
 
@@ -75,8 +77,8 @@ const EditDocument = () => {
     });
 
     try {
-      const response = await axios.patch(
-        `http://localhost:8000/api/documents/${documentId}/`,
+      const response = await axiosInstance.patch(
+        `/api/documents/${documentId}/`,
         formDataToSend,
         {
           headers: {
@@ -141,7 +143,7 @@ const EditDocument = () => {
 
         {/* Référence */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">Référence</label>
+          <label className="block text-gray-700 font-medium mb-2">Numéro</label>
           <input
             type="text"
             name="reference"
@@ -201,16 +203,16 @@ const EditDocument = () => {
 
         {/* Accès */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">Accès</label>
+          <label className="block text-gray-700 font-medium mb-2">Status</label>
           <select
-            name="acces"
-            value={formData.acces}
+            name="status"
+            value={formData.status}
             onChange={handleChange}
             required
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           >
-            <option value="telechargeable">Téléchargeable</option>
-            <option value="non telechargeable">Non Téléchargeable</option>
+            <option value="en_vigueur">En vigueur</option>
+            <option value="abrogé">Abrogé</option>
           </select>
         </div>
 

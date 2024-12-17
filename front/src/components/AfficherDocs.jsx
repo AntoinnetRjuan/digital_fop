@@ -1,16 +1,57 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import SearchBar from "./SearchBar";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "./AxiosConfig";
+import { toast } from "react-toastify";
+import { userContext } from "./Context";
 
-const Documents = ({ isAdmin, doc }) => {
+const Documents = ({ isAdmin }) => {
+  const [data, setData] = useState([])
   const [documents, setDocuments] = useState([]);
+  const [nextPage, setNextPage] = useState(true);
+  const [previousPage, setPreviousPage] = useState(false);
+  const { selectedDomaine } = useContext(userContext);
   const navigate = useNavigate();
 
+  const fetchDocuments = async (url) => {
+    try {
+      const response = await axios.get(url);
+      setDocuments(response.data.results); // Résultats actuels
+
+      if (!response.data.next) {
+
+        setNextPage(false);
+      } else {
+        setNextPage(response.data.next)
+      }
+
+      if (url == "http://localhost:8000/api/documents/") {
+        setPreviousPage(false);
+      } else {
+        setPreviousPage(response.data.previous)
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération des documents :", error);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedDomaine) {
+      axiosInstance.get("/api/documents/", {
+        params: { domaine: selectedDomaine }, // Applique le filtre
+      })
+        .then((response) => setDocuments(response.data.results))
+        .catch((error) => console.error("Erreur lors de la récupération des documents :", error));
+    }
+  }, [selectedDomaine]);
   useEffect(() => {
     axios.get("http://localhost:8000/api/documents/")
       .then(response => {
-        setDocuments(response.data);
+        setDocuments(response.data.results);
+        setNextPage(response.data.next)
+        setPreviousPage(response.data.previous)
+
       })
       .catch(error => {
         console.error("Erreur lors de la récupération des documents :", error);
@@ -24,17 +65,31 @@ const Documents = ({ isAdmin, doc }) => {
       console.error("Token non trouvé. Veuillez vous connecter.");
       return;
     }
-    console.log("Token utilisé pour DELETE :", token); //
     try {
-      await axios.delete(`http://localhost:8000/api/documents/${id}/`, {
+      await axiosInstance.delete(`/api/documents/${id}/`, {
         headers: {
           Authorization: `Bearer ${token}`, // Ajouter le token dans l'en-tête
         },
       });
-      console.log("Document supprimé avec succès !");
+      toast.success("Document supprimé avec succès !");
     } catch (error) {
       console.error("Erreur lors de la suppression :", error.response || error);
     }
+  };
+
+  const updateStatus = async (id) => {
+    const user = JSON.parse(localStorage.getItem("user")); // Récupérer le token depuis le stockage local
+    const token = user?.access;
+    const response = await axiosInstance.patch(`/api/documents/${id}/`, {
+      status: 'abroge'
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    setDocuments(
+      documents.map(doc => (doc.id === id ? response.data : doc))
+    );
   };
 
   const handleEdit = (id) => {
@@ -43,10 +98,19 @@ const Documents = ({ isAdmin, doc }) => {
     navigate(`/edit/${id}`);
   };
 
+  const handleView = (fileUrl, fileType) => {
+    if (fileType === "pdf") {
+      window.open(fileUrl, "_blank");
+    } else {
+      alert("Ce fichier est disponible uniquement en téléchargement.");
+    }
+  };
+
+
   const handleSearch = async (criteria) => {
     try {
       const { searchBy, searchValue } = criteria;
-  
+
       let params = {};
       if (searchBy === "date") {
         params.start_date = searchValue.startDate;
@@ -54,26 +118,50 @@ const Documents = ({ isAdmin, doc }) => {
       } else {
         params[searchBy] = searchValue; // Inclut 'reference' comme clé
       }
-  
-      const response = await axios.get("http://localhost:8000/api/documents/", {
+
+      const response = await axiosInstance.get("/api/documents/", {
         params,
       });
-      setDocuments(response.data);
+      setDocuments(response.data.results);
     } catch (error) {
       console.error("Erreur lors de la recherche :", error);
-      setDocuments([]);
+      // setDocuments([]);
     }
   };
-  
+
+  const handleDownload = async (fileUrl, fileName) => {
+    try {
+      const response = await axios.get(fileUrl, {
+        responseType: "blob", // Important : récupère le fichier en tant que blob
+      });
+
+      // Créer un lien temporaire pour le téléchargement
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", fileName || "document.pdf"); // Nom par défaut si non fourni
+      document.body.appendChild(link);
+      link.click();
+
+      // Nettoyer le lien temporaire
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Erreur lors du téléchargement :", error);
+      toast.error("Erreur lors du téléchargement du fichier.");
+    }
+  };
+
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center mt-10 bg-transparent">
       <div>
         <SearchBar onSearch={handleSearch} />
       </div>
-      <h1 className="text-2xl font-semibold text-gray-800 mb-6">Liste des documents</h1>
-      <div className="overflow-x-auto w-full max-w-4xl bg-white shadow-md rounded-lg">
+      <h1 className="text-2xl font-semibold text-gray-300 mb-6">Liste des documents</h1>
+      <div className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg">
         <table className="table-auto w-full text-left border-collapse">
-          <thead className="bg-slate-200 text-gray-600 uppercase text-sm leading-normal">
+          <thead className="bg-indigo-400 text-white">
             <tr>
               <th className="py-3 px-6">Dates</th>
               <th className="py-3 px-6">Types</th>
@@ -82,48 +170,84 @@ const Documents = ({ isAdmin, doc }) => {
               <th className="py-3 px-6">Action</th>
             </tr>
           </thead>
-          <tbody className="text-gray-700 text-sm font-light">
+          <tbody className="text-gray-900 text-sm font-light">
             {documents.length > 0 ? (
               documents.map((doc) => (
                 <tr
-                  key={doc.id}
+                  key={doc?.id}
                   className="border-b border-gray-200 hover:bg-gray-100"
                 >
-                  <td className="py-3 px-6">{doc.date}</td>
-                  <td className="py-3 px-6">{doc.type}</td>
-                  <td className="py-3 px-6">{doc.objet}</td>
+                  <td className="py-3 px-6">{doc?.date}</td>
+                  <td className="py-3 px-6">{doc?.type}</td>
+                  <td className="py-3 px-6">{doc?.objet}</td>
                   <td className="py-3 px-6">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs ${doc.status === "In progress"
-                          ? "bg-yellow-100 text-yellow-600"
-                          : "bg-green-100 text-green-600"
+                      className={`px-3 py-1 rounded-full text-xs ${doc?.status !== "en_vigueur"
+                        ? "bg-yellow-100 text-yellow-600"
+                        : "bg-green-100 text-green-600"
                         }`}
                     >
-                      {doc.status}
+                      {doc?.status}
                     </span>
                   </td>
                   <td className="py-3 px-6">
                     {isAdmin ? (
                       <>
+                        {doc.pdf_file || doc.fichier ? (
+                          <button
+                            onClick={() => {
+                              doc.pdf_file ?
+                                handleView(doc.pdf_file, "pdf") :
+                                handleView(doc.fichier, "pdf")
+                            }
+                            }
+                            className="text-blue-500 hover:underline"
+                          >
+                            Voir le texte
+                          </button>
+                        ) : (
+                          <span className="text-gray-500">Non disponible</span>
+                        )}
                         <button
-                          onClick={() => handleEdit(doc.id)}
-                          className="text-green-500 hover:underline mr-2"
+                          onClick={() => handleEdit(doc?.id)}
+                          className="text-green-500 hover:underline mr-2 px-5"
                         >
                           Modifier
                         </button>
                         <button
-                          onClick={() => handleDelete(doc.id)}
-                          className="text-red-500 hover:underline"
+                          onClick={() => handleDelete(doc?.id)}
+                          className="text-red-500 hover:underline px-5"
                         >
                           Supprimer
                         </button>
+                        <button
+                          onClick={() => updateStatus(doc?.id)} className="text-yellow-500 hover:underline px-4"
+                        >
+                          Changer status
+                        </button>
                       </>
-                    ) : doc.acces === "telechargeable" ? (
-                      <button className="text-blue-500 hover:underline">
-                        Télécharger
-                      </button>
-                    ) : (
-                      <span className="text-gray-500">Non téléchargeable</span>
+                    ) : (<>
+                      <div className="space-x-5">
+                        {doc.pdf_file || doc.fichier ? (
+                          <button
+                            onClick={() => {
+                              doc.pdf_file ?
+                                handleView(doc.pdf_file, "pdf") :
+                                handleView(doc.fichier, "pdf")
+                            }
+                            }
+                            className="text-blue-500 hover:underline"
+                          >
+                            Voir le texte
+                          </button>
+                        ) : (
+                          <span className="text-gray-500">Non disponible</span>
+                        )}
+                        <button onClick={() => handleDownload(doc.pdf_file || doc.fichier, `document-${doc.id}.pdf`)} className="text-blue-500 hover:underline">
+                          Télécharger
+                        </button>
+                      </div>
+                    </>
                     )}
                   </td>
                 </tr>
@@ -137,6 +261,21 @@ const Documents = ({ isAdmin, doc }) => {
             )}
           </tbody>
         </table>
+        <div>
+          <button
+            onClick={() => previousPage && fetchDocuments(previousPage)} // Vérifiez que l'URL existe avant d'appeler
+            disabled={!previousPage}
+            className="px-5"
+          >
+            précédente
+          </button>
+          <button
+            onClick={() => nextPage && fetchDocuments(nextPage)} // Vérifiez que l'URL existe avant d'appeler
+            disabled={!nextPage}
+          >
+            suivante
+          </button>
+        </div>
       </div>
     </div>
   );

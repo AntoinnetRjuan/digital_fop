@@ -1,12 +1,5 @@
 import axios from "axios"
-
-const BACKEND_DOMAIN = "http://localhost:8000"
-
-const REGISTER_URL = `${BACKEND_DOMAIN}/api/v1/auth/users/`
-const LOGIN_URL = `${BACKEND_DOMAIN}/api/v1/auth/jwt/create/`
-const ACTIVATE_URL = `${BACKEND_DOMAIN}/api/v1/auth/users/activation/`
-const RESET_PASSWORD_URL = `${BACKEND_DOMAIN}/api/v1/auth/users/reset_password/`
-const RESET_PASSWORD_CONFIRM_URL = `${BACKEND_DOMAIN}/api/v1/auth/users/reset_password_cofirm/`
+import axiosInstance from '../../components/AxiosConfig'
 
 //Register user
 
@@ -16,19 +9,11 @@ const register = async (userData) => {
             "Content-type": "application/json"
         }
     }
-    const response = await axios.post(REGISTER_URL,userData,config)
+    const response = await axiosInstance.post('/api/v1/auth/users/',userData,config)
     return response.data
 }
 
 //Login user
-
-const axiosInstance = axios.create({
-    baseURL: BACKEND_DOMAIN,
-    withCredentials: true, // Inclure les cookies
-    headers: {
-      "Content-Type": "application/json",
-    },
-});
 
 const login = async (userData) => {
     const response = await axiosInstance.post("/api/v1/auth/jwt/create/", userData);
@@ -57,8 +42,28 @@ const activate = async (userData) => {
     const response = await axios.post(ACTIVATE_URL,userData,config)
     return response.data
 }
+//reset Password
+const resetPassword = async (userData) => {
+    const config = {
+        headers:{
+            "Content-type": "application/json"
+        }
+    }
+    const response = await axiosInstance.post('/api/v1/auth/users/reset_password/',userData,config)
+    return response.data
+}
 
+//reset Password
+const resetPasswordConfirm = async (userData) => {
+    const config = {
+        headers:{
+            "Content-type": "application/json"
+        }
+    }
+    const response = await axiosInstance.post('/api/v1/auth/users/reset_password_confirm/',userData,config)
+    return response.data
+}
 
-const authService = {register, login, logout, activate}
+const authService = {register, login, logout, resetPassword, resetPasswordConfirm}
 export default authService
 

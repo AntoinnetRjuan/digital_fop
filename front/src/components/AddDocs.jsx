@@ -1,15 +1,17 @@
 import React, { useState,useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import axiosInstance from "./AxiosConfig";
 
 const AjouterDocument = () => {
   const [formData, setFormData] = useState({
     type: "",
     objet: "",
-    reference: "",
+    numero: "",
     date: "",
     conseil: "",
     domaine: "",
-    acces: "",
+    status: "",
     fichier: null,
   });
 
@@ -17,7 +19,7 @@ const AjouterDocument = () => {
   useEffect(() => {
     // Récupérer les domaines depuis l'API
     axios.get("http://localhost:8000/api/domaines/")
-      .then(response => setDomaines(response.data))
+      .then(response => setDomaines(response.data.results))
       .catch(error => console.error("Erreur lors de la récupération des domaines :", error));
   }, []);
 
@@ -29,23 +31,23 @@ const AjouterDocument = () => {
   const handleFileChange = (e) => {
     setFormData({ ...formData, fichier: e.target.files[0] });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
+    
   
     Object.keys(formData).forEach((key) => {
       data.append(key, formData[key]);
     });
     
-    await axios
-      .post("http://localhost:8000/api/documents/", data, {
+    await axiosInstance
+      .post("/api/documents/", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then((response) => {
-        alert("Document ajouté avec succès !");
+        toast.success("Document ajouté avec succès !");
       })
       .catch((error) => {
         console.error("Erreur lors de l'ajout :", error.response || error);
@@ -76,7 +78,15 @@ const AjouterDocument = () => {
             <option value="">Choisissez un type</option>
             <option value="constitution">Constitution</option>
             <option value="traité internationaux">Traité Internationaux</option>
-            {/* Ajoutez plus d'options */}
+            <option value="convention">Convention</option>
+            <option value="lois organiques">Lois Organiques</option>
+            <option value="lois ordinaires">Lois Ordinaires</option>
+            <option value="ordonnances">Ordonnance</option>
+            <option value="decrets">Décrets</option>
+            <option value="arretes interministeriels">Arrêtés Interministériels</option>
+            <option value="arretes">Arrêtés</option>
+            <option value="circilaire">Circulaire</option>
+            <option value="notes">Notes</option>
           </select>
         </div>
 
@@ -99,12 +109,12 @@ const AjouterDocument = () => {
         {/* Référence */}
         <div>
           <label className="block text-gray-700 font-medium mb-2">
-            Référence
+            Numéro
           </label>
           <input
             type="text"
-            name="reference"
-            value={formData.reference}
+            name="numero"
+            value={formData.numero}
             onChange={handleChange}
             required
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
@@ -167,17 +177,17 @@ const AjouterDocument = () => {
         {/* Accès */}
         <div>
           <label className="block text-gray-700 font-medium mb-2">
-            Accès
+            Status
           </label>
           <select
-            name="acces"
-            value={formData.acces}
+            name="status"
+            value={formData.status}
             onChange={handleChange}
             required
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           >
-            <option value="telechargeable">Téléchargeable</option>
-            <option value="non telechargeable">Non Téléchargeable</option>
+            <option value="en_vigueur">En vigueur</option>
+            <option value="abroge">Abrogé</option>
           </select>
         </div>
 
