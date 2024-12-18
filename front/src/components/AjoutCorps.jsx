@@ -60,7 +60,7 @@ const CorpsForm = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-transparent">
+        <div className="min-h-screen flex items-center justify-center bg-transparent mt-40">
             <form
                 onSubmit={handleSubmit}
                 className="w-full max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8"
@@ -162,7 +162,7 @@ const CorpsForm = () => {
                 <div className="flex items-center justify-between">
                     <button
                         type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        className="bg-blue-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     >
                         Ajouter
                     </button>

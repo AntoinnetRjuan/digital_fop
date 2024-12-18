@@ -25,7 +25,7 @@ const EditDocument = () => {
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/domaines/")
-      .then((response) => setDomaines(response.data))
+      .then((response) => setDomaines(response.data.results))
       .catch((error) =>
         console.error("Erreur lors de la récupération des domaines :", error)
       );
@@ -231,7 +231,7 @@ const EditDocument = () => {
         {/* Bouton Modifier */}
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
+          className="bg-blue-900 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
         >
           Modifier
         </button>

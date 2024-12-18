@@ -58,7 +58,7 @@ const Register = () => {
     }, [isError, isSuccess, user, message, navigate])
     return (
         <>
-            <div className="flex items-center justify-center min-h-screen bg-transparent">
+            <div className="flex items-center justify-center min-h-screen bg-transparent mt-36">
                 <div className="flex bg-white rounded-lg shadow-lg overflow-hidden w-1/2">
                     <div className="hidden md:block w-1/2 bg-cover bg-center animate__animated animate__flipInY"
                         style={{

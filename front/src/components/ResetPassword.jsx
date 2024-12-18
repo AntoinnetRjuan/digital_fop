@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetPassword } from '../features/auth/authSlice'
+import { Puff } from 'react-loader-spinner'
 const ResetPassword = () => {
     const [formData, setFormData] = useState({
         "email": "",
     })
+    const [loading, setLoading] = useState(false)
 
     const { email } = formData
 
@@ -25,10 +27,17 @@ const ResetPassword = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const userData = {
-            email
+        setLoading(true)
+        try {
+            const userData = {
+                email
+            }
+            dispatch(resetPassword(userData))
+        } catch (error) {
+            toast.error("une erreur est survenue lors de l'envoye de l'email")
+        } finally {
+            setLoading(false)
         }
-        dispatch(resetPassword(userData))
     }
 
     useEffect(() => {
@@ -53,6 +62,16 @@ const ResetPassword = () => {
                     </div>
                     <div className="w-full max-w-sm p-6 bg-white rounded-lg shadow-md">
                         <h1 className="text-xl font-semibold text-center text-gray-800 mb-4">Oublier mot de passe</h1>
+                        {isLoading && (
+                            <div className="flex justify-center">
+                                <Puff
+                                    height="50"
+                                    width="50"
+                                    color="#4A90E2"
+                                    ariaLabel="loading"
+                                />
+                            </div>
+                        )}
                         <form action="#" className="space-y-4">
                             <input
                                 type="email"
@@ -66,7 +85,7 @@ const ResetPassword = () => {
                             <button
                                 type="submit"
                                 onClick={handleSubmit}
-                                className="w-full px-4 py-2 text-white bg-blue-800 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
+                                className="w-full px-4 py-2 text-white bg-blue-900 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
                             >
                                 Reset password
                             </button>

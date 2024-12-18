@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "./AxiosConfig";
 import { toast } from "react-toastify";
 import { userContext } from "./Context";
-
+import { Link } from "react-router-dom";
+import { MutatingDots } from "react-loader-spinner"
 const Documents = ({ isAdmin }) => {
   const [data, setData] = useState([])
   const [documents, setDocuments] = useState([]);
@@ -154,130 +155,151 @@ const Documents = ({ isAdmin }) => {
 
 
   return (
-    <div className="flex flex-col items-center justify-center mt-10 bg-transparent">
-      <div>
-        <SearchBar onSearch={handleSearch} />
+    <>
+      <div className="flex flex-col items-center justify-center">
+        <MutatingDots
+          visible={true}
+          height="100"
+          width="100"
+          color="#4A90E2"
+          secondaryColor="#4fa94d"
+          radius="12.5"
+          ariaLabel="mutating-dots-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
       </div>
-      <h1 className="text-2xl font-semibold text-gray-300 mb-6">Liste des documents</h1>
-      <div className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg">
-        <table className="table-auto w-full text-left border-collapse">
-          <thead className="bg-blue-900 text-white">
-            <tr>
-              <th className="py-3 px-6">Dates</th>
-              <th className="py-3 px-6">Types</th>
-              <th className="py-3 px-6">Objets</th>
-              <th className="py-3 px-6">Status</th>
-              <th className="py-3 px-6">Action</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-900 text-sm font-light">
-            {documents.length > 0 ? (
-              documents.map((doc) => (
-                <tr
-                  key={doc?.id}
-                  className="border-b border-gray-200 hover:bg-gray-100"
-                >
-                  <td className="py-3 px-6">{doc?.date}</td>
-                  <td className="py-3 px-6">{doc?.type}</td>
-                  <td className="py-3 px-6">{doc?.objet}</td>
-                  <td className="py-3 px-6">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs ${doc?.status !== "en_vigueur"
-                        ? "bg-yellow-100 text-yellow-600"
-                        : "bg-green-100 text-green-600"
-                        }`}
-                    >
-                      {doc?.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-6">
-                    {isAdmin ? (
-                      <>
-                        {doc.pdf_file || doc.fichier ? (
+      <div className="flex flex-col items-center justify-center mt-30 bg-transparent">
+        <div>
+          <SearchBar onSearch={handleSearch} />
+        </div>
+        <h1 className="text-2xl font-semibold text-gray-300 mb-6">Liste des documents</h1>
+        <div className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg">
+          <table className="table-auto w-full text-left border-collapse">
+            <thead className="bg-blue-900 text-white">
+              <tr>
+                <th className="py-3 px-6">Dates</th>
+                <th className="py-3 px-6">Types</th>
+                <th className="py-3 px-6">Objets</th>
+                <th className="py-3 px-6">Status</th>
+                <th className="py-3 px-6">Action</th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-900">
+              {documents.length > 0 ? (
+                documents.map((doc) => (
+                  <tr
+                    key={doc?.id}
+                    className="border-b border-gray-200 hover:bg-gray-100"
+                  >
+                    <td className="py-3 px-6">{doc?.date}</td>
+                    <td className="py-3 px-6">{doc?.type}</td>
+                    <td className="py-3 px-6">{doc?.objet}</td>
+                    <td className="py-3 px-6">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs ${doc?.status !== "en_vigueur"
+                          ? "bg-yellow-100 text-yellow-600"
+                          : "bg-green-100 text-green-600"
+                          }`}
+                      >
+                        {doc?.status}
+                      </span>
+                    </td>
+                    <td className="py-3 px-6">
+                      {isAdmin ? (
+                        <>
+                          {doc.pdf_file || doc.fichier ? (
+                            <button
+                              onClick={() => {
+                                doc.pdf_file ?
+                                  handleView(doc.pdf_file, "pdf") :
+                                  handleView(doc.fichier, "pdf")
+                              }
+                              }
+                              className="text-blue-500 hover:underline"
+                            >
+                              Voir le texte
+                            </button>
+                          ) : (
+                            <span className="text-gray-500">Non disponible</span>
+                          )}
                           <button
-                            onClick={() => {
-                              doc.pdf_file ?
-                                handleView(doc.pdf_file, "pdf") :
-                                handleView(doc.fichier, "pdf")
-                            }
-                            }
-                            className="text-blue-500 hover:underline"
+                            onClick={() => handleEdit(doc?.id)}
+                            className="text-green-500 hover:underline mr-2 px-5"
                           >
-                            Voir le texte
+                            Modifier
                           </button>
-                        ) : (
-                          <span className="text-gray-500">Non disponible</span>
-                        )}
-                        <button
-                          onClick={() => handleEdit(doc?.id)}
-                          className="text-green-500 hover:underline mr-2 px-5"
-                        >
-                          Modifier
-                        </button>
-                        <button
-                          onClick={() => handleDelete(doc?.id)}
-                          className="text-red-500 hover:underline px-5"
-                        >
-                          Supprimer
-                        </button>
-                        <button
-                          onClick={() => updateStatus(doc?.id)} className="text-yellow-500 hover:underline px-4"
-                        >
-                          Changer status
-                        </button>
+                          <button
+                            onClick={() => handleDelete(doc?.id)}
+                            className="text-red-500 hover:underline px-5"
+                          >
+                            Supprimer
+                          </button>
+                          <button
+                            onClick={() => updateStatus(doc?.id)} className="text-yellow-500 hover:underline px-4"
+                          >
+                            Changer status
+                          </button>
+                        </>
+                      ) : (<>
+                        <div className="space-x-5">
+                          {doc.pdf_file || doc.fichier ? (
+                            <button
+                              onClick={() => {
+                                doc.pdf_file ?
+                                  handleView(doc.pdf_file, "pdf") :
+                                  handleView(doc.fichier, "pdf")
+                              }
+                              }
+                              className="text-blue-500 hover:underline"
+                            >
+                              Voir le texte
+                            </button>
+                          ) : (
+                            <span className="text-gray-500">Non disponible</span>
+                          )}
+                          <button onClick={() => handleDownload(doc.pdf_file || doc.fichier, `document-${doc.id}.pdf`)} className="text-blue-500 hover:underline">
+                            Télécharger
+                          </button>
+                        </div>
                       </>
-                    ) : (<>
-                      <div className="space-x-5">
-                        {doc.pdf_file || doc.fichier ? (
-                          <button
-                            onClick={() => {
-                              doc.pdf_file ?
-                                handleView(doc.pdf_file, "pdf") :
-                                handleView(doc.fichier, "pdf")
-                            }
-                            }
-                            className="text-blue-500 hover:underline"
-                          >
-                            Voir le texte
-                          </button>
-                        ) : (
-                          <span className="text-gray-500">Non disponible</span>
-                        )}
-                        <button onClick={() => handleDownload(doc.pdf_file || doc.fichier, `document-${doc.id}.pdf`)} className="text-blue-500 hover:underline">
-                          Télécharger
-                        </button>
-                      </div>
-                    </>
-                    )}
+                      )}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="py-4 text-center text-gray-500">
+                    Aucun résultat trouvé pour ces critères.
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5" className="py-4 text-center text-gray-500">
-                  Aucun résultat trouvé pour ces critères.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        <div>
-          <button
-            onClick={() => previousPage && fetchDocuments(previousPage)} // Vérifiez que l'URL existe avant d'appeler
-            disabled={!previousPage}
-            className="px-5"
-          >
-            précédente
-          </button>
-          <button
-            onClick={() => nextPage && fetchDocuments(nextPage)} // Vérifiez que l'URL existe avant d'appeler
-            disabled={!nextPage}
-          >
-            suivante
-          </button>
+              )}
+            </tbody>
+          </table>
+          <div>
+            <button
+              onClick={() => previousPage && fetchDocuments(previousPage)} // Vérifiez que l'URL existe avant d'appeler
+              disabled={!previousPage}
+              className="px-5"
+            >
+              précédente
+            </button>
+            <button
+              onClick={() => nextPage && fetchDocuments(nextPage)} // Vérifiez que l'URL existe avant d'appeler
+              disabled={!nextPage}
+            >
+              suivante
+            </button>
+          </div>
         </div>
+        {isAdmin && (
+          <div className="mt-5 space-x-5">
+            <Link to={"/AjoutDoc"} className='bg-blue-900 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200'>Ajouter un document</Link>
+            <Link to={"/AjoutCorps"} className='bg-blue-900 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200'>Ajouter un Corps</Link>
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 };
 

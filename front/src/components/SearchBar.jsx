@@ -85,7 +85,7 @@ const SearchBar = ({ onSearch }) => {
                     <div className="relative w-full">
                         <input
                             type="text"
-                            className="p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-gray-500"
                             value={searchValue}
                             onChange={(e) => {
                                 setSearchValue(e.target.value);
