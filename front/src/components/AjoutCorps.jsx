@@ -17,7 +17,7 @@ const CorpsForm = () => {
     const [typeCorps, setTypeCorps] = useState([])
     useEffect(() => {
         axios.get('http://localhost:8000/api/typecorps/')
-            .then(response => setTypeCorps(response.data))
+            .then(response => setTypeCorps(response.data.results))
             .catch(error => console.error("Une erreur est survenue lors du recuperation:", error))
     }, [])
 
@@ -60,7 +60,7 @@ const CorpsForm = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="min-h-screen flex items-center justify-center bg-transparent">
             <form
                 onSubmit={handleSubmit}
                 className="w-full max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8"

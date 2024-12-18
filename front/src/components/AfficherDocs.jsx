@@ -125,7 +125,7 @@ const Documents = ({ isAdmin }) => {
       setDocuments(response.data.results);
     } catch (error) {
       console.error("Erreur lors de la recherche :", error);
-      // setDocuments([]);
+      setDocuments([]);
     }
   };
 
@@ -161,7 +161,7 @@ const Documents = ({ isAdmin }) => {
       <h1 className="text-2xl font-semibold text-gray-300 mb-6">Liste des documents</h1>
       <div className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg">
         <table className="table-auto w-full text-left border-collapse">
-          <thead className="bg-indigo-400 text-white">
+          <thead className="bg-blue-900 text-white">
             <tr>
               <th className="py-3 px-6">Dates</th>
               <th className="py-3 px-6">Types</th>

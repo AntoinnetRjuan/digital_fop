@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { register, reset } from '../features/auth/authSlice'
 import { useNavigate } from 'react-router-dom'
+import { Puff } from 'react-loader-spinner'
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -68,6 +69,16 @@ const Register = () => {
                     </div>
                     <div className="w-full max-w-md bg-white rounded-lg p-7 animate__animated animate__jackInTheBox">
                         <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Créer un compte</h1>
+                        {isLoading && (
+                            <div className="flex justify-center">
+                                        <Puff
+                                          height="50"
+                                          width="50"
+                                          color="#4A90E2"
+                                          ariaLabel="loading"
+                                        />
+                                      </div>
+                        )}
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">
                                 <input

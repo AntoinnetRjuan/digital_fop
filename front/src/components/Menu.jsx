@@ -46,7 +46,7 @@ const Menu = ({ onSelectDomaine }) => {
               <img src={biblio} alt='logo' className='size-6 ' />
             </div>
             <div>
-              <h3>Digital Library</h3>
+              <h3 className='text-yellow-950'>Digital Library</h3>
             </div>
 
           </div>
