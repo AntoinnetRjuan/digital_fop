@@ -36,7 +36,7 @@ const RemarkForm = () => {
                     required
                 />
                 <textarea
-                    className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className=" h-12 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Votre remarque"

@@ -45,7 +45,11 @@ ALLOWED_HOSTS = ["*"]
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://localhost:5173",
+    "http://localhost:3000",  # Ajoutez l'URL de votre frontend
+    # Ajoutez d'autres origines si nécessaire
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True  # Ajoutez cette ligne pour permettre toutes les origines
 
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES":(
@@ -203,6 +207,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / "static/frontend"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -240,3 +245,18 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = "antoinnetrajean@gmail.com"
 DOMAIN = env("DOMAIN")
 SITE_NAME = "Bibliotheque"
+
+CORS_ORIGIN_ALLOW_ALL = False  # Désactivez cela en production
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # L'URL où tourne Vite
+]
+CORS_ALLOW_CREDENTIALS = True  # Pour permettre les cookies/sessions
+
+# CORS_ALLOW_HEADERS = [
+#     "content-type",
+#     "authorization",
+#     "x-requested-with",
+#     "accept",
+#     "origin",
+#     "referer",
+# ]

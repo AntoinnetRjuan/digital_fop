@@ -145,7 +145,7 @@ const AfficheActus = ({ isAdminE }) => {
             <div className="flex flex-col md:flex-row gap-4">
                 <div className="w-full md:w-1/2">
                     <h3 className="text-lg font-bold mb-2 text-green-700 text-center">
-                        Conseil de Gouvernement
+                        Conseil du Gouvernement
                     </h3>
                     {conseilGouvernement.length > 0 ? (
                         conseilGouvernement.map((actus) => (
@@ -179,7 +179,7 @@ const AfficheActus = ({ isAdminE }) => {
                 </div>
                 <div className="w-full md:w-1/2">
                     <h3 className="text-lg font-bold mb-2 text-red-600 text-center">
-                        Conseil de Ministre
+                        Conseil des Ministres
                     </h3>
                     {conseilMinistre.length > 0 ? (
                         conseilMinistre.map((actus) => (

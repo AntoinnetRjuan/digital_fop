@@ -13,7 +13,7 @@ class Domaine(models.Model):  # ou Theme
 class Document(models.Model):
     TYPE_CHOICES = [
         ('constitution', 'Constitution'),
-        ('traité internationaux', 'Traité Internationaux'),
+        ('traités internationaux', 'Traités Internationaux'),
         ('convention', 'Convention'),
         ('lois organiques', 'Lois Organiques'),
         ('lois ordinaires', 'Lois Ordinaires'),
@@ -116,3 +116,26 @@ class Document(models.Model):
             models.Index(fields=['objet']),
             models.Index(fields=['numero']),
         ]
+
+
+class Actualite(models.Model):
+    CONSEIL_CHOICES = [
+        ('CONSEIL DE MINISTRE', 'Ministre'),
+        ('CONSEIL DE GOUVERNEMENT', 'Gouvernement'),
+    ]
+    conseil = models.CharField(max_length=50,choices=CONSEIL_CHOICES,default='CONSEIL DE MINISTRE')
+    titre = models.CharField(max_length=200)
+    date = models.DateField(default='2024-01-01')
+    lieu = models.CharField(max_length=100)
+    texte = models.TextField()
+
+    def __str__(self):
+        return self.titre
+
+class Remark(models.Model):
+    email = models.EmailField()
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email

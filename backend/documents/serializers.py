@@ -1,4 +1,4 @@
-from .models import Document,Domaine
+from .models import Document,Domaine,Actualite,Remark
 from rest_framework import serializers
 from django.core.files.storage import default_storage
 from django.conf import settings
@@ -23,3 +23,13 @@ class DocumentSerializer(serializers.ModelSerializer):
             if default_storage.exists(pdf_path):
                 return f"{settings.MEDIA_URL}{pdf_path}"
         return None
+
+class ActualiteSerialiser(serializers.ModelSerializer):
+    class Meta:
+        model = Actualite
+        fields = '__all__'
+
+class RemarkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Remark
+        fields = ['id', 'email', 'message', 'created_at']

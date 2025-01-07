@@ -103,7 +103,7 @@ const AjouterDocument = () => {
                 >
                   <option value="">Choisissez un type</option>
                   <option value="constitution">Constitution</option>
-                  <option value="traité internationaux">Traité Internationaux</option>
+                  <option value="traités internationaux">Traités Internationaux</option>
                   <option value="convention">Convention</option>
                   <option value="lois organiques">Lois Organiques</option>
                   <option value="lois ordinaires">Lois Ordinaires</option>
