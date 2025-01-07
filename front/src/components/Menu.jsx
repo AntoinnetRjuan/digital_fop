@@ -127,7 +127,7 @@ const Menu = ({ onSelectDomaine }) => {
                     to={"/statuts"}
                     className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
                   >
-                    Statuts
+                    Status Particuliers
                   </Link>
                 </li>
               </>

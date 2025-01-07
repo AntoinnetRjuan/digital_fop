@@ -2,6 +2,7 @@ import React from 'react'
 import ItemsContener from './ItemsContener'
 import SocialIcons from './SocialIcons'
 import {Icons} from './MenuFooter' 
+import RemarkForm from './RemarkForm'
 
 const Footer = ()  =>{
   return (
@@ -17,13 +18,7 @@ const Footer = ()  =>{
 
             </h1>
             <div>
-                <input type="text" placeholder='Enter Your Mail' className='text-gray-800 sm:w-72 w-full 
-                sm:mr-5 mr-1 lg:mb-0 mb-4 py-2.5 rounded px-2 focus:outline-none' />
-
-                <button className='bg-blue-950 hover:bg-indigo-500 duration-300 px-5 py-2.5 font-[Poppins] rounded-md text-white
-                md:w-auto w-full'>
-                  Send
-                </button>
+               <RemarkForm/>
             </div>
 
         </div>

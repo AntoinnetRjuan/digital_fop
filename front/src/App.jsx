@@ -4,7 +4,6 @@ import { ToastContainer } from 'react-toastify'
 import Login from './components/Login';
 import Dashboard from './components/Dashboard'
 import Accueil from './components/Accueil';
-import Register from './components/Register';
 import Menu from './components/Menu';
 import 'react-toastify/dist/ReactToastify.css';
 import ResetPassword from './components/ResetPassword';
@@ -17,6 +16,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import ResetPasswordConfirmPage from './components/ResetPasswordConfirmPage';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import AddActus from './components/AddActus';
+import RemarkForm from "./components/RemarkForm";
+import AdminRemarks from "./components/AdminRemarks";
 axios.defaults.withCredentials = true;
 
 const App = () => {
@@ -30,14 +32,13 @@ const App = () => {
 
     return (
         <>
-            <div className='bg-gray-900 absolute'>
+            <div className='bg-gray-900'>
                 <Header/>
                 <ToastContainer />
                 <Router>
                     <Menu user={user} onSelectDomaine={setSelectedDomaine} />
                     <Routes>
                         <Route path="/" element={<Accueil />} />
-                        <Route path='/register' element={<Register />} />
                         <Route path='/login' element={<Login />} />
                         <Route path='/resetpassword' element={<ResetPassword />} />
                         <Route path='/password/reset/confirm/:uid/:token' element={<ResetPasswordConfirmPage />} />
@@ -45,6 +46,9 @@ const App = () => {
                         <Route path='/AjoutDoc' element={<ProtectedRoute isAuthenticated={user.refresh}><AjouterDocument /></ProtectedRoute>} />
                         <Route path="/edit/:id" element={<ProtectedRoute isAuthenticated={user.refresh}><EditDocument /></ProtectedRoute>} />
                         <Route path='/AjoutCorps' element={<ProtectedRoute isAuthenticated={user.refresh}><CorpsForm /></ProtectedRoute>} />
+                        <Route path='/AjoutActus' element={<ProtectedRoute isAuthenticated={user.refresh}><AddActus /></ProtectedRoute>} />
+                        <Route path="/remarks" element={<RemarkForm />} />
+                        <Route path="/admin/remarks" element={<AdminRemarks />} />
                         <Route path='*' element={<Accueil />} />
                     </Routes>
                 </Router>

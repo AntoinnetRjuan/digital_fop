@@ -110,12 +110,6 @@ function Login() {
                             Se connecter
                         </button>
                     </form>
-                    <p className="mt-4 text-sm text-center text-gray-600">
-                        Vous voulez créer un compte ?{' '}
-                        <a href="/register" className="text-indigo-500 hover:underline">
-                            Register
-                        </a>
-                    </p>
                 </div>
             </div>
         </div>

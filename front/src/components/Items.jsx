@@ -5,7 +5,7 @@ const Items = ({Links,title}) => {
     return (
       <div>
         <ul>
-         <h1 className='mb-1 font-semibold text-base text-blue-800'> {title}</h1>
+         <h1 className='mb-1 font-semibold text-base text-yellow-400'> {title}</h1>
          {
             Links.map((Link)=>(
                 <li key={Link.name}>
