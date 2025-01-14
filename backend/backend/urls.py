@@ -21,6 +21,7 @@ from django.urls import path, include
 from rest_framework.authtoken.views import obtain_auth_token
 from .views import send_response
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/auth/',include('users.urls')),
@@ -28,6 +29,7 @@ urlpatterns = [
     path('api/v1/auth/',include('djoser.urls.jwt')),
     path('api/',include('documents.urls')),
     path('api/', include('corps.urls')),
+    path('',include('visits.urls')),
     path('api/token-auth/', obtain_auth_token, name='api_token_auth'),
     path('api/send-response/', send_response, name='send_response'),
 ]

@@ -114,6 +114,7 @@ INSTALLED_APPS = [
     'users',
     'documents',
     'corps',
+    'visits',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
@@ -129,6 +130,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'visits.middleware.VisitMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'

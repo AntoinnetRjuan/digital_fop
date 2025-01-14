@@ -31,16 +31,42 @@ class DocumentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        search = self.request.query_params.get('search', '')
-        doc_type = self.request.query_params.get('type', '')
-        if search:
-            queryset = queryset.filter(
-                Q(objet__icontains=search) |
-                Q(numero__icontains=search)
-            )
+        domaine_id = self.request.query_params.get('domaine', '')
+        search_by = self.request.query_params.get('searchBy', '')
+        doc_type = self.request.query_params.get('type','')
+        search_value = self.request.query_params.get('searchValue', '')
+
+        # if search:
+        #     queryset = queryset.filter(
+        #         Q(objet__icontains=search) |
+        #         Q(numero__icontains=search)
+        #     )
         if doc_type:
             queryset = queryset.filter(type__icontains=doc_type)
+
+        if search_by and search_value:
+            if search_by == 'objet':
+                queryset = queryset.filter(objet__icontains=search_value)
+            elif search_by == 'numero':
+                queryset = queryset.filter(numero__icontains=search_value)
+            elif search_by == 'date':
+                queryset = queryset.filter(date=search_value)
+        if domaine_id:
+            queryset = queryset.filter(domaine__id=domaine_id)
+
+        # Final query for debugging
+        print("Requête finale :", queryset.query)
         return queryset
+    def partial_update(self, request, *args, **kwargs):
+        print("Fichiers reçus :", request.FILES)
+        print("Données reçues :", request.data)
+        if not request.FILES.get('fichier'):
+            return Response({"error": "Aucun fichier détecté dans la requête."}, status=400)
+        return super().partial_update(request, *args, **kwargs)
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        if instance.fichier and instance.fichier.name.endswith('.docx'):
+            instance.convert_to_pdf()
 
 class SuggestionsView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
