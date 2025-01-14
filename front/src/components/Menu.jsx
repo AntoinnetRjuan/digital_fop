@@ -22,12 +22,12 @@ const Menu = ({ onSelectDomaine }) => {
   }, [])
 
   const handleChangeDomaine = (e) => {
-    const selectedDomaine = e.target.value;
-    if (selectedDomaine) {
-      onSelectDomaine(selectedDomaine); // Passe l'ID du domaine sélectionné au parent
-    }
+    const selectedDomaine = e.target.value; 
+      if (selectedDomaine) {   
+        onSelectDomaine(selectedDomaine);
+        navigate("/AfficherDoc");
+      }
   };
-
   // const { user } = useSelector((state) => state.auth)
   const { user, setUser } = useContext(userContext)
 

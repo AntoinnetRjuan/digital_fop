@@ -122,20 +122,21 @@ const Documents = ({ isAdmin }) => {
         params.end_date = searchValue.endDate;
       } else if (searchBy === "type") {
         params.type = searchValue.type;
-        params.search = searchValue.text;
+        params.search = searchValue.text || "";
       } else {
-        params[searchBy] = searchValue; // Inclut 'reference' comme clé
+        params[searchBy] = searchValue;
       }
 
-      const response = await axiosInstance.get("/api/documents/", {
-        params,
-      });
+
+      const response = await axiosInstance.get("/api/documents/", { params });
+
       setDocuments(response.data.results);
     } catch (error) {
       console.error("Erreur lors de la recherche :", error);
       setDocuments([]);
     }
   };
+
 
   const handleDownload = async (fileUrl, fileName) => {
     try {
@@ -197,8 +198,8 @@ const Documents = ({ isAdmin }) => {
                     <td className="py-3 px-4 sm:px-6">
                       <span
                         className={`px-3 py-1 rounded-full text-xs ${doc?.status !== "en_vigueur"
-                            ? "bg-yellow-100 text-yellow-600"
-                            : "bg-green-100 text-green-600"
+                          ? "bg-yellow-100 text-yellow-600"
+                          : "bg-green-100 text-green-600"
                           }`}
                       >
                         {doc?.status}

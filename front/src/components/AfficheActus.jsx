@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from './AxiosConfig';
 import { toast } from 'react-toastify';
+import gov from "../assets/gov.svg";
+import ministre from "../assets/ministre.svg";
+
+
 
 const Modal = ({ show, onClose, actu, onUpdate, onDelete, isAdmin }) => {
     const [updatedActu, setUpdatedActu] = useState(actu);
@@ -141,9 +145,17 @@ const AfficheActus = ({ isAdminE }) => {
     };
 
     return (
-        <div className="bg-white rounded-lg p-4 mx-4 md:mx-10">
+        <div className="bg-white rounded-lg p-4 mx-4 md:mx-10 w">
             <div className="flex flex-col md:flex-row gap-4">
+
                 <div className="w-full md:w-1/2">
+
+                    <div className="flex items-center justify-center">
+                        <span>
+                            <img src={gov} alt='gov logo' className='product-image flex' />
+
+                        </span>
+                    </div>
                     <h3 className="text-lg font-bold mb-2 text-green-700 text-center">
                         Conseil du Gouvernement
                     </h3>
@@ -178,6 +190,13 @@ const AfficheActus = ({ isAdminE }) => {
                     )}
                 </div>
                 <div className="w-full md:w-1/2">
+                    <div className="flex  justify-center ">
+                        <span class=" icons2 c2">
+                            <img src={ministre} alt='ministre logo' className='product-image    ' />
+
+                        </span>
+                    </div>
+
                     <h3 className="text-lg font-bold mb-2 text-red-600 text-center">
                         Conseil des Ministres
                     </h3>

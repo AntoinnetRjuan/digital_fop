@@ -19,6 +19,7 @@ import Footer from './components/Footer';
 import AddActus from './components/AddActus';
 import RemarkForm from "./components/RemarkForm";
 import AdminRemarks from "./components/AdminRemarks";
+import Documents from './components/AfficherDocs';
 axios.defaults.withCredentials = true;
 
 const App = () => {
@@ -48,6 +49,7 @@ const App = () => {
                         <Route path='/AjoutCorps' element={<ProtectedRoute isAuthenticated={user.refresh}><CorpsForm /></ProtectedRoute>} />
                         <Route path='/AjoutActus' element={<ProtectedRoute isAuthenticated={user.refresh}><AddActus /></ProtectedRoute>} />
                         <Route path="/remarks" element={<RemarkForm />} />
+                        <Route path='/AfficherDoc' element={<Documents/>}/>
                         <Route path="/admin/remarks" element={<AdminRemarks />} />
                         <Route path='*' element={<Accueil />} />
                     </Routes>

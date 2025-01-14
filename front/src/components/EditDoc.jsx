@@ -11,7 +11,7 @@ const EditDocument = () => {
   const [formData, setFormData] = useState({
     type: "",
     objet: "",
-    reference: "",
+    numero: "",
     date: "",
     conseil: "",
     domaine: "",
@@ -63,19 +63,39 @@ const EditDocument = () => {
   // Soumettre le formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     const user = JSON.parse(localStorage.getItem("user"));
     const token = user?.access;
     if (!token) {
-      toast.error("Vous n'etes pas connecté. Veuillez vous connecter.");
+      toast.error("Vous n'êtes pas connecté. Veuillez vous connecter.");
       return;
     }
-
-    // Créer une instance FormData pour inclure le fichier
+  
     const formDataToSend = new FormData();
-    Object.keys(formData).forEach((key) => {
-      formDataToSend.append(key, formData[key]);
-    });
-
+  
+    // Ajoutez les champs
+    formDataToSend.append("type", formData.type);
+    formDataToSend.append("objet", formData.objet);
+    formDataToSend.append("numero", formData.numero);
+    formDataToSend.append("date", formData.date);
+    formDataToSend.append("conseil", formData.conseil);
+    formDataToSend.append("domaine", formData.domaine);
+    formDataToSend.append("status", formData.status);
+  
+    // Ajoutez le fichier
+    if (formData.fichier) {
+      formDataToSend.append("fichier", formData.fichier);
+    } else {
+      console.error("Aucun fichier n'a été sélectionné.");
+      toast.error("Aucun fichier sélectionné.");
+      return;
+    }
+  
+    // Debug : Affichez le contenu de FormData
+    for (let pair of formDataToSend.entries()) {
+      console.log(`${pair[0]}:`, pair[1]);
+    }
+  
     try {
       const response = await axiosInstance.patch(
         `/api/documents/${documentId}/`,
@@ -83,21 +103,27 @@ const EditDocument = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data", //Pour l'upload de fichiers
+            "Content-Type": "multipart/form-data", // Obligatoire pour l'upload de fichiers
           },
         }
       );
-      toast.success("Document modifié avec succès :", response.data);
+      toast.success("Document modifié avec succès !");
       navigate("/dashboard");
-      //onClose(); // Fermer le formulaire après la modification
     } catch (error) {
-      console.error(error.response || error);
-      toast.error(`Erreur lors de la modification : ${error.response?.data?.message || error.message}`);
+      console.error("Détails de l'erreur :", error.response?.data || error.message);
+      toast.error(
+        `Erreur : ${
+          error.response?.data?.pdf_file?.[0] || "Un problème est survenu."
+        }`
+      );
     }
   };
+  
+  
+  
 
   return (
-    <div className="w-full max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6 mt-16">
+    <div className="w-full max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6 mt-40">
       <h2 className="text-lg font-bold mb-4 text-center">Modification du Document</h2>
       <form
         className="flex flex-col gap-4"
@@ -118,7 +144,7 @@ const EditDocument = () => {
           >
             <option value="">Choisissez un type</option>
             <option value="constitution">Constitution</option>
-            <option value="traité internationaux">Traité Internationaux</option>
+            <option value="traités internationaux">Traité Internationaux</option>
             <option value="convention">Convention</option>
             <option value="lois organiques">Lois Organiques</option>
             <option value="lois ordinaires">Lois Ordinaires</option>
@@ -146,8 +172,8 @@ const EditDocument = () => {
           <label className="block text-gray-700 font-medium mb-2">Numéro</label>
           <input
             type="text"
-            name="reference"
-            value={formData.reference}
+            name="numero"
+            value={formData.numero}
             onChange={handleChange}
             required
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
@@ -212,7 +238,7 @@ const EditDocument = () => {
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           >
             <option value="en_vigueur">En vigueur</option>
-            <option value="abrogé">Abrogé</option>
+            <option value="abroge">Abrogé</option>
           </select>
         </div>
 
@@ -222,6 +248,7 @@ const EditDocument = () => {
           <input
             type="file"
             name="fichier"
+            accept=".pdf,.docx"
             onChange={handleFileChange}
             required
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"

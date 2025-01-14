@@ -13,7 +13,7 @@ const SearchBar = ({ onSearch }) => {
     const types = [
         { value: "", label: "Choisissez un type" },
         { value: "constitution", label: "Constitution" },
-        { value: "traité internationaux", label: "Traité Internationaux" },
+        { value: "traités internationaux", label: "Traité Internationaux" },
         { value: "convention", label: "Convention" },
         { value: "lois organiques", label: "Lois Organiques" },
         { value: "lois ordinaires", label: "Lois Ordinaires" },
@@ -32,16 +32,23 @@ const SearchBar = ({ onSearch }) => {
         }
 
         try {
-            const params = searchBy === "type" 
-            ? { searchBy, query: value, type: selectedType }
-            : { searchBy, query: value };
+            const params = searchBy === "type"
+                ? { searchBy, query: value, type: selectedType }
+                : { searchBy, query: value };
+
+
+            console.log("Params envoyés :", params); // Debugging log
+
             const response = await axios.get(`http://localhost:8000/api/suggestions/`, { params });
+            console.log("Suggestions reçues :", response.data); // Debugging log
+
             setSuggestions(response.data);
             setShowSuggestions(true);
         } catch (error) {
             console.error("Erreur lors de la récupération des suggestions :", error);
         }
     };
+
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -50,13 +57,17 @@ const SearchBar = ({ onSearch }) => {
             searchValue:
                 searchBy === "date"
                     ? { startDate, endDate }
-                    : searchBy === "type"
+                : searchBy === "type"
                     ? { type: selectedType, text: searchValue }
-                    : searchValue,
+                : searchValue,
         };
+
+        console.log("Critères de recherche :", critere); // Debugging log
+        
         setShowSuggestions(false);
         onSearch(critere);
     };
+
 
     const handleSuggestionClick = (suggestion) => {
         setSearchValue(suggestion);
@@ -70,7 +81,9 @@ const SearchBar = ({ onSearch }) => {
                 <select
                     className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={searchBy}
-                    onChange={(e) => setSearchBy(e.target.value)}
+                    onChange={(e) => {
+                        setSearchBy(e.target.value);
+                    }}
                 >
                     <option value="objet">Objet</option>
                     <option value="type">Type</option>
@@ -102,7 +115,10 @@ const SearchBar = ({ onSearch }) => {
                         <select
                             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={selectedType}
-                            onChange={(e) => setSelectedType(e.target.value)}
+                            onChange={(e) => {
+                                setSelectedType(e.target.value);
+                                console.log(selectedType)
+                            }}
                         >
                             {types.map((type, index) => (
                                 <option key={index} value={type.value}>

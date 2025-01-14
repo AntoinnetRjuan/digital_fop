@@ -49,7 +49,6 @@ const AjouterDocument = () => {
         .post("/api/documents/", data, {
           headers: {
             "Content-Type": "multipart/form-data",
-            "Access-Control-Allow-Origin":"*",
           },
         });
       toast.success("Document ajouté avec succès !");

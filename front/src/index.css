@@ -17,6 +17,18 @@ h1{
     opacity: 0;
     
 }
+.product-image {
+    /* position: absolute; */
+    padding: 15px;
+    width: 100px; 
+    height: auto;
+    /* display: inline-table;
+    border: 4px solid #bc332a;
+    border-radius: 50%; */
+    background: #ffffff;
+    align-items: center;
+    
+}
 
 .clip-visible{
     clip-path: ellipse(1900px 1900px at 0% 0%);
@@ -28,7 +40,7 @@ h1{
     border-0 top-2/4;
 }
 .content{
-    @apply text-[aliceblue] absolute w-[400px] z-[5] text-center  backdrop-blur-[2px] duration-[1s] px-0 py-[15px]  bottom-0 top-40;
+    @apply text-[aliceblue] absolute w-[600px] z-[5] text-center  backdrop-blur-[3px] duration-[1s] px-0 py-[15px]  bottom-0 top-40;
     /* background: #ffffff22; */
 }
 /* .content{

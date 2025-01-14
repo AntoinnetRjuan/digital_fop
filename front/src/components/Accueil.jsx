@@ -4,7 +4,6 @@ import img2 from "/3.jpg";
 import img3 from "/2.png";
 import Documents from './AfficherDocs';
 import AfficheActus from './AfficheActus';
-import RemarkForm from './RemarkForm';
 
 const Accueil = () => {
   const [active, setActive] = useState(0);
@@ -15,23 +14,24 @@ const Accueil = () => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const nameRef = useRef("");
-  const TextRef = useRef("");
+  const textRef = useRef("");
 
   const sliderContent = [
     {
       img: img1,
       name: "Bienvenue",
-      Text: "Afin d’améliorer sa visibilité et de conduire les programmes de réforme de la Fonction Publique, pilier du développement de notre pays, le Ministère, du Travail, de l’Emploi, de la Fonction Publique et des Lois Sociales est à pied d'œuvre dans la mise en place d'une bibliothèque numérique en son sein."
+      Text: 'Afin d’améliorer sa visibilité et de conduire les programmes de réforme de la Fonction Publique,pilier du développement de notre pays, <strong> le Ministère, du Travail, de l’Emploi, de la Fonction Publique et des Lois Sociales </strong> dont les rôles sont:<br>  -De mettre en œuvre des politiques inclusives pour le travail et l’emploi.<br>-De promouvoir une administration publique moderne et performante.<br>-Garantir la sécurité sociale et les droits fondamentaux des employés , est à pied d\'œuvre dans la mise en place d\'une bibliothèque numérique en son sein.'
+
     },
     {
       img: img2,
-      name: "Réformes en cours",
-      Text: "Le Ministère du Travail et de la Fonction Publique met en place des initiatives pour moderniser l'administration publique et améliorer l'efficacité des services offerts aux citoyens. Une bibliothèque numérique est une des pierres angulaires de ces réformes."
+      name: "Direction des Études et des Affaires Juridiques",
+      Text: "Cette direction est responsable de : -L'élaboration des textes juridiques : <br> Rédaction, mise à jour, et diffusion des législations et réglementations.<br>-L’appui aux réformes : Réalisation d’études pour moderniser les cadres réglementaires et administratifs.<br>-La gestion des contentieux : Assistance juridique et traitement des dossiers administratifs sensibles."
     },
     {
       img: img3,
-      name: "Notre Vision",
-      Text: "Dans une démarche continue d'amélioration de la transparence et de l'accessibilité de ses services, le Ministère œuvre pour la mise en place de solutions numériques, y compris une bibliothèque numérique qui soutiendra la gestion des informations et la diffusion des ressources publiques."
+      name: "Direction de la Réforme et de la Fonction Publique",
+      Text: "Cette direction se concentre sur :-Modernisation administrative : <br>Mise en œuvre des réformes pour une fonction publique performante.<br>-Gestion stratégique des ressources humaines : <br>Planification et optimisation des effectifs, des compétences et des parcours professionnels.<br>-Promotion des valeurs éthiques : Renforcement de la déontologie et de la transparence dans l’administration publique."
     }
   ];
 
@@ -59,7 +59,7 @@ const Accueil = () => {
     // Simulate slide transition
     setTimeout(() => {
       nameRef.current.innerText = sliderContent[active].name;
-      TextRef.current.innerText = sliderContent[active].Text;
+      textRef.current.innerHTML = sliderContent[active].Text;  // Use HTML content
       contentRef.current.style.left = '5%';
       prevRef.current.style.left = '0%';
       nextRef.current.style.right = '0%';
@@ -72,7 +72,6 @@ const Accueil = () => {
 
     // Cleanup interval on component unmount
     return () => clearInterval(intervalId);
-
   }, [active]);
 
   return (
@@ -97,8 +96,8 @@ const Accueil = () => {
           </button>
         </div>
         <div className="content" ref={contentRef}>
-          <h1 ref={nameRef} className="text-4xl text-white">{sliderContent[0].name}</h1>
-          <p ref={TextRef} className="mt-5 text-lg text-left text-white">{sliderContent[0].Text}</p>
+          <h1 ref={nameRef} className="text-4xl text-white">{sliderContent[active].name}</h1>
+          <p ref={textRef} className="mt-5 text-lg text-left text-white">{sliderContent[active].Text}</p>
         </div>
       </div>
       <Documents />
