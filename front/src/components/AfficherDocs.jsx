@@ -7,6 +7,10 @@ import { toast } from "react-toastify";
 import { userContext } from "./Context";
 import { Link } from "react-router-dom";
 import { MutatingDots } from "react-loader-spinner";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload ,faPenToSquare,faTrash,faCashRegister,faForward,faBackward,faSquarePlus} from '@fortawesome/free-solid-svg-icons';
+import {faReadme} from '@fortawesome/free-brands-svg-icons';
+
 
 const Documents = ({ isAdmin }) => {
   const [data, setData] = useState([]);
@@ -215,30 +219,30 @@ const Documents = ({ isAdmin }) => {
                                   ? handleView(doc.pdf_file, "pdf")
                                   : handleView(doc.fichier, "pdf");
                               }}
-                              className="text-blue-500 hover:underline"
+                              className="text-blue-800 hover:underline"
                             >
-                              Voir le texte
+                              <FontAwesomeIcon icon={faReadme}/>
                             </button>
                           ) : (
                             <span className="text-gray-500">Non disponible</span>
                           )}
                           <button
                             onClick={() => handleEdit(doc?.id)}
-                            className="text-green-500 hover:underline mr-2 px-5"
+                            className="text-green-500 hover:underline mr-2 px-9"
                           >
-                            Modifier
+                            <FontAwesomeIcon icon={faPenToSquare} />
                           </button>
                           <button
                             onClick={() => handleDelete(doc?.id)}
-                            className="text-red-500 hover:underline px-5"
+                            className="text-red-500 hover:underline"
                           >
-                            Supprimer
+                           <FontAwesomeIcon icon={faTrash} />
                           </button>
                           <button
                             onClick={() => updateStatus(doc?.id)}
-                            className="text-yellow-500 hover:underline px-4"
+                            className="text-yellow-500 hover:underline px-14"
                           >
-                            Changer status
+                            <FontAwesomeIcon icon={faCashRegister} className="px-3"/>status
                           </button>
                         </>
                       ) : (
@@ -250,9 +254,9 @@ const Documents = ({ isAdmin }) => {
                                   ? handleView(doc.pdf_file, "pdf")
                                   : handleView(doc.fichier, "pdf");
                               }}
-                              className="text-blue-500 hover:underline"
+                              className="text-blue-800 hover:underline"
                             >
-                              Voir le texte
+                              <FontAwesomeIcon icon={faReadme} />
                             </button>
                           ) : (
                             <span className="text-gray-500">Non disponible</span>
@@ -261,9 +265,9 @@ const Documents = ({ isAdmin }) => {
                             onClick={() =>
                               handleDownload(doc.pdf_file || doc.fichier, `document-${doc.id}.pdf`)
                             }
-                            className="text-blue-500 hover:underline"
+                            className="text-gray-700 hover:underline"
                           >
-                            Télécharger
+                            <FontAwesomeIcon icon={faDownload} className="icon"/>
                           </button>
                         </div>
                       )}
@@ -285,14 +289,14 @@ const Documents = ({ isAdmin }) => {
               disabled={!previousPage}
               className={`px-4 py-2 rounded-md ${previousPage ? "bg-blue-900 text-white" : "bg-gray-300 text-gray-500"}`}
             >
-              précédente
+              <FontAwesomeIcon icon={faBackward} className="px-4"/>précédente
             </button>
             <button
               onClick={() => nextPage && fetchDocuments(nextPage)}
               disabled={!nextPage}
               className={`px-4 py-2 rounded-md ${nextPage ? "bg-blue-900 text-white" : "bg-gray-300 text-gray-500"}`}
             >
-              suivante
+              suivante<FontAwesomeIcon icon={faForward} className="px-4"/>
             </button>
           </div>
         </div>
@@ -302,19 +306,19 @@ const Documents = ({ isAdmin }) => {
               to={"/AjoutDoc"}
               className="bg-blue-900  py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 w-full sm:w-auto"
             >
-              Ajouter un document
+              <FontAwesomeIcon icon={faSquarePlus} className="px-2 text-white"/>Ajouter un document
             </Link>
             <Link
               to={"/AjoutCorps"}
               className="bg-blue-900  py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 w-full sm:w-auto"
             >
-              Ajouter un Corps
+              <FontAwesomeIcon icon={faSquarePlus} className="px-2 text-white"/>Ajouter un Corps
             </Link>
             <Link
               to={"/AjoutActus"}
               className="bg-blue-900  py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 w-full sm:w-auto"
             >
-              Ajouter un Actualité
+              <FontAwesomeIcon icon={faSquarePlus} className="px-2 text-white"/>Ajouter un Actualité
             </Link>
           </div>
         )}

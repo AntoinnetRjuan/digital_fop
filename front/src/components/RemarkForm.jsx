@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
 const RemarkForm = () => {
     const [email, setEmail] = useState("");
@@ -47,7 +49,7 @@ const RemarkForm = () => {
                     type="submit"
                     className="bg-blue-900 text-yellow-300 py-3 px-6 rounded-md hover:bg-blue-700 transition duration-200"
                 >
-                    Envoyer
+                    Envoyer<FontAwesomeIcon icon={faPaperPlane} className='px-2'/>
                 </button>
             </form>
         </div>

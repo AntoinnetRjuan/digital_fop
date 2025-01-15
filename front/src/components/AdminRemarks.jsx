@@ -39,7 +39,7 @@ const AdminRemarks = () => {
     };
 
     return (
-        <div className="flex flex-col items-center w-full p-6 bg-white shadow-lg rounded-lg max-w-4xl mx-auto">
+        <div className="flex flex-col items-center p-6 bg-white shadow-lg rounded-lg max-w-4xl mx-auto">
             <h1 className="text-2xl font-semibold text-gray-800 mb-6">Remarques des visiteurs</h1>
             <div className="w-full">
                 {remarks.length > 0 ? (

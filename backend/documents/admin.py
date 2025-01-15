@@ -5,6 +5,9 @@ from .models import Document,Domaine
 class DomaineAdmin(admin.ModelAdmin):
     list_display = ('nom',)
     search_fields = ('nom',)
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.order_by('-id')
 
 # Register your models here.
 admin.site.site_header = "Administration de Bibliotheque Numerique"

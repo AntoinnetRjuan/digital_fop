@@ -9,6 +9,8 @@ class Domaine(models.Model):  # ou Theme
 
     def __str__(self):
         return self.nom
+    class Meta:
+        ordering = []
 # Create your models here.
 class Document(models.Model):
     TYPE_CHOICES = [

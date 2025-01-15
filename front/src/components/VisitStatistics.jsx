@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Line } from "react-chartjs-2";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChartLine } from '@fortawesome/free-solid-svg-icons';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -102,9 +104,9 @@ const VisitStatistics = () => {
     };
 
     return (
-        <div className="p-4 bg-white shadow-lg rounded-lg">
-            <h1 className="text-2xl font-semibold mb-4">Statistiques de visites</h1>
-            <form onSubmit={handleFilter} className="flex gap-4 items-center mb-4">
+        <div className="p-4 m-11 bg-white shadow-lg rounded-lg text-center">
+            <h1 className="text-2xl font-semibold mb-4"><FontAwesomeIcon icon={faChartLine} className="px-3"/>Statistiques de visites</h1>
+            <form onSubmit={handleFilter} className=" mb-4 mx-auto">
                 <input
                     type="date"
                     value={startDate}

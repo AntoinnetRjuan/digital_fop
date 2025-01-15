@@ -6,6 +6,8 @@ import { toast } from 'react-toastify'
 import { userContext } from './Context'
 import  biblio from "../assets/logo.png"
 import axios from 'axios'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRightFromBracket,faHouse } from '@fortawesome/free-solid-svg-icons';
 const Menu = ({ onSelectDomaine }) => {
   const [domaines, setDomaines] = useState([])
   const [isMenuOpen, SetisMenuOpen] = useState(false)
@@ -77,7 +79,7 @@ const Menu = ({ onSelectDomaine }) => {
                     to={"/"}
                     className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
                   >
-                    Accueil
+                    <FontAwesomeIcon icon={faHouse} className='px-2 mb-0.5'/>Accueil
                   </Link>
                 </li>
                 <li>
@@ -94,7 +96,7 @@ const Menu = ({ onSelectDomaine }) => {
                     onClick={handleLogout}
                     className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
                   >
-                    Déconnecter
+                    Déconnecter<FontAwesomeIcon icon={faRightFromBracket} className='px-2'/>
                   </Link>
                 </li>
               </>

@@ -1,0 +1,17 @@
+{
+  "name": "digital-library",
+  "version": "1.0.0",
+  "scripts": {
+    "build:css": "postcss src/styles.css -o dist/styles.css",
+    "start": "node -r @babel/register src/index.js"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.0.0",
+    "postcss-cli": "^8.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/register": "^7.0.0"
+  }
+}

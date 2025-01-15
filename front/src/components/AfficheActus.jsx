@@ -3,6 +3,8 @@ import axiosInstance from './AxiosConfig';
 import { toast } from 'react-toastify';
 import gov from "../assets/gov.svg";
 import ministre from "../assets/ministre.svg";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare,faTrash } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -89,13 +91,13 @@ const Modal = ({ show, onClose, actu, onUpdate, onDelete, isAdmin }) => {
                             onClick={handleUpdate}
                             className="bg-green-500 text-white p-2 rounded-md mr-2"
                         >
-                            Modifier
+                           <FontAwesomeIcon icon={faPenToSquare}/> Modifier
                         </button>
                         <button
                             onClick={handleDelete}
                             className="bg-red-500 text-white p-2 rounded-md"
                         >
-                            Supprimer
+                            <FontAwesomeIcon icon={faTrash}/>Supprimer
                         </button>
                     </div>
                 )}
@@ -167,22 +169,6 @@ const AfficheActus = ({ isAdminE }) => {
                                 onClick={() => openModal(actus.id)}
                             >
                                 <p>{actus.titre}</p>
-                                {isAdminE && (
-                                    <div className="mt-2">
-                                        <button
-                                            onClick={() => openModal(actus.id)}
-                                            className="bg-blue-500 text-white p-2 rounded-md mr-2"
-                                        >
-                                            Modifier
-                                        </button>
-                                        <button
-                                            onClick={() => deleteActu(actus.id)}
-                                            className="bg-red-500 text-white p-2 rounded-md"
-                                        >
-                                            Supprimer
-                                        </button>
-                                    </div>
-                                )}
                             </div>
                         ))
                     ) : (
@@ -192,8 +178,7 @@ const AfficheActus = ({ isAdminE }) => {
                 <div className="w-full md:w-1/2">
                     <div className="flex  justify-center ">
                         <span class=" icons2 c2">
-                            <img src={ministre} alt='ministre logo' className='product-image    ' />
-
+                            <img src={ministre} alt='ministre logo' className='product-image' />
                         </span>
                     </div>
 

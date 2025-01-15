@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
 
 const SearchBar = ({ onSearch }) => {
     const [searchBy, setSearchBy] = useState("objet");
@@ -184,9 +186,9 @@ const SearchBar = ({ onSearch }) => {
 
                 <button
                     type="submit"
-                    className="bg-blue-800 text-yellow-300 py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
+                    className="bg-blue-800 text-yellow-300 py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 flex items-center justify-center"
                 >
-                    Rechercher
+                    <FontAwesomeIcon icon={faMagnifyingGlass} className="px-3"/>Rechercher
                 </button>
             </form>
         </div>
