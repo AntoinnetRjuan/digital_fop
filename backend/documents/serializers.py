@@ -12,9 +12,12 @@ class DocumentSerializer(serializers.ModelSerializer):
     domaine = serializers.PrimaryKeyRelatedField(queryset=Domaine.objects.all())
     content = serializers.SerializerMethodField()
     pdf_url = serializers.SerializerMethodField()
+    last_modified_by = serializers.StringRelatedField(read_only=True)  # Nom de l'utilisateur
+    last_modified_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
     class Meta:
         model = Document
         fields = '__all__'
+
     def get_content(self, obj):
         return obj.extract_content()
     def get_pdf_url(self, obj):

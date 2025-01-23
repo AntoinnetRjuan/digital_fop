@@ -1,9 +1,11 @@
+from django.utils.timezone import now
 from django.db import models
 import PyPDF2
 import docx
 import win32com.client
 import pythoncom 
 import os
+from django.conf import settings
 class Domaine(models.Model):  # ou Theme
     nom = models.CharField(max_length=100, unique=True,null=True)
 
@@ -47,6 +49,27 @@ class Document(models.Model):
     fichier = models.FileField(upload_to='documents/')
     pdf_file = models.FileField(upload_to='pdf_documents/', null=True, blank=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='en_vigueur')
+    last_modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='modified_documents'
+    )
+    last_modified_at = models.DateTimeField(null=True, blank=True)
+    modification_details = models.TextField(null=True, blank=True)  # Description des modifications
+    inclus_journal = models.BooleanField(default=False)
+    date_journal = models.DateField(null=True, blank=True)
+    numero_journal = models.CharField(max_length=20, null=True, blank=True)
+    page_journal = models.CharField(max_length=20, null=True, blank=True)
+
+    def update_modification(self, user, details):
+        """Mise à jour des informations de modification."""
+        self.last_modified_by = user
+        self.last_modified_at = now()
+        self.modification_details = details
+        self.save()
+
 
     def __str__(self):
         return f"{self.type} - {self.numero}"
@@ -105,10 +128,10 @@ class Document(models.Model):
 
 class Actualite(models.Model):
     CONSEIL_CHOICES = [
-        ('CONSEIL DE MINISTRE', 'Ministre'),
-        ('CONSEIL DE GOUVERNEMENT', 'Gouvernement'),
+        ('CONSEIL DES MINISTRES', 'Ministre'),
+        ('CONSEIL DU GOUVERNEMENT', 'Gouvernement'),
     ]
-    conseil = models.CharField(max_length=50,choices=CONSEIL_CHOICES,default='CONSEIL DE MINISTRE')
+    conseil = models.CharField(max_length=50,choices=CONSEIL_CHOICES,default='CONSEIL DES MINISTRES')
     titre = models.CharField(max_length=200)
     date = models.DateField(default='2024-01-01')
     lieu = models.CharField(max_length=100)
@@ -124,3 +147,4 @@ class Remark(models.Model):
 
     def __str__(self):
         return self.email
+

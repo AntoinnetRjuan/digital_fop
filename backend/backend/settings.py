@@ -19,6 +19,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 #
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+DOMAIN = 'http://localhost:8000'
+FULL_MEDIA_URL = os.path.join(DOMAIN,MEDIA_URL)
 # Initialisation de l'objet environ.Env
 env = environ.Env()
 
@@ -41,6 +43,8 @@ SECRET_KEY = 'django-insecure-w4a9d_hko73r$z77!onf18@=9m)9j^2u#hg5^4lk^(zxfj4&x&
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+
+AUTH_USER_MODEL = 'users.User'
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
@@ -209,7 +213,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static/frontend"]
+#STATICFILES_DIRS = [BASE_DIR / "static/frontend"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

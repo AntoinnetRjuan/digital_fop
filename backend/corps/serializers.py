@@ -17,8 +17,8 @@ class CorpsSerializer(serializers.ModelSerializer):
     def get_content(self, obj):
         return obj.extract_content()
     def get_pdf_url(self, obj):
-        if obj.fichier.name.endswith('.docx'):
-            pdf_path = obj.fichier.name.replace('.docx', '.pdf')
-            if default_storage.exists(pdf_path):
-                return f"{settings.MEDIA_URL}{pdf_path}"
+        if obj.pdf_file:
+            return f"{settings.FULL_MEDIA_URL}{obj.pdf_file}"
+        elif obj.fichier:
+            return f"{settings.FULL_MEDIA_URL}{obj.fichier}"
         return None
