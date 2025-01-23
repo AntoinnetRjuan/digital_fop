@@ -7,6 +7,8 @@ import AdminRemarks from './AdminRemarks';
 import VisitStatistics from './VisitStatistics';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
+import DocumentStatsDropdown from './StatistiqueDocs';
+import CorpsFilteredList from './CorpsFilteredList';
 
 function Dashboard() {
     const { user } = useContext(userContext);
@@ -19,6 +21,10 @@ function Dashboard() {
         <>
             <div className='mt-40'>
                 <Documents isAdmin={true} />
+            </div>
+            <div>
+                <h1 className="text-2xl font-semibold text-gray-400 mt-8 flex flex-col items-center justify-center">Status Particulier</h1>
+                <CorpsFilteredList isAdmin={true}/>
             </div>
             <div>
                 <h1 className="text-2xl font-semibold text-gray-400 mt-8 flex flex-col items-center justify-center">Actualités</h1>
@@ -36,6 +42,9 @@ function Dashboard() {
             <div className="dashboard">
                 <h1 className="text-center text-white text-3xl font-bold mb-4">Reporting</h1>
                 <VisitStatistics/>
+            </div>
+            <div className='mt-6'>
+                <DocumentStatsDropdown/>
             </div>
         </>
     );

@@ -8,8 +8,9 @@ import { userContext } from "./Context";
 import { Link } from "react-router-dom";
 import { MutatingDots } from "react-loader-spinner";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload ,faPenToSquare,faTrash,faCashRegister,faForward,faBackward,faSquarePlus} from '@fortawesome/free-solid-svg-icons';
-import {faReadme} from '@fortawesome/free-brands-svg-icons';
+import { faDownload, faPenToSquare, faTrash, faCashRegister, faForward, faBackward, faSquarePlus, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faReadme } from '@fortawesome/free-brands-svg-icons';
+import Modal from "./Modal";
 
 
 const Documents = ({ isAdmin }) => {
@@ -17,9 +18,30 @@ const Documents = ({ isAdmin }) => {
   const [documents, setDocuments] = useState([]);
   const [nextPage, setNextPage] = useState(true);
   const [previousPage, setPreviousPage] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedModification, setSelectedModification] = useState(null);
+  const [journaux, setJournaux] = useState([]);
   const { selectedDomaine } = useContext(userContext);
   const navigate = useNavigate();
 
+  const handleShowInfo = (modification) => {
+    setSelectedModification(modification);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedModification(null);
+  };
+  // useEffect(()=>{
+  //   axios.get("http://localhost:8000/api/journaux")
+  //   .then((response)=>{
+  //     setJournaux(response.data.results)
+  //   })
+  //   .catch(error=>{
+  //     toast.error("erreur lors de récuperations des journaux")
+  //   })
+  // },[])
   const fetchDocuments = async (url) => {
     try {
       const response = await axios.get(url);
@@ -121,7 +143,10 @@ const Documents = ({ isAdmin }) => {
       const { searchBy, searchValue } = criteria;
 
       let params = {};
-      if (searchBy === "date") {
+      if (searchBy === "journal") {
+        params.dateJournal = searchValue.dateJournal;
+        params.numeroJournal = searchValue.numeroJournal;
+      } else if (searchBy === "date") {
         params.start_date = searchValue.startDate;
         params.end_date = searchValue.endDate;
       } else if (searchBy === "type") {
@@ -131,15 +156,17 @@ const Documents = ({ isAdmin }) => {
         params[searchBy] = searchValue;
       }
 
+      console.log("Paramètres envoyés à l'API :", params); // Vérifiez ici
 
       const response = await axiosInstance.get("/api/documents/", { params });
-
       setDocuments(response.data.results);
     } catch (error) {
       console.error("Erreur lors de la recherche :", error);
       setDocuments([]);
     }
   };
+
+
 
 
   const handleDownload = async (fileUrl, fileName) => {
@@ -182,6 +209,14 @@ const Documents = ({ isAdmin }) => {
         </div>
         <h1 className="text-2xl font-semibold text-gray-300 mb-6">Liste des documents</h1>
         <div className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg">
+          {showModal && selectedModification && (
+            <Modal onClose={closeModal}>
+              <h2 className="text-lg font-bold mb-4">Détails des modifications</h2>
+              <p><strong>Modifié par :</strong> {selectedModification.user}</p>
+              <p><strong>Date :</strong> {selectedModification.date}</p>
+              <p><strong>Modifications :</strong> {selectedModification.details}</p>
+            </Modal>
+          )}
           <table className="table-auto w-full text-left border-collapse">
             <thead className="bg-blue-900 text-yellow-300">
               <tr>
@@ -221,7 +256,7 @@ const Documents = ({ isAdmin }) => {
                               }}
                               className="text-blue-800 hover:underline"
                             >
-                              <FontAwesomeIcon icon={faReadme}/>
+                              <FontAwesomeIcon icon={faReadme} />
                             </button>
                           ) : (
                             <span className="text-gray-500">Non disponible</span>
@@ -236,14 +271,27 @@ const Documents = ({ isAdmin }) => {
                             onClick={() => handleDelete(doc?.id)}
                             className="text-red-500 hover:underline"
                           >
-                           <FontAwesomeIcon icon={faTrash} />
+                            <FontAwesomeIcon icon={faTrash} />
                           </button>
                           <button
                             onClick={() => updateStatus(doc?.id)}
                             className="text-yellow-500 hover:underline px-14"
                           >
-                            <FontAwesomeIcon icon={faCashRegister} className="px-3"/>status
+                            <FontAwesomeIcon icon={faCashRegister} className="px-3" />status
                           </button>
+                          {doc.last_modified_by && (
+                            <button
+                              onClick={() => handleShowInfo({
+                                user: doc.last_modified_by,
+                                date: doc.last_modified_at,
+                                details: doc.modification_details,
+                              })}
+                              className="text-red-500 hover:underline"
+                            >
+                              <FontAwesomeIcon icon={faCircleInfo} />
+                            </button>
+                          )
+                          }
                         </>
                       ) : (
                         <div className="space-x-5">
@@ -267,7 +315,7 @@ const Documents = ({ isAdmin }) => {
                             }
                             className="text-gray-700 hover:underline"
                           >
-                            <FontAwesomeIcon icon={faDownload} className="icon"/>
+                            <FontAwesomeIcon icon={faDownload} className="icon" />
                           </button>
                         </div>
                       )}
@@ -289,14 +337,14 @@ const Documents = ({ isAdmin }) => {
               disabled={!previousPage}
               className={`px-4 py-2 rounded-md ${previousPage ? "bg-blue-900 text-white" : "bg-gray-300 text-gray-500"}`}
             >
-              <FontAwesomeIcon icon={faBackward} className="px-4"/>précédente
+              <FontAwesomeIcon icon={faBackward} className="px-4" />précédente
             </button>
             <button
               onClick={() => nextPage && fetchDocuments(nextPage)}
               disabled={!nextPage}
               className={`px-4 py-2 rounded-md ${nextPage ? "bg-blue-900 text-white" : "bg-gray-300 text-gray-500"}`}
             >
-              suivante<FontAwesomeIcon icon={faForward} className="px-4"/>
+              suivante<FontAwesomeIcon icon={faForward} className="px-4" />
             </button>
           </div>
         </div>
@@ -306,19 +354,19 @@ const Documents = ({ isAdmin }) => {
               to={"/AjoutDoc"}
               className="bg-blue-900  py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 w-full sm:w-auto"
             >
-              <FontAwesomeIcon icon={faSquarePlus} className="px-2 text-white"/>Ajouter un document
+              <FontAwesomeIcon icon={faSquarePlus} className="px-2 text-white" />Ajouter un document
             </Link>
             <Link
               to={"/AjoutCorps"}
               className="bg-blue-900  py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 w-full sm:w-auto"
             >
-              <FontAwesomeIcon icon={faSquarePlus} className="px-2 text-white"/>Ajouter un Corps
+              <FontAwesomeIcon icon={faSquarePlus} className="px-2 text-white" />Ajouter un Corps
             </Link>
             <Link
               to={"/AjoutActus"}
               className="bg-blue-900  py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 w-full sm:w-auto"
             >
-              <FontAwesomeIcon icon={faSquarePlus} className="px-2 text-white"/>Ajouter un Actualité
+              <FontAwesomeIcon icon={faSquarePlus} className="px-2 text-white" />Ajouter un Actualité
             </Link>
           </div>
         )}

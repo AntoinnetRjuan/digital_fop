@@ -17,10 +17,11 @@ const CorpsForm = () => {
     });
     const [typeCorps, setTypeCorps] = useState([])
     const [loading, setLoading] = useState(false)
+
     useEffect(() => {
         axios.get('http://localhost:8000/api/typecorps/')
             .then(response => setTypeCorps(response.data.results))
-            .catch(error => console.error("Une erreur est survenue lors du recuperation:", error))
+            .catch(error => console.error("Une erreur est survenue lors du récupération:", error))
     }, [])
 
     const handleFileChange = (e) => {
@@ -36,7 +37,7 @@ const CorpsForm = () => {
         const user = JSON.parse(localStorage.getItem("user"));
         const token = user?.access;
         if (!token) {
-            toast.error("Vous n'etes pas connecté. Veuillez vous connecter.");
+            toast.error("Vous n'êtes pas connecté. Veuillez vous connecter.");
             return;
         }
 
@@ -48,14 +49,12 @@ const CorpsForm = () => {
 
         setLoading(true)
         try {
-            const response = await axiosInstance.post('/api/corps/', formData, {
+            const response = await axiosInstance.post('/api/corps/', formDataToSend, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
-            }).then(response => {
-                toast.success('Corps ajouté avec succès!');
-            })
-
+            });
+            toast.success('Corps ajouté avec succès!');
         } catch (error) {
             toast.error("Erreur lors de l'ajout du corps:", error);
         } finally {
@@ -72,7 +71,6 @@ const CorpsForm = () => {
                         height: "auto", backgroundSize: "cover",
                         backgroundPosition: "center",
                     }}>
-
                 </div>
                 <div className='w-full md:w-1/2 p-6'>
                     <form
@@ -80,16 +78,43 @@ const CorpsForm = () => {
                         className="w-full max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8"
                     >
                         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Ajouter un Corps</h2>
+
+                        {/* Nom du corps : Liste déroulante */}
                         <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2">Nom du corps</label>
-                            <input
-                                type="text"
+                            <label className="block text-gray-700 text-sm font-bold mb-2">Catégories des corps professionnels dans la fonction publique</label>
+                            <select
                                 name="nom"
                                 value={formData.nom}
                                 onChange={handleChange}
                                 className="w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
                                 required
-                            />
+                            >
+                                <option value="">Choisir</option>
+                                <option value="Administration Publique">Administration Publique</option>
+                                <option value="Administration Judiciaire">Administration Judiciaire</option>
+                                <option value="Administration Pénitentiaire">Administration Pénitentiaire</option>
+                                <option value="Agriculture-Elevage - Pêche">Agriculture-Élevage - Pêche</option>
+                                <option value="Chercheur enseignant et Enseignement chercheur">Chercheur enseignant et Enseignement chercheur</option>
+                                <option value="Communication médiatisée">Communication médiatisée</option>
+                                <option value="Diplomatie">Diplomatie</option>
+                                <option value="Domaine-Topographie">Domaine-Topographie</option>
+                                <option value="Environnement - Eaux et Forêts">Environnement - Eaux et Forêts</option>
+                                <option value="Éducation de base et Enseignement secondaire">Éducation de base et Enseignement secondaire</option>
+                                <option value="Énergie, Mines et Ressources">Énergie, Mines et Ressources</option>
+                                <option value="Économie, Finances et Plan">Économie, Finances et Plan</option>
+                                <option value="Inspection de l'Etat">Inspection de l'État</option>
+                                <option value="Forces Armées">Forces Armées</option>
+                                <option value="Jeunesse et Sports">Jeunesse et Sports</option>
+                                <option value="Météorologie">Météorologie</option>
+                                <option value="Planification">Planification</option>
+                                <option value="Police nationale">Police nationale</option>
+                                <option value="Poste et Télécommunications">Poste et Télécommunications</option>
+                                <option value="Travail et Lois Sociales">Travail et Lois Sociales</option>
+                                <option value="Corps transversaux">Corps transversaux</option>
+                                <option value="Travaux publics, Habitat et Aménagement">Travaux publics, Habitat et Aménagement</option>
+                                <option value="Transports">Transports</option>
+                                <option value="Santé Publique">Santé Publique</option>
+                            </select>
                         </div>
 
                         <div className="mb-4">
@@ -127,8 +152,7 @@ const CorpsForm = () => {
                                 <option value="">Choisir</option>
                                 {typeCorps.map((type) => (
                                     <option key={type.id} value={type.id}>{type.nom}</option>
-                                ))
-                                }
+                                ))}
                             </select>
                         </div>
 
@@ -158,10 +182,9 @@ const CorpsForm = () => {
                                 <option value="inactif">Inactif</option>
                             </select>
                         </div>
+
                         <div>
-                            <label className="block text-gray-700 font-medium mb-2">
-                                Fichier
-                            </label>
+                            <label className="block text-gray-700 font-medium mb-2">Fichier</label>
                             <input
                                 type="file"
                                 name="fichier"
@@ -170,7 +193,6 @@ const CorpsForm = () => {
                                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
-
 
                         <div className="flex items-center justify-between">
                             <button
@@ -194,7 +216,6 @@ const CorpsForm = () => {
                     </form>
                 </div>
             </div>
-
         </div>
     );
 };

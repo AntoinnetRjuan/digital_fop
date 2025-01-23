@@ -20,6 +20,9 @@ import AddActus from './components/AddActus';
 import RemarkForm from "./components/RemarkForm";
 import AdminRemarks from "./components/AdminRemarks";
 import Documents from './components/AfficherDocs';
+import AnimatedCard from './components/AnimatedCard';
+import CorpsFilteredList from './components/CorpsFilteredList';
+import EditCorpsForm from './components/EditCorpsForm';
 axios.defaults.withCredentials = true;
 
 const App = () => {
@@ -34,7 +37,7 @@ const App = () => {
     return (
         <>
             <div className='bg-gray-900'>
-                <Header/>
+                <Header />
                 <ToastContainer />
                 <Router>
                     <Menu user={user} onSelectDomaine={setSelectedDomaine} />
@@ -46,15 +49,17 @@ const App = () => {
                         <Route path='/dashboard' element={<ProtectedRoute isAuthenticated={user.refresh}><Dashboard /></ProtectedRoute>} />
                         <Route path='/AjoutDoc' element={<ProtectedRoute isAuthenticated={user.refresh}><AjouterDocument /></ProtectedRoute>} />
                         <Route path="/edit/:id" element={<ProtectedRoute isAuthenticated={user.refresh}><EditDocument /></ProtectedRoute>} />
+                        <Route path="/editCorps/:id" element={<ProtectedRoute isAuthenticated={user.refresh}><EditCorpsForm/></ProtectedRoute>} />
                         <Route path='/AjoutCorps' element={<ProtectedRoute isAuthenticated={user.refresh}><CorpsForm /></ProtectedRoute>} />
                         <Route path='/AjoutActus' element={<ProtectedRoute isAuthenticated={user.refresh}><AddActus /></ProtectedRoute>} />
                         <Route path="/remarks" element={<RemarkForm />} />
-                        <Route path='/AfficherDoc' element={<Documents/>}/>
+                        <Route path='/AfficherDoc' element={<Documents />} />
+                        <Route path='/status' element={<CorpsFilteredList />} />
                         <Route path="/admin/remarks" element={<AdminRemarks />} />
                         <Route path='*' element={<Accueil />} />
                     </Routes>
                 </Router>
-                <Footer/>
+                <Footer />
             </div>
 
         </>

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import gov from "../assets/gov.svg";
 import ministre from "../assets/ministre.svg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare,faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -91,13 +91,13 @@ const Modal = ({ show, onClose, actu, onUpdate, onDelete, isAdmin }) => {
                             onClick={handleUpdate}
                             className="bg-green-500 text-white p-2 rounded-md mr-2"
                         >
-                           <FontAwesomeIcon icon={faPenToSquare}/> Modifier
+                            <FontAwesomeIcon icon={faPenToSquare} /> Modifier
                         </button>
                         <button
                             onClick={handleDelete}
                             className="bg-red-500 text-white p-2 rounded-md"
                         >
-                            <FontAwesomeIcon icon={faTrash}/>Supprimer
+                            <FontAwesomeIcon icon={faTrash} />Supprimer
                         </button>
                     </div>
                 )}
@@ -147,71 +147,72 @@ const AfficheActus = ({ isAdminE }) => {
     };
 
     return (
-        <div className="bg-white rounded-lg p-4 mx-4 md:mx-10 w">
-            <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex items-center justify-center">
+            <div className=" bg-white rounded-lg p-4 mx-4 md:mx-10 w-2/3">
+                <div className="flex flex-col md:flex-row gap-4">
 
-                <div className="w-full md:w-1/2">
-
-                    <div className="flex items-center justify-center">
-                        <span>
-                            <img src={gov} alt='gov logo' className='product-image flex' />
-
-                        </span>
-                    </div>
-                    <h3 className="text-lg font-bold mb-2 text-green-700 text-center">
-                        Conseil du Gouvernement
-                    </h3>
-                    {conseilGouvernement.length > 0 ? (
-                        conseilGouvernement.map((actus) => (
-                            <div
-                                key={actus.id}
-                                className="bg-gray-100 p-4 rounded-md text-gray-900 mb-4 cursor-pointer"
-                                onClick={() => openModal(actus.id)}
-                            >
-                                <p>{actus.titre}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <p className="text-gray-500">Aucune actualité disponible.</p>
-                    )}
-                </div>
-                <div className="w-full md:w-1/2">
-                    <div className="flex  justify-center ">
-                        <span class=" icons2 c2">
-                            <img src={ministre} alt='ministre logo' className='product-image' />
-                        </span>
+                    <div className="w-full md:w-1/2">
+                        <div className="flex items-center justify-center">
+                            <span>
+                                <img src={gov} alt='gov logo' className='product-image flex' />
+                            </span>
+                        </div>
+                        <h3 className="text-lg font-bold mb-2 text-green-700 text-center">
+                            Conseil du Gouvernement
+                        </h3>
+                        {conseilGouvernement.length > 0 ? (
+                            conseilGouvernement.map((actus) => (
+                                <div
+                                    key={actus.id}
+                                    className="bg-gray-100 p-4 rounded-md text-gray-900 mb-4 cursor-pointer"
+                                    onClick={() => openModal(actus.id)}
+                                >
+                                    <p>{actus.titre}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="text-gray-500">Aucune actualité disponible.</p>
+                        )}
                     </div>
 
-                    <h3 className="text-lg font-bold mb-2 text-red-600 text-center">
-                        Conseil des Ministres
-                    </h3>
-                    {conseilMinistre.length > 0 ? (
-                        conseilMinistre.map((actus) => (
-                            <div
-                                key={actus.id}
-                                className="bg-gray-100 p-4 rounded-md text-gray-900 mb-4 cursor-pointer"
-                                onClick={() => openModal(actus.id)}
-                            >
-                                <p>{actus.titre}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <p className="text-gray-500">Aucune actualité disponible.</p>
-                    )}
+                    <div className="w-full md:w-1/2">
+                        <div className="flex justify-center">
+                            <span className="icons2 c2">
+                                <img src={ministre} alt='ministre logo' className='product-image' />
+                            </span>
+                        </div>
+                        <h3 className="text-lg font-bold mb-2 text-red-600 text-center">
+                            Conseil des Ministres
+                        </h3>
+                        {conseilMinistre.length > 0 ? (
+                            conseilMinistre.map((actus) => (
+                                <div
+                                    key={actus.id}
+                                    className="bg-gray-100 p-4 rounded-md text-gray-900 mb-4 cursor-pointer"
+                                    onClick={() => openModal(actus.id)}
+                                >
+                                    <p>{actus.titre}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="text-gray-500">Aucune actualité disponible.</p>
+                        )}
+                    </div>
                 </div>
+
+                {selectedActu && (
+                    <Modal
+                        show={!!selectedActu}
+                        onClose={closeModal}
+                        actu={selectedActu}
+                        onUpdate={updateActu}
+                        onDelete={deleteActu}
+                        isAdmin={isAdminE}
+                    />
+                )}
             </div>
-
-            {selectedActu && (
-                <Modal
-                    show={!!selectedActu}
-                    onClose={closeModal}
-                    actu={selectedActu}
-                    onUpdate={updateActu}
-                    onDelete={deleteActu}
-                    isAdmin={isAdminE}
-                />
-            )}
         </div>
+
     );
 };
 

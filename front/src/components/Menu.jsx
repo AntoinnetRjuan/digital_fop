@@ -126,7 +126,7 @@ const Menu = ({ onSelectDomaine }) => {
                 </li>
                 <li>
                   <Link
-                    to={"/statuts"}
+                    to={"/status"}
                     className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
                   >
                     Status Particuliers

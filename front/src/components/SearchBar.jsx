@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
 const SearchBar = ({ onSearch }) => {
     const [searchBy, setSearchBy] = useState("objet");
@@ -11,6 +11,8 @@ const SearchBar = ({ onSearch }) => {
     const [endDate, setEndDate] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const [journalDate, setJournalDate] = useState(""); // Nouveau champ pour la date du Journal Officiel
+    const [journalNumero, setJournalNumero] = useState(""); // Nouveau champ pour le numéro du Journal Officiel
 
     const types = [
         { value: "", label: "Choisissez un type" },
@@ -61,16 +63,15 @@ const SearchBar = ({ onSearch }) => {
                     ? { startDate, endDate }
                 : searchBy === "type"
                     ? { type: selectedType, text: searchValue }
+                : searchBy === "journal"
+                    ? { dateJournal: journalDate, numeroJournal: journalNumero }
                 : searchValue,
         };
-
-        console.log("Critères de recherche :", critere); // Debugging log
-        
-        setShowSuggestions(false);
+    
+        console.log("Critères de recherche :", critere); // Log des critères envoyés
         onSearch(critere);
     };
-
-
+    
     const handleSuggestionClick = (suggestion) => {
         setSearchValue(suggestion);
         setShowSuggestions(false);
@@ -156,6 +157,32 @@ const SearchBar = ({ onSearch }) => {
                             </ul>
                         )}
                     </div>
+                ) : searchBy === "journal" ? (
+                    <div className="flex flex-col md:flex-row gap-4 items-center w-full">
+                        <div>
+                            <label className="block text-gray-700 font-medium mb-2">
+                                Date du Journal Officiel
+                            </label>
+                            <input
+                                type="date"
+                                value={journalDate}
+                                onChange={(e) => setJournalDate(e.target.value)}
+                                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-700 font-medium mb-2">
+                                Numéro du Journal Officiel
+                            </label>
+                            <input
+                                type="text"
+                                value={journalNumero}
+                                onChange={(e) => setJournalNumero(e.target.value)}
+                                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Entrez le numéro"
+                            />
+                        </div>
+                    </div>
                 ) : (
                     <div className="relative w-full">
                         <input
@@ -188,7 +215,7 @@ const SearchBar = ({ onSearch }) => {
                     type="submit"
                     className="bg-blue-800 text-yellow-300 py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 flex items-center justify-center"
                 >
-                    <FontAwesomeIcon icon={faMagnifyingGlass} className="px-3"/>Rechercher
+                    <FontAwesomeIcon icon={faMagnifyingGlass} className="px-3" />Rechercher
                 </button>
             </form>
         </div>

@@ -58,8 +58,8 @@ const AddActus = () => {
                                 required
                                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                             >
-                                <option value="CONSEIL DE MINISTRE">Conseil de ministre</option>
-                                <option value="CONSEIL DE GOUVERNEMENT">Conseil de Gouvernement</option>
+                                <option value="CONSEIL DES MINISTRES">Conseil des ministres</option>
+                                <option value="CONSEIL DE GOUVERNEMENT">Conseil du Gouvernement</option>
                             </select>
                         </div>
                         <div>

@@ -15,7 +15,12 @@ const AjouterDocument = () => {
     domaine: "",
     status: "",
     fichier: null,
+    inclusJournal: false,
+    dateJournal: "",
+    numeroJournal: "",
+    pageJournal: "",
   });
+
 
   const [domaines, setDomaines] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -26,6 +31,14 @@ const AjouterDocument = () => {
       .then(response => setDomaines(response.data.results))
       .catch(error => console.error("Erreur lors de la récupération des domaines :", error));
   }, []);
+  const handleInclusJournalChange = (e) => {
+    const inclus = e.target.checked;
+    setFormData((prevData) => ({
+      ...prevData,
+      inclusJournal: inclus,
+      ...(inclus ? {} : { dateJournal: "", numeroJournal: "", pageJournal: "" }), // Réinitialiser les champs si décoché
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,11 +51,13 @@ const AjouterDocument = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
-
-
+    
     Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key]);
+      if (formData[key] !== null && formData[key] !== "") {
+        data.append(key, formData[key]);
+      }
     });
+
     setLoading(true)
     try {
       await axiosInstance
@@ -136,14 +151,14 @@ const AjouterDocument = () => {
                 onChange={handleChange}
                 required
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                placeholder="Entrez la référence"
+                placeholder="Entrez la référence (ex: xxxx-xxx)"
               />
             </div>
 
             {/* Date */}
             <div>
               <label className="block text-gray-700 font-medium mb-2">
-                Date
+                Date (sortie du document)
               </label>
               <input
                 type="date"
@@ -222,6 +237,71 @@ const AjouterDocument = () => {
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
               />
             </div>
+            {/* Inclus dans le Journal Officiel */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">
+                Inclus dans le Journal Officiel ?
+              </label>
+              <input
+                type="checkbox"
+                name="inclusJournal"
+                checked={formData.inclusJournal}
+                onChange={handleInclusJournalChange}
+                className="mr-2"
+              />
+            </div>
+
+            {formData.inclusJournal && (
+              <>
+                {/* Date du Journal Officiel */}
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2">
+                    Date du Journal Officiel
+                  </label>
+                  <input
+                    type="date"
+                    name="dateJournal"
+                    value={formData.dateJournal}
+                    onChange={handleChange}
+                    required
+                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                {/* Numéro du Journal Officiel */}
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2">
+                    Numéro du Journal Officiel
+                  </label>
+                  <input
+                    type="text"
+                    name="numeroJournal"
+                    value={formData.numeroJournal}
+                    onChange={handleChange}
+                    required
+                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    placeholder="Entrez le numéro du Journal Officiel"
+                  />
+                </div>
+
+                {/* Page du Journal Officiel */}
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2">
+                    Page du Journal Officiel
+                  </label>
+                  <input
+                    type="text"
+                    name="pageJournal"
+                    value={formData.pageJournal}
+                    onChange={handleChange}
+                    required
+                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    placeholder="Entrez la page du Journal Officiel"
+                  />
+                </div>
+              </>
+            )}
+
 
             {/* Bouton Ajouter */}
             <button

@@ -4,6 +4,7 @@ import img2 from "/3.jpg";
 import img3 from "/2.png";
 import Documents from './AfficherDocs';
 import AfficheActus from './AfficheActus';
+import AnimatedCard from './AnimatedCard';
 
 const Accueil = () => {
   const [active, setActive] = useState(0);
@@ -103,7 +104,10 @@ const Accueil = () => {
       <Documents />
       <div>
         <h1 className="text-2xl font-semibold text-gray-400 mt-8 flex flex-col items-center justify-center">Actualités</h1>
-        <AfficheActus /> 
+        <AfficheActus />
+      </div>
+      <div className='bg-gradient-to-br from-primary/70 grid place-items-center'>
+        <AnimatedCard/>
       </div>
     </>
   );
