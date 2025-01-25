@@ -12,7 +12,6 @@ import { faDownload, faPenToSquare, faTrash, faCashRegister, faForward, faBackwa
 import { faReadme } from '@fortawesome/free-brands-svg-icons';
 import Modal from "./Modal";
 
-
 const Documents = ({ isAdmin }) => {
   const [data, setData] = useState([]);
   const [documents, setDocuments] = useState([]);
@@ -33,19 +32,11 @@ const Documents = ({ isAdmin }) => {
     setShowModal(false);
     setSelectedModification(null);
   };
-  // useEffect(()=>{
-  //   axios.get("http://localhost:8000/api/journaux")
-  //   .then((response)=>{
-  //     setJournaux(response.data.results)
-  //   })
-  //   .catch(error=>{
-  //     toast.error("erreur lors de récuperations des journaux")
-  //   })
-  // },[])
+
   const fetchDocuments = async (url) => {
     try {
       const response = await axios.get(url);
-      setDocuments(response.data.results); // Résultats actuels
+      setDocuments(response.data.results);
 
       if (!response.data.next) {
         setNextPage(false);
@@ -53,7 +44,7 @@ const Documents = ({ isAdmin }) => {
         setNextPage(response.data.next);
       }
 
-      if (url == "http://localhost:8000/api/documents/") {
+      if (url === "http://localhost:8000/api/documents/") {
         setPreviousPage(false);
       } else {
         setPreviousPage(response.data.previous);
@@ -67,7 +58,7 @@ const Documents = ({ isAdmin }) => {
     if (selectedDomaine) {
       axiosInstance
         .get("/api/documents/", {
-          params: { domaine: selectedDomaine }, // Applique le filtre
+          params: { domaine: selectedDomaine },
         })
         .then((response) => setDocuments(response.data.results))
         .catch((error) => console.error("Erreur lors de la récupération des documents :", error));
@@ -156,8 +147,6 @@ const Documents = ({ isAdmin }) => {
         params[searchBy] = searchValue;
       }
 
-      console.log("Paramètres envoyés à l'API :", params); // Vérifiez ici
-
       const response = await axiosInstance.get("/api/documents/", { params });
       setDocuments(response.data.results);
     } catch (error) {
@@ -166,13 +155,10 @@ const Documents = ({ isAdmin }) => {
     }
   };
 
-
-
-
   const handleDownload = async (fileUrl, fileName) => {
     try {
       const response = await axios.get(fileUrl, {
-        responseType: "blob", // Important : récupère le fichier en tant que blob
+        responseType: "blob",
       });
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -220,23 +206,23 @@ const Documents = ({ isAdmin }) => {
           <table className="table-auto w-full text-left border-collapse">
             <thead className="bg-blue-900 text-yellow-300">
               <tr>
-                <th className="py-3 px-4 sm:px-6">Dates</th>
-                <th className="py-3 px-4 sm:px-6">Types</th>
-                <th className="py-3 px-4 sm:px-6">Objets</th>
-                <th className="py-3 px-4 sm:px-6">Status</th>
-                <th className="py-3 px-4 sm:px-6">Action</th>
+                <th className="py-3 px-2 sm:px-4">Dates</th>
+                <th className="py-3 px-2 sm:px-4">Types</th>
+                <th className="py-3 px-2 sm:px-4">Objets</th>
+                <th className="py-3 px-2 sm:px-4">Status</th>
+                <th className="py-3 px-2 sm:px-4">Action</th>
               </tr>
             </thead>
             <tbody className="text-gray-900">
               {documents.length > 0 ? (
                 documents.map((doc) => (
                   <tr key={doc?.id} className="border-b border-gray-200 hover:bg-gray-100">
-                    <td className="py-3 px-4 sm:px-6">{doc?.date}</td>
-                    <td className="py-3 px-4 sm:px-6">{doc?.type}</td>
-                    <td className="py-3 px-4 sm:px-6">{doc?.objet}</td>
-                    <td className="py-3 px-4 sm:px-6">
+                    <td className="py-3 px-2 sm:px-4">{doc?.date}</td>
+                    <td className="py-3 px-2 sm:px-4">{doc?.type}</td>
+                    <td className="py-3 px-2 sm:px-4">{doc?.objet}</td>
+                    <td className="py-3 px-2 sm:px-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs ${doc?.status !== "en_vigueur"
+                        className={`px-2 py-1 rounded-full text-xs ${doc?.status !== "en_vigueur"
                           ? "bg-yellow-100 text-yellow-600"
                           : "bg-green-100 text-green-600"
                           }`}
@@ -244,9 +230,9 @@ const Documents = ({ isAdmin }) => {
                         {doc?.status}
                       </span>
                     </td>
-                    <td className="py-3 px-4 sm:px-6">
+                    <td className="py-3 px-2 sm:px-4">
                       {isAdmin ? (
-                        <>
+                        <div className="flex space-x-2 sm:space-x-4">
                           {doc.pdf_file || doc.fichier ? (
                             <button
                               onClick={() => {
@@ -263,7 +249,7 @@ const Documents = ({ isAdmin }) => {
                           )}
                           <button
                             onClick={() => handleEdit(doc?.id)}
-                            className="text-green-500 hover:underline mr-2 px-9"
+                            className="text-green-500 hover:underline"
                           >
                             <FontAwesomeIcon icon={faPenToSquare} />
                           </button>
@@ -275,9 +261,9 @@ const Documents = ({ isAdmin }) => {
                           </button>
                           <button
                             onClick={() => updateStatus(doc?.id)}
-                            className="text-yellow-500 hover:underline px-14"
+                            className="text-yellow-500 hover:underline"
                           >
-                            <FontAwesomeIcon icon={faCashRegister} className="px-3" />status
+                            <FontAwesomeIcon icon={faCashRegister} />
                           </button>
                           {doc.last_modified_by && (
                             <button
@@ -290,11 +276,10 @@ const Documents = ({ isAdmin }) => {
                             >
                               <FontAwesomeIcon icon={faCircleInfo} />
                             </button>
-                          )
-                          }
-                        </>
+                          )}
+                        </div>
                       ) : (
-                        <div className="space-x-5">
+                        <div className="flex space-x-2 sm:space-x-4">
                           {doc.pdf_file || doc.fichier ? (
                             <button
                               onClick={() => {
@@ -315,7 +300,7 @@ const Documents = ({ isAdmin }) => {
                             }
                             className="text-gray-700 hover:underline"
                           >
-                            <FontAwesomeIcon icon={faDownload} className="icon" />
+                            <FontAwesomeIcon icon={faDownload} />
                           </button>
                         </div>
                       )}
@@ -335,38 +320,38 @@ const Documents = ({ isAdmin }) => {
             <button
               onClick={() => previousPage && fetchDocuments(previousPage)}
               disabled={!previousPage}
-              className={`px-4 py-2 rounded-md ${previousPage ? "bg-blue-900 text-white" : "bg-gray-300 text-gray-500"}`}
+              className={`px-2 sm:px-4 py-2 rounded-md text-sm sm:text-base ${previousPage ? "bg-blue-900 text-white" : "bg-gray-300 text-gray-500"}`}
             >
-              <FontAwesomeIcon icon={faBackward} className="px-4" />précédente
+              <FontAwesomeIcon icon={faBackward} className="mr-1 sm:mr-2" />Précédente
             </button>
             <button
               onClick={() => nextPage && fetchDocuments(nextPage)}
               disabled={!nextPage}
-              className={`px-4 py-2 rounded-md ${nextPage ? "bg-blue-900 text-white" : "bg-gray-300 text-gray-500"}`}
+              className={`px-2 sm:px-4 py-2 rounded-md text-sm sm:text-base ${nextPage ? "bg-blue-900 text-white" : "bg-gray-300 text-gray-500"}`}
             >
-              suivante<FontAwesomeIcon icon={faForward} className="px-4" />
+              Suivante<FontAwesomeIcon icon={faForward} className="ml-1 sm:ml-2" />
             </button>
           </div>
         </div>
         {isAdmin && (
-          <div className="mt-5 space-x-5 flex flex-wrap justify-center gap-4 text-yellow-300">
+          <div className="mt-5 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
             <Link
               to={"/AjoutDoc"}
-              className="bg-blue-900  py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 w-full sm:w-auto"
+              className="bg-blue-900 py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 text-center"
             >
-              <FontAwesomeIcon icon={faSquarePlus} className="px-2 text-white" />Ajouter un document
+              <FontAwesomeIcon icon={faSquarePlus} className="mr-2" />Ajouter un document
             </Link>
             <Link
               to={"/AjoutCorps"}
-              className="bg-blue-900  py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 w-full sm:w-auto"
+              className="bg-blue-900 py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 text-center"
             >
-              <FontAwesomeIcon icon={faSquarePlus} className="px-2 text-white" />Ajouter un Corps
+              <FontAwesomeIcon icon={faSquarePlus} className="mr-2" />Ajouter un Corps
             </Link>
             <Link
               to={"/AjoutActus"}
-              className="bg-blue-900  py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 w-full sm:w-auto"
+              className="bg-blue-900 py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 text-center"
             >
-              <FontAwesomeIcon icon={faSquarePlus} className="px-2 text-white" />Ajouter un Actualité
+              <FontAwesomeIcon icon={faSquarePlus} className="mr-2" />Ajouter une Actualité
             </Link>
           </div>
         )}

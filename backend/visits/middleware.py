@@ -9,7 +9,13 @@ class VisitMiddleware:
         if not request.path.startswith('/admin') and not request.path.startswith('/api'):
             ip_address = self.get_client_ip(request)
             user_agent = request.META.get('HTTP_USER_AGENT', '')
-            Visit.objects.create(ip_address=ip_address, user_agent=user_agent)
+
+            # Vérifier si une session existe déjà pour cet utilisateur
+            if 'visited' not in request.session:
+                # Enregistrer la visite dans la base de données
+                Visit.objects.create(ip_address=ip_address, user_agent=user_agent)
+                # Marquer la session comme visitée
+                request.session['visited'] = True
 
         # Passer la requête au prochain middleware ou à la vue
         response = self.get_response(request)

@@ -4,6 +4,7 @@ import docx
 import win32com.client
 import pythoncom 
 import os
+from django.utils.timezone import now
 class TypeCorps(models.Model):
     nom = models.CharField(max_length=100,unique=True,null=True)
 
@@ -103,4 +104,13 @@ class Corps(models.Model):
             except Exception as e:
                 return f"Error reading DOC/DOCX: {e}"
         return "Unsupported file type."
+
+class CorpsStats(models.Model):
+    date = models.DateField(default=now)  # Date de l'ajout
+    daily_count = models.IntegerField(default=0)  # Nombre d'ajouts par jour
+    monthly_count = models.IntegerField(default=0)  # Nombre d'ajouts par mois
+    yearly_count = models.IntegerField(default=0)  # Nombre d'ajouts par année
+
+    class Meta:
+        verbose_name_plural = "Corps Statistics"
 

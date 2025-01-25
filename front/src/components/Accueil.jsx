@@ -21,18 +21,17 @@ const Accueil = () => {
     {
       img: img1,
       name: "Bienvenue",
-      Text: 'Afin d’améliorer sa visibilité et de conduire les programmes de réforme de la Fonction Publique,pilier du développement de notre pays, <strong> le Ministère, du Travail, de l’Emploi, de la Fonction Publique et des Lois Sociales </strong> est à pied d\'œuvre dans la mise en place d\'une bibliothèque numérique en son sein.'
-
+      Text: 'Afin d’améliorer sa visibilité et de conduire les programmes de réforme de la Fonction Publique, pilier du développement de notre pays, <strong> le Ministère, du Travail, de l’Emploi, de la Fonction Publique et des Lois Sociales </strong> est à pied d\'œuvre dans la mise en place d\'une bibliothèque numérique en son sein.'
     },
     {
       img: img2,
       name: "Réforme en cours",
-      Text: "<strong> Le mimistere du travail </strong> et de la fonction publique  met en place des initiatives pour moderniser l'administration publique et améliorer la éfficacité des services  offerts aux citoyens. Une bibliothèque numérique est une des pierres  angulaires de ces réformes."
+      Text: "<strong> Le ministère du travail </strong> et de la fonction publique met en place des initiatives pour moderniser l'administration publique et améliorer l'efficacité des services offerts aux citoyens. Une bibliothèque numérique est une des pierres angulaires de ces réformes."
     },
     {
       img: img3,
       name: "Notre vision",
-      Text: "Dans une démarche continue d'amélioration de la transparence et de l'accéssibilité de ses services ,<strong> le Ministère </strong>  oeuvre pour la mise en place de solutions numériques ,y compris une bibliothèque numerique qui soutiendra la gestion des informations et de la diffusion des ressources publiques."
+      Text: "Dans une démarche continue d'amélioration de la transparence et de l'accessibilité de ses services, <strong> le Ministère </strong> œuvre pour la mise en place de solutions numériques, y compris une bibliothèque numérique qui soutiendra la gestion des informations et de la diffusion des ressources publiques."
     }
   ];
 
@@ -78,44 +77,49 @@ const Accueil = () => {
   return (
     <>
       <div className="mt-24 relative shadow-lg overflow-hidden">
+        {/* Slider Container */}
+        <div className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] relative">
+          {sliderContent.map((slide, i) => (
+            <img
+              key={i}
+              src={slide.img}
+              alt="slideImg"
+              className={`h-full w-full absolute object-cover inset-0 duration-[2.5s] ease-out transition-[clip-path] ${i === active ? "clip-visible" : "clip-hidden"}`}
+            />
+          ))}
+        </div>
 
-          <div className="w-full h-[400px] sm:h-[500px] md:h-[600px] relative">
-            {sliderContent.map((slide, i) => (
-              <img
-                key={i}
-                src={slide.img}
-                alt="slideImg"
-                className={`h-[600px] w-full absolute object-cover inset-0 duration-[2.5s] ease-out transition-[clip-path] ${i === active ? "clip-visible" : "clip-hidden"}`}
-              />
-            ))}
-          </div>
-
-
+        {/* Navigation Buttons */}
         <div>
-          <button id="back" ref={prevRef} onClick={() => Slide("prev")}>
-            <ion-icon name="chevron-back-outline" size="large"></ion-icon>
+          <button id="back" ref={prevRef} onClick={() => Slide("prev")} className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 text-white text-3xl sm:text-4xl hover:scale-125 transition-transform">
+            <ion-icon name="chevron-back-outline"></ion-icon>
           </button>
-          <button id="forward" ref={nextRef} onClick={() => Slide("next")}>
-            <ion-icon name="chevron-forward-outline" size="large"></ion-icon>
+          <button id="forward" ref={nextRef} onClick={() => Slide("next")} className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 text-white text-3xl sm:text-4xl hover:scale-125 transition-transform">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
           </button>
-        </div>
-        <div className="content" ref={contentRef}>
-          <h1 ref={nameRef} className="text-3xl sm:text-4xl md:text-3xl text-white">
-            {sliderContent[active].name}
-          </h1>
-          <p ref={textRef} className="mt-4 sm:mt-3 text-base sm:text-lg md:text-xl text-left text-white">
-            {sliderContent[active].Text}
-          </p>
         </div>
 
+        {/* Slider Content */}
+        <div className="content" ref={contentRef}>
+          <div className="flex flex-col justify-center h-full">
+            <h1 ref={nameRef} className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white font-bold">
+              {sliderContent[active].name}
+            </h1>
+            <p ref={textRef} className="mt-2 sm:mt-3 text-sm sm:text-base md:text-lg lg:text-xl text-left text-white">
+              {sliderContent[active].Text}
+            </p>
+          </div>
+        </div>
       </div>
+
+      {/* Other Components */}
       <Documents />
       <div>
         <h1 className="text-2xl font-semibold text-gray-400 mt-8 flex flex-col items-center justify-center">Actualités</h1>
         <AfficheActus />
       </div>
       <div className='bg-gradient-to-br from-primary/70 grid place-items-center'>
-        <AnimatedCard/>
+        <AnimatedCard />
       </div>
     </>
   );

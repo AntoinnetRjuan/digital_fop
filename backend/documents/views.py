@@ -1,5 +1,5 @@
 from rest_framework import viewsets, filters,generics
-from .models import Document, Domaine, Actualite, Remark
+from .models import Document, Domaine, Actualite, Remark, DocumentStats
 from .serializers import DocumentSerializer, DomaineSerializer, ActualiteSerialiser, RemarkSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from django_filters.rest_framework import DjangoFilterBackend
@@ -13,7 +13,11 @@ from django.db.models import Q
 from django.utils.timezone import now
 from django.db.models import Count
 from rest_framework.decorators import action
+from datetime import date
+from django.db.models import Sum
+import logging
 
+logger = logging.getLogger(__name__)
 class DocumentStatsView(APIView):
     def get(self, request, *args, **kwargs):
         doc_type = request.query_params.get('type', None)
@@ -31,6 +35,41 @@ class DocumentStatsView(APIView):
             'total_documents': total_documents,
             'documents_by_type': documents_by_type,
         })
+
+
+class DocumentStatsAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        period = request.query_params.get('period', 'daily')
+        start_date = request.query_params.get('start_date', None)
+        end_date = request.query_params.get('end_date', None)
+
+        try:
+            if period == 'daily':
+                if start_date and end_date:
+                    # Filtrer par plage de dates pour les statistiques journalières
+                    total = DocumentStats.objects.filter(date__range=[start_date, end_date]).aggregate(total=Sum('daily_count'))['total'] or 0
+                else:
+                    # Afficher les statistiques pour aujourd'hui par défaut
+                    today = date.today()
+                    total = DocumentStats.objects.filter(date=today).aggregate(total=Sum('daily_count'))['total'] or 0
+            elif period == 'monthly':
+                # Statistiques mensuelles
+                today = date.today()
+                total = DocumentStats.objects.filter(date__month=today.month, date__year=today.year).aggregate(total=Sum('monthly_count'))['total'] or 0
+            elif period == 'yearly':
+                # Statistiques annuelles
+                today = date.today()
+                total = DocumentStats.objects.filter(date__year=today.year).aggregate(total=Sum('yearly_count'))['total'] or 0
+            else:
+                return Response({"error": "Période invalide. Utilisez 'daily', 'monthly' ou 'yearly'."}, status=400)
+
+            return Response({
+                'daily_count': total if period == 'daily' else 0,
+                'monthly_count': total if period == 'monthly' else 0,
+                'yearly_count': total if period == 'yearly' else 0,
+            })
+        except Exception as e:
+            return Response({"error": f"Une erreur s'est produite : {str(e)}"}, status=500)
 
 class DomaineViewSet(viewsets.ModelViewSet):
     queryset = Domaine.objects.all()
@@ -103,6 +142,14 @@ class DocumentViewSet(viewsets.ModelViewSet):
             request.data["date_journal"] = None
             request.data["numero_journal"] = None
             request.data["page_journal"] = None
+
+        today = date.today()
+        stats, created = DocumentStats.objects.get_or_create(date=today)
+        stats.daily_count += 1
+        stats.monthly_count += 1
+        stats.yearly_count += 1
+        stats.save()
+
 
         return super().create(request, *args, **kwargs)
 

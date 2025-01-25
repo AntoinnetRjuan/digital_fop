@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logout, reset } from '../features/auth/authSlice'
 import { toast } from 'react-toastify'
 import { userContext } from './Context'
-import  biblio from "../assets/logo.png"
+import biblio from "../assets/logo.png"
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRightFromBracket,faHouse } from '@fortawesome/free-solid-svg-icons';
+import { faRightFromBracket, faHouse } from '@fortawesome/free-solid-svg-icons';
 const Menu = ({ onSelectDomaine }) => {
   const [domaines, setDomaines] = useState([])
   const [isMenuOpen, SetisMenuOpen] = useState(false)
@@ -24,11 +24,11 @@ const Menu = ({ onSelectDomaine }) => {
   }, [])
 
   const handleChangeDomaine = (e) => {
-    const selectedDomaine = e.target.value; 
-      if (selectedDomaine) {   
-        onSelectDomaine(selectedDomaine);
-        navigate("/AfficherDoc");
-      }
+    const selectedDomaine = e.target.value;
+    if (selectedDomaine) {
+      onSelectDomaine(selectedDomaine);
+      navigate("/AfficherDoc");
+    }
   };
   // const { user } = useSelector((state) => state.auth)
   const { user, setUser } = useContext(userContext)
@@ -79,7 +79,28 @@ const Menu = ({ onSelectDomaine }) => {
                     to={"/"}
                     className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
                   >
-                    <FontAwesomeIcon icon={faHouse} className='px-2 mb-0.5'/>Accueil
+                    <FontAwesomeIcon icon={faHouse} className='px-2 mb-0.5' />Accueil
+                  </Link>
+                </li>
+                <li>
+                  <select
+                    name="domaine"
+                    onChange={handleChangeDomaine}
+                    className="text-gray-700 border rounded-lg px-3 py-1">
+                    <option value="">Acces par theme</option>
+                    {
+                      domaines.map((dom) => (
+                        <option key={dom.id} value={dom.id}>{dom.nom}</option>
+                      ))
+                    }
+                  </select>
+                </li>
+                <li>
+                  <Link
+                    to={"/status"}
+                    className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
+                  >
+                    Status Particuliers
                   </Link>
                 </li>
                 <li>
@@ -96,7 +117,7 @@ const Menu = ({ onSelectDomaine }) => {
                     onClick={handleLogout}
                     className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
                   >
-                    Déconnecter<FontAwesomeIcon icon={faRightFromBracket} className='px-2'/>
+                    Déconnecter<FontAwesomeIcon icon={faRightFromBracket} className='px-2' />
                   </Link>
                 </li>
               </>
@@ -138,78 +159,99 @@ const Menu = ({ onSelectDomaine }) => {
         </div>
         {isMenuOpen && (
           <ul className="flex-col md:hidden  animate__animated animate__zoomInRight">
-          {user?.refresh ? (
-            <>
-              <li>
-                <Link
-                  to={"/"}
-                  className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
-                >
-                  Accueil
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={"/dashboard"}
-                  className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
-                >
-                  Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={"/"}
-                  onClick={handleLogout}
-                  className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
-                >
-                  Déconnecter
-                </Link>
-              </li>
-            </>
-          ) : (
-            <>
-              {/* Ajout des nouvelles options */}
-              <li>
-                <Link
-                  to={"/"}
-                  className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
-                >
-                  Accueil
-                </Link>
-              </li>
-              <li>
-                <select
-                  name="domaine"
-                  onChange={handleChangeDomaine}
-                  className="text-gray-700 border rounded-lg px-3 py-1">
-                  <option value="">Acces par theme</option>
-                  {
-                    domaines.map((dom) => (
-                      <option key={dom.id} value={dom.id}>{dom.nom}</option>
-                    ))
-                  }
-                </select>
-              </li>
-              <li>
-                <Link
-                  to={"/statuts"}
-                  className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
-                >
-                  Statuts
-                </Link>
-              </li>
+            {user?.refresh ? (
+              <>
+                <li>
+                  <Link
+                    to={"/"}
+                    className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
+                  >
+                    Accueil
+                  </Link>
+                </li>
+                <li>
+                  <select
+                    name="domaine"
+                    onChange={handleChangeDomaine}
+                    className="text-gray-700 border rounded-lg px-3 py-1">
+                    <option value="">Acces par theme</option>
+                    {
+                      domaines.map((dom) => (
+                        <option key={dom.id} value={dom.id}>{dom.nom}</option>
+                      ))
+                    }
+                  </select>
+                </li>
+                <li>
+                  <Link
+                    to={"/status"}
+                    className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
+                  >
+                    Status Particuliers
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={"/dashboard"}
+                    className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
+                  >
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={"/"}
+                    onClick={handleLogout}
+                    className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
+                  >
+                    Déconnecter
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                {/* Ajout des nouvelles options */}
+                <li>
+                  <Link
+                    to={"/"}
+                    className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
+                  >
+                    Accueil
+                  </Link>
+                </li>
+                <li>
+                  <select
+                    name="domaine"
+                    onChange={handleChangeDomaine}
+                    className="text-gray-700 border rounded-lg px-3 py-1">
+                    <option value="">Acces par theme</option>
+                    {
+                      domaines.map((dom) => (
+                        <option key={dom.id} value={dom.id}>{dom.nom}</option>
+                      ))
+                    }
+                  </select>
+                </li>
+                <li>
+                  <Link
+                    to={"/status"}
+                    className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
+                  >
+                    Statuts
+                  </Link>
+                </li>
 
-              <li>
-                <Link
-                  to={"/login"}
-                  className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
-                >
-                  Se connecter
-                </Link>
-              </li>
-            </>
-          )}
-        </ul>
+                <li>
+                  <Link
+                    to={"/login"}
+                    className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
+                  >
+                    Se connecter
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
         )}
       </nav>
     </>

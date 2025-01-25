@@ -125,7 +125,14 @@ class Document(models.Model):
             models.Index(fields=['numero']),
         ]
 
+class DocumentStats(models.Model):
+    date = models.DateField(default=now)  # Date de l'ajout
+    daily_count = models.IntegerField(default=0)  # Nombre d'ajouts par jour
+    monthly_count = models.IntegerField(default=0)  # Nombre d'ajouts par mois
+    yearly_count = models.IntegerField(default=0)  # Nombre d'ajouts par année
 
+    class Meta:
+        verbose_name_plural = "Document Statistics"
 class Actualite(models.Model):
     CONSEIL_CHOICES = [
         ('CONSEIL DES MINISTRES', 'Ministre'),
