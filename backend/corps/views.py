@@ -6,6 +6,7 @@ from rest_framework import viewsets
 from .models import TypeCorps,Corps
 from .serializers import CorpsSerializer, TypeCorpsSerializer
 from django.http import JsonResponse
+from django.db.models import Count
 from rest_framework.decorators import action
 
 class TypeCorpsViewSet(viewsets.ModelViewSet):
@@ -35,6 +36,20 @@ class CorpsViewSet(viewsets.ModelViewSet):
         self.perform_destroy(instance)
         return Response({"message": "Corps supprimé avec succès."}, status=204)
 
+class CorpsStatsView(APIView):
+    def get(self,request,*args,**kwargs):
+        corps_nom = request.query_params.get('nom',None)
+
+        if corps_nom:
+            count = Corps.objects.filter(nom=corps_nom).count()
+            return Response({'nom':corps_nom,'count':count})
+        total_corps = Corps.objects.count()
+        corps_by_nom = Corps.objects.values('nom').annotate(count=Count('nom')).order_by('nom')
+
+        return Response({
+            'total_corps':total_corps,
+            'corps_by_nom':corps_by_nom,
+        })
 
 class FilteredCorpsAPIView(APIView):
    

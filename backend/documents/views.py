@@ -32,7 +32,6 @@ class DocumentStatsView(APIView):
             'documents_by_type': documents_by_type,
         })
 
-
 class DomaineViewSet(viewsets.ModelViewSet):
     queryset = Domaine.objects.all()
     serializer_class = DomaineSerializer
