@@ -40,7 +40,7 @@ h1{
     border-0 top-2/4;
 }
 .content{
-    @apply text-[aliceblue] absolute w-[600px] z-[5] text-center  backdrop-blur-[3px] duration-[1s] px-0 py-[15px]  bottom-0 top-40;
+    @apply text-[aliceblue] absolute w-[420px] z-[5] text-center  backdrop-blur-[3px] duration-[1s] px-0 py-[15px]  bottom-0 top-40;
     /* background: #ffffff22; */
 }
 /* .content{

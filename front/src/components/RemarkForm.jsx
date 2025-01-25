@@ -27,29 +27,36 @@ const RemarkForm = () => {
 
     return (
         <div className="flex flex-col items-center w-full p-6 rounded-lg max-w-4xl mx-auto">
-            <h1 className="text-2xl font-semibold text-yellow-900 mb-6">Envoyer une remarque</h1>
-            <form className="flex flex-row w-full gap-6" onSubmit={handleSubmit}>
+            <h1 className="text-2xl font-semibold text-yellow-900 mb-6 text-center">Envoyer une remarque</h1>
+            <form
+                className="flex flex-col md:flex-row w-full gap-6 items-stretch"
+                onSubmit={handleSubmit}
+            >
+                {/* Email Input */}
                 <input
                     type="email"
-                    className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full md:w-1/3 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Votre email"
                     required
                 />
+                {/* Message Textarea */}
                 <textarea
-                    className=" h-12 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full md:w-1/2 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Votre remarque"
-                    rows="5"
+                    rows="3"
                     required
                 />
+                {/* Submit Button */}
                 <button
                     type="submit"
-                    className="bg-blue-900 text-yellow-300 py-3 px-6 rounded-md hover:bg-blue-700 transition duration-200"
+                    className="w-full md:w-auto bg-blue-900 text-yellow-300 py-3 px-6 rounded-md hover:bg-blue-700 transition duration-200 flex items-center justify-center"
                 >
-                    Envoyer<FontAwesomeIcon icon={faPaperPlane} className='px-2'/>
+                    Envoyer
+                    <FontAwesomeIcon icon={faPaperPlane} className="ml-2" />
                 </button>
             </form>
         </div>

@@ -21,18 +21,18 @@ const Accueil = () => {
     {
       img: img1,
       name: "Bienvenue",
-      Text: 'Afin d’améliorer sa visibilité et de conduire les programmes de réforme de la Fonction Publique,pilier du développement de notre pays, <strong> le Ministère, du Travail, de l’Emploi, de la Fonction Publique et des Lois Sociales </strong> dont les rôles sont:<br>  -De mettre en œuvre des politiques inclusives pour le travail et l’emploi.<br>-De promouvoir une administration publique moderne et performante.<br>-Garantir la sécurité sociale et les droits fondamentaux des employés , est à pied d\'œuvre dans la mise en place d\'une bibliothèque numérique en son sein.'
+      Text: 'Afin d’améliorer sa visibilité et de conduire les programmes de réforme de la Fonction Publique,pilier du développement de notre pays, <strong> le Ministère, du Travail, de l’Emploi, de la Fonction Publique et des Lois Sociales </strong> est à pied d\'œuvre dans la mise en place d\'une bibliothèque numérique en son sein.'
 
     },
     {
       img: img2,
-      name: "Direction des Études et des Affaires Juridiques",
-      Text: "Cette direction est responsable de : -L'élaboration des textes juridiques : <br> Rédaction, mise à jour, et diffusion des législations et réglementations.<br>-L’appui aux réformes : Réalisation d’études pour moderniser les cadres réglementaires et administratifs.<br>-La gestion des contentieux : Assistance juridique et traitement des dossiers administratifs sensibles."
+      name: "Réforme en cours",
+      Text: "<strong> Le mimistere du travail </strong> et de la fonction publique  met en place des initiatives pour moderniser l'administration publique et améliorer la éfficacité des services  offerts aux citoyens. Une bibliothèque numérique est une des pierres  angulaires de ces réformes."
     },
     {
       img: img3,
-      name: "Direction de la Réforme et de la Fonction Publique",
-      Text: "Cette direction se concentre sur :-Modernisation administrative : <br>Mise en œuvre des réformes pour une fonction publique performante.<br>-Gestion stratégique des ressources humaines : <br>Planification et optimisation des effectifs, des compétences et des parcours professionnels.<br>-Promotion des valeurs éthiques : Renforcement de la déontologie et de la transparence dans l’administration publique."
+      name: "Notre vision",
+      Text: "Dans une démarche continue d'amélioration de la transparence et de l'accéssibilité de ses services ,<strong> le Ministère </strong>  oeuvre pour la mise en place de solutions numériques ,y compris une bibliothèque numerique qui soutiendra la gestion des informations et de la diffusion des ressources publiques."
     }
   ];
 
@@ -78,16 +78,19 @@ const Accueil = () => {
   return (
     <>
       <div className="mt-24 relative shadow-lg overflow-hidden">
-        <div className="w-[100%] h-[600px] relative">
-          {sliderContent.map((slide, i) => (
-            <img
-              key={i}
-              src={slide.img}
-              alt="slideImg"
-              className={`h-[600px] w-full absolute object-cover inset-0 duration-[2.5s] ease-out transition-[clip-path] ${i === active ? "clip-visible" : "clip-hidden"}`}
-            />
-          ))}
-        </div>
+
+          <div className="w-full h-[400px] sm:h-[500px] md:h-[600px] relative">
+            {sliderContent.map((slide, i) => (
+              <img
+                key={i}
+                src={slide.img}
+                alt="slideImg"
+                className={`h-[600px] w-full absolute object-cover inset-0 duration-[2.5s] ease-out transition-[clip-path] ${i === active ? "clip-visible" : "clip-hidden"}`}
+              />
+            ))}
+          </div>
+
+
         <div>
           <button id="back" ref={prevRef} onClick={() => Slide("prev")}>
             <ion-icon name="chevron-back-outline" size="large"></ion-icon>
@@ -97,9 +100,14 @@ const Accueil = () => {
           </button>
         </div>
         <div className="content" ref={contentRef}>
-          <h1 ref={nameRef} className="text-4xl text-white">{sliderContent[active].name}</h1>
-          <p ref={textRef} className="mt-5 text-lg text-left text-white">{sliderContent[active].Text}</p>
+          <h1 ref={nameRef} className="text-3xl sm:text-4xl md:text-3xl text-white">
+            {sliderContent[active].name}
+          </h1>
+          <p ref={textRef} className="mt-4 sm:mt-3 text-base sm:text-lg md:text-xl text-left text-white">
+            {sliderContent[active].Text}
+          </p>
         </div>
+
       </div>
       <Documents />
       <div>

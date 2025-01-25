@@ -155,7 +155,7 @@ const CorpsFilteredList = ({ isAdmin }) => {
         navigate(`/editCorps/${id}`);
     };
     return (
-        <div className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg text-center mx-auto">
+        <div className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg text-center mx-auto mt-44">
             <h1>Liste des Corps Professionnels</h1>
 
             {/* Liste déroulante pour sélectionner un corps */}

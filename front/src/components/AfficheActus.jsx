@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import gov from "../assets/gov.svg";
 import ministre from "../assets/ministre.svg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPenToSquare, faTrash,faLandmark, faUsers } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -154,10 +154,10 @@ const AfficheActus = ({ isAdminE }) => {
                     <div className="w-full md:w-1/2">
                         <div className="flex items-center justify-center">
                             <span>
-                                <img src={gov} alt='gov logo' className='product-image flex' />
+                                <FontAwesomeIcon icon={faLandmark} className='h-10 py-3 text-green-700'/>
                             </span>
                         </div>
-                        <h3 className="text-lg font-bold mb-2 text-green-700 text-center">
+                        <h3 className="text-lg font-bold mb-2 text-black text-center">
                             Conseil du Gouvernement
                         </h3>
                         {conseilGouvernement.length > 0 ? (
@@ -178,10 +178,10 @@ const AfficheActus = ({ isAdminE }) => {
                     <div className="w-full md:w-1/2">
                         <div className="flex justify-center">
                             <span className="icons2 c2">
-                                <img src={ministre} alt='ministre logo' className='product-image' />
+                                <FontAwesomeIcon icon={faUsers} className='h-10 py-3 text-red-600'/>
                             </span>
                         </div>
-                        <h3 className="text-lg font-bold mb-2 text-red-600 text-center">
+                        <h3 className="text-lg font-bold mb-2 text-black text-center">
                             Conseil des Ministres
                         </h3>
                         {conseilMinistre.length > 0 ? (
