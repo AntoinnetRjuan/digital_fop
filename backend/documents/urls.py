@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import DocumentViewSet, DomaineViewSet, SuggestionsView, ActualiteViewSet, RemarkViewSet,DocumentStatsView,DocumentStatsAPIView
+from .views import DocumentViewSet, DomaineViewSet, SuggestionsView, ActualiteViewSet, RemarkViewSet,DocumentStatsView,DocumentStatsAPIView,DocumentVisitsView,MostVisitedDocumentsView
 
 router = DefaultRouter()
 router.register(r'documents', DocumentViewSet, basename='document')
@@ -13,4 +13,6 @@ urlpatterns = [
     path('suggestions/', SuggestionsView.as_view(), name='suggestions'),
     path('document-stats/', DocumentStatsView.as_view(), name='document-stats'),
     path('documents-stats/', DocumentStatsAPIView.as_view(), name='document-stats'),
+    path('documents/<int:document_id>/visit/', DocumentVisitsView.as_view(), name='document-visit'),
+    path('most-visited/', MostVisitedDocumentsView.as_view(), name='most-visited-documents'),
 ]

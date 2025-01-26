@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { Line } from 'react-chartjs-2';
+import axiosInstance from './AxiosConfig';
 
 // Enregistrer les composants de Chart.js
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -56,44 +57,53 @@ const DocumentStatsDropdown = () => {
     const [corpsStats, setCorpsStats] = useState({ daily: 0, monthly: 0, yearly: 0 });
     const [selectedPeriod, setSelectedPeriod] = useState('daily');
     const [startDate, setStartDate] = useState('');
+    const [mostVisitedDocuments, setMostVisitedDocuments] = useState([]);
     const [endDate, setEndDate] = useState('');
     const [error, setError] = useState(null);
 
+    //recuperation des documents les plus visités
+    useEffect(() => {
+        const fetchMostVisitedDocuments = async() => {
+            try {
+                const response = await axiosInstance.get('/api/most-visited/');
+                setMostVisitedDocuments(response.data);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des documents les plus visités :", error);
+            }
+        };
+    
+        fetchMostVisitedDocuments();
+    }, []);
     // Fonction pour récupérer les statistiques
     const fetchStats = async () => {
         try {
             const params = {
                 period: selectedPeriod,
             };
-    
+
             // Ajouter start_date et end_date uniquement pour la période journalière
             if (selectedPeriod === 'daily') {
                 params.start_date = startDate;
                 params.end_date = endDate;
             }
-    
-            console.log("Paramètres de la requête :", params); // Afficher les paramètres
-    
             // Récupérer les statistiques des documents
             const documentResponse = await axios.get(`http://localhost:8000/api/documents-stats/`, { params });
-            console.log("Réponse des documents :", documentResponse.data); // Afficher la réponse
-    
+
             setDocumentStats({
                 daily: documentResponse.data.daily_count || 0,
                 monthly: documentResponse.data.monthly_count || 0,
                 yearly: documentResponse.data.yearly_count || 0,
             });
-    
+
             // Récupérer les statistiques des corps
             const corpsResponse = await axios.get(`http://localhost:8000/api/corps-stats1/`, { params });
-            console.log("Réponse des corps :", corpsResponse.data); // Afficher la réponse
-    
+
             setCorpsStats({
                 daily: corpsResponse.data.daily_count || 0,
                 monthly: corpsResponse.data.monthly_count || 0,
                 yearly: corpsResponse.data.yearly_count || 0,
             });
-    
+
             setError(null); // Réinitialiser l'erreur
         } catch (error) {
             console.error("Erreur lors de la récupération des statistiques :", error);
@@ -318,6 +328,16 @@ const DocumentStatsDropdown = () => {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className="bg-white shadow-md rounded-lg p-6">
+                    <h2 className="text-lg font-bold text-gray-800 mb-4">Documents les plus visités:</h2>
+                    <ul>
+                        {mostVisitedDocuments.map((doc) => (
+                            <li key={doc.id}>
+                                {doc.type} - {doc.numero} ({doc.visits>1 ? "visites:":"visite:"}{doc.visits})
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
         </div>

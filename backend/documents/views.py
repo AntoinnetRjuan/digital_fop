@@ -1,4 +1,4 @@
-from rest_framework import viewsets, filters,generics
+from rest_framework import viewsets, filters,status
 from .models import Document, Domaine, Actualite, Remark, DocumentStats
 from .serializers import DocumentSerializer, DomaineSerializer, ActualiteSerialiser, RemarkSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
@@ -153,6 +153,23 @@ class DocumentViewSet(viewsets.ModelViewSet):
 
 
         return super().create(request, *args, **kwargs)
+    
+class DocumentVisitsView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request, document_id, *args, **kwargs):
+        try:
+            document = Document.objects.get(id=document_id)
+            document.increment_visits()  # Incrémente le compteur de visites
+            return Response({"message": "Visite enregistrée"}, status=status.HTTP_200_OK)
+        except Document.DoesNotExist:
+            return Response({"error": "Document non trouvé"}, status=status.HTTP_404_NOT_FOUND)
+class MostVisitedDocumentsView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, *args, **kwargs):
+        # Récupérer les 10 documents les plus visités
+        most_visited_documents = Document.objects.order_by('-visits')[:10]
+        serializer = DocumentSerializer(most_visited_documents, many=True)
+        return Response(serializer.data)
 
 class SuggestionsView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]

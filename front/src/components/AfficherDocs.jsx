@@ -121,9 +121,16 @@ const Documents = ({ isAdmin }) => {
     navigate(`/edit/${id}`);
   };
 
-  const handleView = (fileUrl, fileType) => {
+  const handleView = async (fileUrl, fileType, documentId) => {
     if (fileType === "pdf") {
       window.open(fileUrl, "_blank");
+
+      // Enregistrer la visite
+      try {
+        await axiosInstance.post(`/api/documents/${documentId}/visit/`);
+      } catch (error) {
+        console.error("Erreur lors de l'enregistrement de la visite :", error);
+      }
     } else {
       alert("Ce fichier est disponible uniquement en téléchargement.");
     }
@@ -237,8 +244,8 @@ const Documents = ({ isAdmin }) => {
                             <button
                               onClick={() => {
                                 doc.pdf_file
-                                  ? handleView(doc.pdf_file, "pdf")
-                                  : handleView(doc.fichier, "pdf");
+                                  ? handleView(doc.pdf_file, "pdf",doc.id)
+                                  : handleView(doc.fichier, "pdf",doc.id);
                               }}
                               className="text-blue-800 hover:underline"
                             >
@@ -284,8 +291,8 @@ const Documents = ({ isAdmin }) => {
                             <button
                               onClick={() => {
                                 doc.pdf_file
-                                  ? handleView(doc.pdf_file, "pdf")
-                                  : handleView(doc.fichier, "pdf");
+                                  ? handleView(doc.pdf_file, "pdf", doc.id)
+                                  : handleView(doc.fichier, "pdf", doc.id);
                               }}
                               className="text-blue-800 hover:underline"
                             >

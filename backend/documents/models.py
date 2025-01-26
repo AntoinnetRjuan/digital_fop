@@ -62,6 +62,11 @@ class Document(models.Model):
     date_journal = models.DateField(null=True, blank=True)
     numero_journal = models.CharField(max_length=20, null=True, blank=True)
     page_journal = models.CharField(max_length=20, null=True, blank=True)
+    visits = models.PositiveIntegerField(default=0,verbose_name='nombre de visite')
+
+    def increment_visits(self):
+        self.visits += 1
+        self.save()
 
     def update_modification(self, user, details):
         """Mise à jour des informations de modification."""

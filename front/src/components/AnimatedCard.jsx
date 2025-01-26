@@ -25,7 +25,7 @@ const CardsData = [
         img: photo2,
         title: "Ministère du Travail et de la Fonction Publique",
         desc1:"Responsable de l'élaboration des textes juridiques",
-        desc: "Cette direction est responsable de : -L'élaboration des textes juridiques : Rédaction, mise à jour, et diffusion des législations et réglementations.-L’appui aux réformes : Réalisation d’études pour moderniser les cadres réglementaires et administratifs.-La gestion des contentieux : Assistance juridique et traitement des dossiers administratifs sensibles.",
+        desc: "Cette direction se concentre sur :-Modernisation administrative :Mise en œuvre des réformes pour une fonction publique performante.-Gestion stratégique des ressources humaines : Planification et optimisation des effectifs, des compétences et des parcours professionnels.-Promotion des valeurs éthiques : Renforcement de la déontologie et de la transparence dans l’administration publique.",
         logo_img: img2,
     },
     {
@@ -33,7 +33,7 @@ const CardsData = [
         img: photo3,
         title: "Direction des Etudes et des Affaires Juridiques",
         desc1:"Se concentre sur la modernisation administrative",
-        desc: "Cette direction se concentre sur :-Modernisation administrative :Mise en œuvre des réformes pour une fonction publique performante.-Gestion stratégique des ressources humaines : Planification et optimisation des effectifs, des compétences et des parcours professionnels.-Promotion des valeurs éthiques : Renforcement de la déontologie et de la transparence dans l’administration publique.",
+        desc: "Cette direction est responsable de : -L'élaboration des textes juridiques : Rédaction, mise à jour, et diffusion des législations et réglementations.-L’appui aux réformes : Réalisation d’études pour moderniser les cadres réglementaires et administratifs.-La gestion des contentieux : Assistance juridique et traitement des dossiers administratifs sensibles.",
         logo_img: img3,
     }
 ];
