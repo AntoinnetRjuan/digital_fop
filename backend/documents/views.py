@@ -15,7 +15,8 @@ from django.db.models import Count
 from rest_framework.decorators import action
 from datetime import date
 from django.db.models import Sum
-import logging
+import logging  
+from unidecode import unidecode 
 
 logger = logging.getLogger(__name__)
 class DocumentStatsView(APIView):
@@ -163,13 +164,20 @@ class SuggestionsView(APIView):
 
         if not query:
             return Response([])
+
+        # Normaliser la requête (enlever les accents et mettre en minuscule)
+        normalized_query = unidecode(query).lower()
+
         if search_by == 'type':
-            suggestions = Document.objects.filter(type__icontains=query).values_list('type', flat=True).distinct()[:10]
+            suggestions = Document.objects.filter(
+                type__icontains=normalized_query
+            ).values_list('type', flat=True).distinct()[:10]
         else:
-            filter_kwargs = {f"{search_by}__icontains": query}
+            filter_kwargs = {f"{search_by}__icontains": normalized_query}
             if doc_type:
                 filter_kwargs["type__icontains"] = doc_type
             suggestions = Document.objects.filter(**filter_kwargs).values_list(search_by, flat=True).distinct()[:10]
+
         return Response(suggestions)
 
 class ActualiteViewSet(viewsets.ModelViewSet):

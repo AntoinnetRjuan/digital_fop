@@ -1,6 +1,7 @@
 import django_filters
 from django.db.models import Q
 from .models import Document
+from unidecode import unidecode  # Pour gérer les accents
 
 class DocumentFilter(django_filters.FilterSet):
     search = django_filters.CharFilter(method="filter_search", label="Recherche")
@@ -20,8 +21,12 @@ class DocumentFilter(django_filters.FilterSet):
         search_value = self.request.GET.get('searchValue', '')
         doc_type = self.request.GET.get('type', '')
 
+        # Normaliser la valeur de recherche (enlever les accents et mettre en minuscule)
+        normalized_value = unidecode(search_value).lower()
+
         if doc_type:
             queryset = queryset.filter(type__icontains=doc_type)
+
         if search_by == 'journal':
             date_journal = self.request.GET.get('dateJournal', '')
             numero_journal = self.request.GET.get('numeroJournal', '')
@@ -30,11 +35,10 @@ class DocumentFilter(django_filters.FilterSet):
             if numero_journal:
                 queryset = queryset.filter(numero_journal__icontains=numero_journal)
         elif search_by == 'objet' and search_value:
-            queryset = queryset.filter(objet__icontains=search_value)
+            queryset = queryset.filter(objet__icontains=normalized_value)
         elif search_by == 'numero' and search_value:
-            queryset = queryset.filter(numero__icontains=search_value)
+            queryset = queryset.filter(numero__icontains=normalized_value)
         elif search_by == 'date' and search_value:
             queryset = queryset.filter(date=search_value)
 
         return queryset
-    

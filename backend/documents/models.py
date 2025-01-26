@@ -121,8 +121,8 @@ class Document(models.Model):
         return "Unsupported file type."
     class Meta:
         indexes = [
-            models.Index(fields=['objet']),
-            models.Index(fields=['numero']),
+            models.Index(fields=['objet'],name='objet_idx'),
+            models.Index(fields=['numero'],name='numero_idx'),
         ]
 
 class DocumentStats(models.Model):

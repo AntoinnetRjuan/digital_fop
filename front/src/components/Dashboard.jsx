@@ -23,11 +23,11 @@ function Dashboard() {
                 <Documents isAdmin={true} />
             </div>
             <div>
-                <h1 className="text-2xl font-semibold text-gray-400 mt-8 flex flex-col items-center justify-center">Status Particulier</h1>
+                <h1 className="text-2xl font-semibold text-gray-400 px-5 py-5 flex flex-col items-center justify-center">Status Particulier</h1>
                 <CorpsFilteredList isAdmin={true}/>
             </div>
             <div>
-                <h1 className="text-2xl font-semibold text-gray-400 mt-8 flex flex-col items-center justify-center">Actualités</h1>
+                <h1 className="text-2xl font-semibold text-gray-400 px-5 py-5 flex flex-col items-center justify-center">Actualités</h1>
                 <AfficheActus isAdminE={true} />
             </div>
             <div className="flex flex-col items-center justify-center mt-8">
