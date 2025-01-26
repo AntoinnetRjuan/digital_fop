@@ -63,7 +63,7 @@ const DocumentStatsDropdown = () => {
 
     //recuperation des documents les plus visités
     useEffect(() => {
-        const fetchMostVisitedDocuments = async() => {
+        const fetchMostVisitedDocuments = async () => {
             try {
                 const response = await axiosInstance.get('/api/most-visited/');
                 setMostVisitedDocuments(response.data);
@@ -71,7 +71,7 @@ const DocumentStatsDropdown = () => {
                 console.error("Erreur lors de la récupération des documents les plus visités :", error);
             }
         };
-    
+
         fetchMostVisitedDocuments();
     }, []);
     // Fonction pour récupérer les statistiques
@@ -331,13 +331,26 @@ const DocumentStatsDropdown = () => {
                 </div>
                 <div className="bg-white shadow-md rounded-lg p-6">
                     <h2 className="text-lg font-bold text-gray-800 mb-4">Documents les plus visités:</h2>
-                    <ul>
-                        {mostVisitedDocuments.map((doc) => (
-                            <li key={doc.id}>
-                                {doc.type} - {doc.numero} ({doc.visits>1 ? "visites:":"visite:"}{doc.visits})
-                            </li>
-                        ))}
-                    </ul>
+                    <div className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg">
+                        <table className="table-auto w-full text-left border-collapse">
+                            <thead className="bg-blue-900 text-yellow-300">
+                                <tr>
+                                    <th className="py-3 px-2 sm:px-4">Types</th>
+                                    <th className="py-3 px-2 sm:px-4">Numero</th>
+                                    <th className="py-3 px-2 sm:px-4">Visites</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-gray-900">
+                                {mostVisitedDocuments.map((doc) => (
+                                    <tr key={doc?.id} className="border-b border-gray-200 hover:bg-gray-100">
+                                        <td className="py-3 px-2 sm:px-4">{doc?.type}</td>
+                                        <td className="py-3 px-2 sm:px-4">{doc?.numero}</td>
+                                        <td className="py-3 px-2 sm:px-4">{doc?.visits}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
