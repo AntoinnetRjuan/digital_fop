@@ -115,7 +115,7 @@ const Accueil = () => {
       {/* Other Components */}
       <Documents />
       <div>
-        <h1 className="text-2xl font-semibold text-gray-400 mt-8 flex flex-col items-center justify-center">Actualités</h1>
+        <h1 className="text-2xl font-semibold text-gray-400 px-5 py-5 flex flex-col items-center justify-center">Actualités</h1>
         <AfficheActus />
       </div>
       <div className='bg-gradient-to-br from-primary/70 grid place-items-center'>

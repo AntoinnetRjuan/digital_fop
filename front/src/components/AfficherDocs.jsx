@@ -193,7 +193,7 @@ const Documents = ({ isAdmin }) => {
         <div>
           <SearchBar onSearch={handleSearch} />
         </div>
-        <h1 className="text-2xl font-semibold text-gray-300 mb-6">Liste des documents</h1>
+        <h1 className="text-2xl font-semibold text-gray-300 px-5 py-5">Liste des documents</h1>
         <div className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg">
           {showModal && selectedModification && (
             <Modal onClose={closeModal}>

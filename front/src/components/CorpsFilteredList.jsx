@@ -140,7 +140,7 @@ const CorpsFilteredList = ({ isAdmin }) => {
     };
 
     return (
-        <div className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg text-center mx-auto mt-44 p-4">
+        <div className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg text-center mx-auto p-4">
             <h1 className="text-2xl font-semibold text-gray-800 mb-4">Liste des Corps Professionnels</h1>
 
             {/* Liste déroulante pour sélectionner un corps */}

@@ -72,7 +72,7 @@ class DocumentStatsAPIView(APIView):
             return Response({"error": f"Une erreur s'est produite : {str(e)}"}, status=500)
 
 class DomaineViewSet(viewsets.ModelViewSet):
-    queryset = Domaine.objects.all()
+    queryset = Domaine.objects.all().order_by('-id')
     serializer_class = DomaineSerializer
 
 class DocumentViewSet(viewsets.ModelViewSet):

@@ -57,7 +57,7 @@ const AnimatedCard = () => {
     };
     return (
         <div className='container mx-auto'>
-            <h1 className='text-center text-white font-bold text-3xl mb-14 mt-5 sm:mt-0'>A Propos</h1>
+            <h1 className='text-center text-white font-bold text-3xl px-5 py-5 sm:mt-0'>A Propos</h1>
 
 
             {showModal && (<Modal onClose={closeModal}>
