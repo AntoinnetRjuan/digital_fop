@@ -198,7 +198,7 @@ class SuggestionsView(APIView):
         return Response(suggestions)
 
 class ActualiteViewSet(viewsets.ModelViewSet):
-    # queryset = Actualite.objects.all()
+    queryset = Actualite.objects.all()
     serializer_class = ActualiteSerialiser
 
     def get_queryset(self):
@@ -207,8 +207,8 @@ class ActualiteViewSet(viewsets.ModelViewSet):
         if id_param:
             return Actualite.objects.filter(id=id_param)
 
-        conseil_ministre = Actualite.objects.filter(conseil='CONSEIL DE MINISTRE').order_by('-id')[:4]
-        conseil_gouvernement = Actualite.objects.filter(conseil='CONSEIL DE GOUVERNEMENT').order_by('-id')[:4]
+        conseil_ministre = Actualite.objects.filter(conseil='CONSEIL DES MINISTRES').order_by('-id')[:4]
+        conseil_gouvernement = Actualite.objects.filter(conseil='CONSEIL DU GOUVERNEMENT').order_by('-id')[:4]
 
         queryset = list(conseil_ministre) + list(conseil_gouvernement)
 

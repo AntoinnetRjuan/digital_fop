@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { getCsrfToken } from './Utils';
 import axiosInstance from './AxiosConfig';
 import { ThreeDots } from 'react-loader-spinner';
+import { useNavigate } from 'react-router-dom';
 
 const CorpsForm = () => {
     const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ const CorpsForm = () => {
     });
     const [typeCorps, setTypeCorps] = useState([])
     const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/typecorps/')
@@ -55,6 +57,7 @@ const CorpsForm = () => {
                 },
             });
             toast.success('Corps ajouté avec succès!');
+            navigate("/dashboard")
         } catch (error) {
             toast.error("Erreur lors de l'ajout du corps:", error);
         } finally {

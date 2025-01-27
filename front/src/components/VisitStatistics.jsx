@@ -9,8 +9,9 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const VisitStatistics = () => {
-    const [data, setData] = useState({ totalVisits: 0, uniqueVisitors: 0, totalVisitsPerDay: [], uniqueVisitorsPerDay: [] });
+    const [data, setData] = useState({ totalVisits: 0, uniqueVisitors: 0, totalVisitsPerDay: [], uniqueVisitorsPerDay: [],visitsToday:0 });
     const [filters, setFilters] = useState({ startDate: "", endDate: "" });
+    const ObjectifVisitPerDay = 500
 
     useEffect(() => { fetchStatistics(); }, []);
 
@@ -24,10 +25,11 @@ const VisitStatistics = () => {
                 uniqueVisitors: stats.unique_visitors || 0,
                 totalVisitsPerDay: stats.total_visits_per_day || [],
                 uniqueVisitorsPerDay: stats.unique_visitors_per_day || [],
+                visitsToday:stats.visits_today || 0,
             });
         } catch (error) {
             console.error("Erreur lors de la récupération des statistiques :", error);
-            setData({ totalVisits: 0, uniqueVisitors: 0, totalVisitsPerDay: [], uniqueVisitorsPerDay: [] });
+            setData({ totalVisits: 0, uniqueVisitors: 0, totalVisitsPerDay: [], uniqueVisitorsPerDay: [] ,visitsToday:0});
         }
     };
 
@@ -101,6 +103,7 @@ const VisitStatistics = () => {
                     <div className="mb-4 sm:mb-6 text-base sm:text-lg">
                         <p>Total visites : <span className="font-bold">{data.totalVisits}</span></p>
                         <p>Visiteurs uniques : <span className="font-bold">{data.uniqueVisitors}</span></p>
+                        <p>Le nombre de visites a augmenté de <span className="font-bold">{(data.visitsToday * 100)/ ObjectifVisitPerDay} %</span> aujourd'hui</p>
                     </div>
                     <div className="h-64 sm:h-80">
                         <Line data={chartData} options={options} />
