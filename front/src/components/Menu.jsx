@@ -53,7 +53,7 @@ const Menu = ({ onSelectDomaine }) => {
 
           </div>
 
-          <div className="md:hidden">
+          <div className="md:hidden ">
             <button className="text-black" onClick={toggleMenu}>
               <svg
                 fill="none"
@@ -153,6 +153,14 @@ const Menu = ({ onSelectDomaine }) => {
                     Status Particuliers
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    to={"/animated"}
+                    className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
+                  >
+                    A propos
+                  </Link>
+                </li>
               </>
             )}
           </ul>
@@ -238,6 +246,14 @@ const Menu = ({ onSelectDomaine }) => {
                     className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
                   >
                     Statuts
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={"/animated"}
+                    className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
+                  >
+                    A propos
                   </Link>
                 </li>
 

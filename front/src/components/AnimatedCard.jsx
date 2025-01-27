@@ -7,7 +7,7 @@ import photo3 from "../assets/images.jpg";
 import photo2 from "/5.jpeg";
 // import photo3 from "/2.png";
 import { Fade, Slide } from "react-awesome-reveal"
-import Modal from "./Modal";
+import ModalInfo from "./Modal1";
 import { useState } from 'react';
 
 
@@ -17,23 +17,23 @@ const CardsData = [
         img: photo1,
         title: "Gouvernement Malagasy",
         desc1:"Le Gouvernement Malagasy incarne l’autorité ",
-        desc: "Le Gouvernement Malagasy incarne l’autorité exécutive de la République de Madagascar, guidé par le leadership du Président de la République, Andry Rajoelina. Il est structuré autour de la Primature, qui coordonne les actions gouvernementales et supervise l'exécution des politiques publiques à travers ses différents ministères. Ensemble, ces institutions travaillent pour le développement durable, la modernisation du pays et l’amélioration des conditions de vie de la population, en s’appuyant sur des stratégies innovantes et une gouvernance efficace.",
+        desc: "<strong>&nbsp;&nbsp;&nbsp;&nbsp; Le Gouvernement Malagasy </strong>incarne l’autorité exécutive de la République de Madagascar, guidé par le leadership du Président de la République,<strong> Andry Rajoelina </strong>.</br>&nbsp;&nbsp;&nbsp;&nbsp;  Il est structuré autour de la Primature, qui coordonne les actions gouvernementales et supervise l'exécution des politiques publiques à travers ses différents ministères.</br>&nbsp;&nbsp;&nbsp;&nbsp;  Ensemble, ces institutions travaillent pour le développement durable, la modernisation du pays et l’amélioration des conditions de vie de la population, en s’appuyant sur des stratégies innovantes et une gouvernance efficace.",
         logo_img: img1,
     },
     {
         id: 2,
         img: photo2,
         title: "Ministère du Travail et de la Fonction Publique",
-        desc1:"Responsable de l'élaboration des textes juridiques",
-        desc: "Cette direction se concentre sur :-Modernisation administrative :Mise en œuvre des réformes pour une fonction publique performante.-Gestion stratégique des ressources humaines : Planification et optimisation des effectifs, des compétences et des parcours professionnels.-Promotion des valeurs éthiques : Renforcement de la déontologie et de la transparence dans l’administration publique.",
+        desc1:"Dirigé par madame la Ministre RAZAKABOANA Hanitra Fitiavana.",
+        desc: "Cette direction est responsable de :<br/> &nbsp;&nbsp;&nbsp;&nbsp; - L'élaboration des textes juridiques : Rédaction, mise à jour, et diffusion des législations &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  et réglementations.<br/>&nbsp;&nbsp;&nbsp;&nbsp;- L’appui aux réformes : Réalisation d’études pour moderniser les cadres réglementaires &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;et administratifs.<br/>&nbsp;&nbsp;&nbsp;&nbsp;- La gestion des contentieux : Assistance juridique et traitement des dossiers administratifs sensibles.",        
         logo_img: img2,
     },
     {
         id: 3,
         img: photo3,
         title: "Direction des Etudes et des Affaires Juridiques",
-        desc1:"Se concentre sur la modernisation administrative",
-        desc: "Cette direction est responsable de : -L'élaboration des textes juridiques : Rédaction, mise à jour, et diffusion des législations et réglementations.-L’appui aux réformes : Réalisation d’études pour moderniser les cadres réglementaires et administratifs.-La gestion des contentieux : Assistance juridique et traitement des dossiers administratifs sensibles.",
+        desc1:"Responsable de l'élaboration des textes juridiques",
+        desc: "Cette direction est responsable de : <br>&nbsp;&nbsp;&nbsp;&nbsp;-L'élaboration des textes juridiques : Rédaction, mise à jour, et diffusion des législations &nbsp;&nbsp;&nbsp;&nbsp;   et  réglementations.</br>&nbsp;&nbsp;&nbsp;&nbsp;-L’appui aux réformes : Réalisation d’études pour moderniser les cadres réglementaires &nbsp;&nbsp;&nbsp;&nbsp; et administratifs.</br>&nbsp;&nbsp;&nbsp;&nbsp;-La gestion des contentieux : Assistance juridique et traitement des dossiers administratifs sensibles.",
         logo_img: img3,
     }
 ];
@@ -60,10 +60,10 @@ const AnimatedCard = () => {
             <h1 className='text-center text-white font-bold text-3xl px-5 py-5 sm:mt-0'>A Propos</h1>
 
 
-            {showModal && (<Modal onClose={closeModal}>
-                <h2 className="text-lg font-bold mb-4">{filtered.title}</h2>
-                <p>{filtered.desc}</p>
-            </Modal>)
+            {showModal && (<ModalInfo onClose={closeModal}>
+                <h2 className="text-xl font-bold mb-4 items-center text-center text-yellow-900">{filtered.title}</h2>
+                <p className="mb-10 text-base" dangerouslySetInnerHTML={{ __html: filtered.desc }}></p>
+            </ModalInfo>)
             }
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 place-items-center gap-12">
                 {

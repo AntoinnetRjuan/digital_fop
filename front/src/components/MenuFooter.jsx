@@ -28,7 +28,7 @@ export const  SUPPORT=[
 {/* <li><NavLink to={"/login"} className="text-black  hover:text-blue-900 font-medium transition duration-200">Se connecter</NavLink></li> */}
 
 export const  Icons=[
-    {name:"logo-facebook" ,link:"https://univ-antananarivo.mg"},
+    {name:"logo-facebook" ,link:"https://www.facebook.com/p/Ministère-du-Travail-de-lEmploi-et-de-la-Fonction-Publique-100081858410290/"},
     {name:"logo-twitter" ,link:"#"},
     {name:"logo-instagram" ,link:"#"},
     {name:"person-circle-outline" ,link :"/login"},

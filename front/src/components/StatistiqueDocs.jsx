@@ -192,7 +192,7 @@ const DocumentStatsDropdown = () => {
             )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white shadow-md rounded-lg p-6">
-                    <h2 className="text-lg font-bold text-gray-800 mb-4">Statistiques des Texte (Corps non inclus)</h2>
+                    <h2 className="text-lg font-bold text-gray-800 mb-4">Statistiques des Textes (Corps non inclus)</h2>
                     {totalDocuments !== null && (
                         <p className="text-gray-600 mb-4">
                             Total des documents : <span className="font-bold">{totalDocuments}</span>

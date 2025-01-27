@@ -38,7 +38,7 @@ h1{
     border-0 top-2/4;
 }
 .content {
-    @apply text-white absolute w-[90%] sm:w-[420px] md:w-[500px] lg:w-[600px] z-[5] text-left backdrop-blur-[3px] duration-[1s] px-4 py-6 top-1/2 transform -translate-y-1/2 left-4 sm:left-8;
+    @apply text-white absolute w-[90%] sm:w-[420px] md:w-[500px] lg:w-[600px] z-[5] text-left backdrop-blur-[9px] duration-[1s] px-4 py-6 top-1/2 transform -translate-y-1/2 left-4 sm:left-8;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
 }

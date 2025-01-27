@@ -99,10 +99,10 @@ CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SECURE = False
 # Durée de session en secondes (30 minutes)
-SESSION_COOKIE_AGE = 3600
+SESSION_COOKIE_AGE = 86400
 
 # Expirer la session à la fermeture du navigateur
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+#SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Enregistrer la session à chaque requête
 SESSION_SAVE_EVERY_REQUEST = True

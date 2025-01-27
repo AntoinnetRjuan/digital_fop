@@ -57,6 +57,7 @@ const App = () => {
                         <Route path='/AfficherDoc' element={<Documents />} />
                         <Route path='/status' element={<CorpsFilteredList />} />
                         <Route path="/admin/remarks" element={<AdminRemarks />} />
+                        <Route path="/animated" element={<AnimatedCard />} />
                         <Route path='*' element={<Accueil />} />
                     </Routes>
                 </Router>

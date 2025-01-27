@@ -21,12 +21,12 @@ const Accueil = () => {
     {
       img: img1,
       name: "Bienvenue",
-      Text: 'Afin d’améliorer sa visibilité et de conduire les programmes de réforme de la Fonction Publique, pilier du développement de notre pays, <strong> le Ministère, du Travail, de l’Emploi, de la Fonction Publique et des Lois Sociales </strong> est à pied d\'œuvre dans la mise en place d\'une bibliothèque numérique en son sein.'
+      Text: 'Afin d’améliorer sa visibilité et de conduire les programmes de réforme de la Fonction Publique, pilier du développement de notre pays, <strong> le Ministère du Travail, de l’Emploi et de la Fonction Publique et des Lois Sociales </strong> est à pied d\'œuvre dans la mise en place d\'une bibliothèque numérique en son sein.'
     },
     {
       img: img2,
       name: "Réforme en cours",
-      Text: "<strong> Le ministère du travail </strong> et de la fonction publique met en place des initiatives pour moderniser l'administration publique et améliorer l'efficacité des services offerts aux citoyens. Une bibliothèque numérique est une des pierres angulaires de ces réformes."
+      Text: "<strong> Le Ministère du Travail,de l'Emploi  et de la fonction publique </strong> met en place des initiatives pour moderniser l'administration publique et améliorer l'efficacité des services offerts aux citoyens. Une bibliothèque numérique est une des pierres angulaires de ces réformes."
     },
     {
       img: img3,
