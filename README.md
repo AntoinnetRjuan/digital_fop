@@ -5,10 +5,10 @@ Welcome to my GitHub profile! I'm a passionate developer with a keen interest in
 ## 🚀 About Me
 
 - 🌱 I’m currently learning and exploring new technologies.
-- 🔭 I’m working on [Your Project Name](link-to-your-project) - a brief description of what your project does.
+- 🔭 I’m working on [Bibliothèque numérique MTEFop](link-to-your-project) - a brief description of what your project does.
 - 🤝 I’m looking to collaborate on open-source projects and innovative ideas.
 - 💬 Ask me about web development, Python, JavaScript, and more.
-- 📫 How to reach me: [Your Email](mailto:your.email@example.com)
+- 📫 How to reach me: [antoinnetrajean@gmail.com](mailto:your.email@example.com)
 
 ## 🛠️ Technologies & Tools
 
@@ -27,7 +27,6 @@ Welcome to my GitHub profile! I'm a passionate developer with a keen interest in
 
 - [Project 1](link-to-your-project) - A brief description of what your project does.
 - [Project 2](link-to-your-project) - A brief description of what your project does.
-- [Project 3](link-to-your-project) - A brief description of what your project does.
 
 ## 🌐 Connect with Me
 
