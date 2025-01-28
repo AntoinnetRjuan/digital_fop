@@ -70,11 +70,11 @@ const EditCorpsForm = () => {
         }
 
         try {
-            const token = localStorage.getItem("access_token");
+            const user = JSON.parse(localStorage.getItem("user"));
+            const token = user?.access;
             await axios.put(`http://localhost:8000/api/corps/${corpsId}/`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    "X-CSRFToken": getCsrfToken(),
                     "Content-Type": "multipart/form-data",
                 },
             });

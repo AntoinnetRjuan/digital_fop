@@ -220,3 +220,22 @@ class RemarkViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]  # Permettre aux utilisateurs non authentifiés de créer des remarques
 
 
+class UpdateStatusView(APIView):
+    def patch(self, request, pk):
+        try:
+            # Récupérer le document par son ID
+            document = Document.objects.get(pk=pk)
+        except Document.DoesNotExist:
+            return Response({"error": "Document not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Vérifier si le champ 'status' est présent dans la requête
+        new_status = request.data.get("status")
+        if not new_status:
+            return Response({"error": "Status field is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Mettre à jour uniquement le statut
+        document.status = new_status
+        document.save()
+
+        return Response({"message": "Status updated successfully.", "status": document.status}, status=status.HTTP_200_OK)
+

@@ -26,6 +26,7 @@ const CorpsFilteredList = ({ isAdmin }) => {
             .get(`http://localhost:8000/api/corps/?page=${page}`)
             .then((response) => {
                 setCorpsList(response.data.results);
+                
                 setTotalPages(Math.ceil(response.data.count / 10));
             })
             .catch((error) => {
@@ -164,130 +165,130 @@ const CorpsFilteredList = ({ isAdmin }) => {
             {/* Affichage de la liste filtrée */}
             <div>
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">Résultats :</h2>
-                {corpsList.length > 0 ? (
-                    <>
-                        <table className="table-auto w-full text-left border-collapse">
-                            <thead className="bg-blue-900 text-yellow-300">
-                                <tr>
-                                    <th className="py-3 px-2 sm:px-4">Dates</th>
-                                    <th className="py-3 px-2 sm:px-4">Types</th>
-                                    <th className="py-3 px-2 sm:px-4">Description</th>
-                                    <th className="py-3 px-2 sm:px-4">Status</th>
-                                    <th className="py-3 px-2 sm:px-4">Action</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                {corpsList.map((corps) => (
-                                    <tr key={corps?.id} className="border-b border-gray-200 hover:bg-gray-100">
-                                        <td className="py-3 px-2 sm:px-4">{corps?.date_creation}</td>
-                                        {typeCorps.map((type) => (
-                                            <td className="py-3 px-2 sm:px-4" key={type.id}>{type?.nom}</td>
-                                        ))}
-                                        <td className="py-3 px-2 sm:px-4">{corps?.description}</td>
-                                        <td className="py-3 px-2 sm:px-4">
-                                            <span
-                                                className={`px-2 py-1 rounded-full text-xs ${corps?.status !== "actif"
-                                                    ? "bg-yellow-100 text-yellow-600"
-                                                    : "bg-green-100 text-green-600"
-                                                    }`}
-                                            >
-                                                {corps?.status}
-                                            </span>
-                                        </td>
-                                        <td className="py-3 px-2 sm:px-4">
-                                            {isAdmin ? (
-                                                <div className="flex space-x-2 sm:space-x-4">
-                                                    {corps.pdf_file || corps.fichier ? (
-                                                        <button
-                                                            onClick={() => {
-                                                                corps.pdf_file
-                                                                    ? handleView(corps.pdf_file, "pdf")
-                                                                    : handleView(corps.fichier, "pdf");
-                                                            }}
-                                                            className="text-blue-800 hover:underline"
-                                                        >
-                                                            <FontAwesomeIcon icon={faReadme} />
-                                                        </button>
-                                                    ) : (
-                                                        <span className="text-gray-500">Non disponible</span>
-                                                    )}
-                                                    <button
-                                                        onClick={() => handleEdit(corps?.id)}
-                                                        className="text-green-500 hover:underline"
-                                                    >
-                                                        <FontAwesomeIcon icon={faPenToSquare} />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDelete(corps.id)}
-                                                        className="text-red-500 hover:underline"
-                                                    >
-                                                        <FontAwesomeIcon icon={faTrash} />
-                                                    </button>
-                                                    <button
-                                                        className="text-yellow-500 hover:underline"
-                                                        onClick={() =>
-                                                            handleChangeStatus(
-                                                                corps.id,
-                                                                corps.status === "actif" ? "inactif" : "actif"
-                                                            )
-                                                        }
-                                                    >
-                                                        <FontAwesomeIcon icon={faCashRegister} />
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <div className="flex space-x-2 sm:space-x-4">
-                                                    {corps.pdf_file || corps.fichier ? (
-                                                        <button
-                                                            onClick={() => {
-                                                                corps.pdf_file
-                                                                    ? handleView(corps.pdf_file, "pdf")
-                                                                    : handleView(corps.fichier, "pdf");
-                                                            }}
-                                                            className="text-blue-800 hover:underline"
-                                                        >
-                                                            <FontAwesomeIcon icon={faReadme} />
-                                                        </button>
-                                                    ) : (
-                                                        <span className="text-gray-500">Non disponible</span>
-                                                    )}
-                                                    <button
-                                                        onClick={() =>
-                                                            handleDownload(corps.pdf_file || corps.fichier, `document-${corps.id}.pdf`)
-                                                        }
-                                                        className="text-gray-700 hover:underline"
-                                                    >
-                                                        <FontAwesomeIcon icon={faDownload} />
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </td>
+                <div  className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg">
+                    {corpsList.length > 0 ? (
+                        <>
+                            <table className="table-auto w-full text-left border-collapse">
+                                <thead className="bg-blue-900 text-yellow-300">
+                                    <tr>
+                                        <th className="py-3 px-2 sm:px-4">Dates</th>
+                                        <th className="py-3 px-2 sm:px-4">Noms</th>
+                                        <th className="py-3 px-2 sm:px-4">Description</th>
+                                        <th className="py-3 px-2 sm:px-4">Status</th>
+                                        <th className="py-3 px-2 sm:px-4">Action</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <div className="flex justify-between mt-4 px-2 sm:px-4">
-                            <button
-                                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                                disabled={currentPage === 1}
-                                className={`px-2 sm:px-4 py-2 rounded-md text-sm sm:text-base ${currentPage === 1 ? "bg-gray-300 text-gray-500" : "bg-blue-900 text-white"}`}
-                            >
-                                <FontAwesomeIcon icon={faBackward} className="mr-1 sm:mr-2" /> Précédent
-                            </button>
-                            <span className="text-sm sm:text-base">Page {currentPage} sur {totalPages}</span>
-                            <button
-                                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                                disabled={currentPage === totalPages}
-                                className={`px-2 sm:px-4 py-2 rounded-md text-sm sm:text-base ${currentPage === totalPages ? "bg-gray-300 text-gray-500" : "bg-blue-900 text-white"}`}
-                            >
-                                Suivant <FontAwesomeIcon icon={faForward} className="ml-1 sm:ml-2" />
-                            </button>
-                        </div>
-                    </>
-                ) : (
-                    <p className="text-gray-500">Aucun corps trouvé pour ce filtre.</p>
-                )}
+                                </thead>
+
+                                <tbody>
+                                    {corpsList.map((corps) => (
+                                        <tr key={corps?.id} className="border-b border-gray-200 hover:bg-gray-100">
+                                            <td className="py-3 px-2 sm:px-4">{corps?.date_creation}</td>
+                                            <td className="py-3 px-2 sm:px-4">{corps?.nom}</td>
+                                            <td className="py-3 px-2 sm:px-4">{corps?.description}</td>
+                                            <td className="py-3 px-2 sm:px-4">
+                                                <span
+                                                    className={`px-2 py-1 rounded-full text-xs ${corps?.status !== "actif"
+                                                        ? "bg-yellow-100 text-yellow-600"
+                                                        : "bg-green-100 text-green-600"
+                                                        }`}
+                                                >
+                                                    {corps?.status}
+                                                </span>
+                                            </td>
+                                            <td className="py-3 px-2 sm:px-4">
+                                                {isAdmin ? (
+                                                    <div className="flex space-x-2 sm:space-x-4">
+                                                        {corps.pdf_file || corps.fichier ? (
+                                                            <button
+                                                                onClick={() => {
+                                                                    corps.pdf_file
+                                                                        ? handleView(corps.pdf_file, "pdf")
+                                                                        : handleView(corps.fichier, "pdf");
+                                                                }}
+                                                                className="text-blue-800 hover:underline"
+                                                            >
+                                                                <FontAwesomeIcon icon={faReadme} />
+                                                            </button>
+                                                        ) : (
+                                                            <span className="text-gray-500">Non disponible</span>
+                                                        )}
+                                                        <button
+                                                            onClick={() => handleEdit(corps?.id)}
+                                                            className="text-green-500 hover:underline"
+                                                        >
+                                                            <FontAwesomeIcon icon={faPenToSquare} />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDelete(corps.id)}
+                                                            className="text-red-500 hover:underline"
+                                                        >
+                                                            <FontAwesomeIcon icon={faTrash} />
+                                                        </button>
+                                                        <button
+                                                            className="text-yellow-500 hover:underline"
+                                                            onClick={() =>
+                                                                handleChangeStatus(
+                                                                    corps.id,
+                                                                    corps.status === "actif" ? "inactif" : "actif"
+                                                                )
+                                                            }
+                                                        >
+                                                            <FontAwesomeIcon icon={faCashRegister} />
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex space-x-2 sm:space-x-4">
+                                                        {corps.pdf_file || corps.fichier ? (
+                                                            <button
+                                                                onClick={() => {
+                                                                    corps.pdf_file
+                                                                        ? handleView(corps.pdf_file, "pdf")
+                                                                        : handleView(corps.fichier, "pdf");
+                                                                }}
+                                                                className="text-blue-800 hover:underline"
+                                                            >
+                                                                <FontAwesomeIcon icon={faReadme} />
+                                                            </button>
+                                                        ) : (
+                                                            <span className="text-gray-500">Non disponible</span>
+                                                        )}
+                                                        <button
+                                                            onClick={() =>
+                                                                handleDownload(corps.pdf_file || corps.fichier, `document-${corps.id}.pdf`)
+                                                            }
+                                                            className="text-gray-700 hover:underline"
+                                                        >
+                                                            <FontAwesomeIcon icon={faDownload} />
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <div className="flex justify-between mt-4 px-2 sm:px-4">
+                                <button
+                                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                    disabled={currentPage === 1}
+                                    className={`px-2 sm:px-4 py-2 rounded-md text-sm sm:text-base ${currentPage === 1 ? "bg-gray-300 text-gray-500" : "bg-blue-900 text-white"}`}
+                                >
+                                    <FontAwesomeIcon icon={faBackward} className="mr-1 sm:mr-2" /> Précédent
+                                </button>
+                                <span className="text-sm sm:text-base">Page {currentPage} sur {totalPages}</span>
+                                <button
+                                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                                    disabled={currentPage === totalPages}
+                                    className={`px-2 sm:px-4 py-2 rounded-md text-sm sm:text-base ${currentPage === totalPages ? "bg-gray-300 text-gray-500" : "bg-blue-900 text-white"}`}
+                                >
+                                    Suivant <FontAwesomeIcon icon={faForward} className="ml-1 sm:ml-2" />
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                        <p className="text-gray-500">Aucun corps trouvé pour ce filtre.</p>
+                    )}
+                </div>
             </div>
         </div>
     );

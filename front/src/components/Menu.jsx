@@ -41,14 +41,14 @@ const Menu = ({ onSelectDomaine }) => {
   }
   return (
     <>
-      <nav className="fixed container top-28 w-3/4 mx-auto  rounded-lg left-0 right-0 bg-white shadow-xl p-2 z-50 ">
+      <nav className="fixed container top-28 w-3/4 mx-auto sm:w-[1500px] md:w-[1500px] sm:text-sm md:text-sm rounded-lg left-0 right-0 bg-white shadow-xl p-2 z-50 ">
         <div className="flex items-center justify-between">
-          <div className='gap-x-4 flex  text-black text-xl font-bold ml-8'>
+          <div className='gap-x-4 flex  text-black text-lg font-bold ml-8'>
             <div className='shrink-0'>
               <img src={biblio} alt='logo' className='size-6 ' />
             </div>
             <div>
-              <h3 className='text-yellow-950'>Digital Library</h3>
+              <h3 className='text-yellow-950 sm:text-sm md:text-lg'>Digital Library</h3>
             </div>
 
           </div>
@@ -254,15 +254,6 @@ const Menu = ({ onSelectDomaine }) => {
                     className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
                   >
                     A propos
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    to={"/login"}
-                    className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
-                  >
-                    Se connecter
                   </Link>
                 </li>
               </>

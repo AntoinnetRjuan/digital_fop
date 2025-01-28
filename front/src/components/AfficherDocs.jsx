@@ -6,7 +6,7 @@ import axiosInstance from "./AxiosConfig";
 import { toast } from "react-toastify";
 import { userContext } from "./Context";
 import { Link } from "react-router-dom";
-import { MutatingDots } from "react-loader-spinner";
+import { Oval } from "react-loader-spinner";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faPenToSquare, faTrash, faCashRegister, faForward, faBackward, faSquarePlus, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { faReadme } from '@fortawesome/free-brands-svg-icons';
@@ -20,6 +20,7 @@ const Documents = ({ isAdmin }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedModification, setSelectedModification] = useState(null);
   const [journaux, setJournaux] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { selectedDomaine } = useContext(userContext);
   const navigate = useNavigate();
 
@@ -34,6 +35,7 @@ const Documents = ({ isAdmin }) => {
   };
 
   const fetchDocuments = async (url) => {
+    setLoading(true);
     try {
       const response = await axios.get(url);
       setDocuments(response.data.results);
@@ -51,32 +53,50 @@ const Documents = ({ isAdmin }) => {
       }
     } catch (error) {
       console.error("Erreur lors de la récupération des documents :", error);
+    } finally {
+      setLoading(false);
     }
   };
-
   useEffect(() => {
-    if (selectedDomaine) {
-      axiosInstance
-        .get("/api/documents/", {
-          params: { domaine: selectedDomaine },
-        })
-        .then((response) => setDocuments(response.data.results))
-        .catch((error) => console.error("Erreur lors de la récupération des documents :", error));
-    }
-  }, [selectedDomaine]);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/documents/")
-      .then((response) => {
+    const fetchInitialDocuments = async () => {
+      setLoading(true);
+      try {
+        const params = selectedDomaine ? { domaine: selectedDomaine } : {};
+        const response = await axiosInstance.get("/api/documents/", { params });
         setDocuments(response.data.results);
         setNextPage(response.data.next);
         setPreviousPage(response.data.previous);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Erreur lors de la récupération des documents :", error);
-      });
-  }, []);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchInitialDocuments();
+  }, [selectedDomaine]);
+  // useEffect(() => {
+  //   if (selectedDomaine) {
+  //     axiosInstance
+  //       .get("/api/documents/", {
+  //         params: { domaine: selectedDomaine },
+  //       })
+  //       .then((response) => setDocuments(response.data.results))
+  //       .catch((error) => console.error("Erreur lors de la récupération des documents :", error));
+  //   }
+  // }, [selectedDomaine]);
+
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:8000/api/documents/")
+  //     .then((response) => {
+  //       setDocuments(response.data.results);
+  //       setNextPage(response.data.next);
+  //       setPreviousPage(response.data.previous);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Erreur lors de la récupération des documents :", error);
+  //     });
+  // }, []);
 
   const handleDelete = async (id) => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -97,13 +117,13 @@ const Documents = ({ isAdmin }) => {
     }
   };
 
-  const updateStatus = async (id) => {
+  const updateStatus = async (id, newStatus) => {
     const user = JSON.parse(localStorage.getItem("user"));
     const token = user?.access;
     const response = await axiosInstance.patch(
-      `/api/documents/${id}/`,
+      `/api/documents/${id}/status/`,
       {
-        status: "abroge",
+        status: newStatus,
       },
       {
         headers: {
@@ -111,8 +131,10 @@ const Documents = ({ isAdmin }) => {
         },
       }
     );
-    setDocuments(
-      documents.map((doc) => (doc.id === id ? response.data : doc))
+    setData(
+      data.map((doc) =>
+        doc.id === id ? { ...doc, ...response.data } : doc
+      )
     );
   };
 
@@ -185,17 +207,6 @@ const Documents = ({ isAdmin }) => {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center">
-        <MutatingDots
-          visible={true}
-          height="100"
-          width="100"
-          color="#4A90E2"
-          secondaryColor="#4fa94d"
-          radius="12.5"
-          ariaLabel="mutating-dots-loading"
-        />
-      </div>
       <div className="flex flex-col items-center justify-center bg-transparent px-4 sm:px-6 md:px-8">
         <div>
           <SearchBar onSearch={handleSearch} />
@@ -244,8 +255,8 @@ const Documents = ({ isAdmin }) => {
                             <button
                               onClick={() => {
                                 doc.pdf_file
-                                  ? handleView(doc.pdf_file, "pdf",doc.id)
-                                  : handleView(doc.fichier, "pdf",doc.id);
+                                  ? handleView(doc.pdf_file, "pdf", doc.id)
+                                  : handleView(doc.fichier, "pdf", doc.id);
                               }}
                               className="text-blue-800 hover:underline"
                             >
@@ -267,7 +278,8 @@ const Documents = ({ isAdmin }) => {
                             <FontAwesomeIcon icon={faTrash} />
                           </button>
                           <button
-                            onClick={() => updateStatus(doc?.id)}
+                            onClick={() => updateStatus(doc.id,
+                              doc.status === "en_vigueur" ? "abroge" : "en_vigueur")}
                             className="text-yellow-500 hover:underline"
                           >
                             <FontAwesomeIcon icon={faCashRegister} />
@@ -314,7 +326,17 @@ const Documents = ({ isAdmin }) => {
                     </td>
                   </tr>
                 ))
-              ) : (
+              ) : loading ? (<tr className="flex justify-center ml-96 py-4">
+                <Oval
+                  visible={true}
+                  height="80"
+                  width="80"
+                  color="#4f94a9"
+                  ariaLabel="oval-loading"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                />
+              </tr>) : (
                 <tr>
                   <td colSpan="5" className="py-4 text-center text-gray-500">
                     Aucun résultat trouvé pour ces critères.

@@ -112,4 +112,3 @@ class FilteredCorpsAPIView(APIView):
 def corps_professionnels_list(request):
     corps_list = Corps.objects.values('id', 'nom')
     return JsonResponse(list(corps_list), safe=False)
-

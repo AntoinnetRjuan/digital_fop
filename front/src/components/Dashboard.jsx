@@ -24,7 +24,7 @@ function Dashboard() {
             </div>
             <div>
                 <h1 className="text-2xl font-semibold text-gray-400 px-5 py-5 flex flex-col items-center justify-center">Status Particulier</h1>
-                <CorpsFilteredList isAdmin={true}/>
+                <CorpsFilteredList isAdmin={true} />
             </div>
             <div>
                 <h1 className="text-2xl font-semibold text-gray-400 px-5 py-5 flex flex-col items-center justify-center">Actualités</h1>
@@ -34,17 +34,17 @@ function Dashboard() {
                 <div className="flex items-center">
                     <h1 className="text-2xl font-semibold text-gray-400">Voir les remarques des visiteurs</h1>
                     <button onClick={toggleRemarks} className="ml-4">
-                        <FontAwesomeIcon icon={faComment} className='text-white h-12 w-12'/>
+                        <FontAwesomeIcon icon={faComment} className='text-white h-12 w-12' />
                     </button>
                 </div>
                 {showRemarks && <AdminRemarks />}
             </div>
             <div className="dashboard">
                 <h1 className="text-center text-white text-3xl font-bold mb-4">Reporting</h1>
-                <VisitStatistics/>
+                <VisitStatistics />
             </div>
             <div className='mt-6'>
-                <DocumentStatsDropdown/>
+                <DocumentStatsDropdown />
             </div>
         </>
     );
