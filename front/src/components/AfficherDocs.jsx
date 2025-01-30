@@ -65,7 +65,7 @@ const Documents = ({ isAdmin }) => {
         const response = await axiosInstance.get("/api/documents/", { params });
         setDocuments(response.data.results);
         setNextPage(response.data.next);
-        setPreviousPage(response.data.previous);
+        setPreviousPage(response.data.previous); 
       } catch (error) {
         console.error("Erreur lors de la récupération des documents :", error);
       } finally {
@@ -184,7 +184,7 @@ const Documents = ({ isAdmin }) => {
     }
   };
 
-  const handleDownload = async (fileUrl, fileName) => {
+  const handleDownload = async (fileUrl, fileName,documentId) => {
     try {
       const response = await axios.get(fileUrl, {
         responseType: "blob",
@@ -199,6 +199,7 @@ const Documents = ({ isAdmin }) => {
 
       link.parentNode.removeChild(link);
       window.URL.revokeObjectURL(url);
+      await axiosInstance.post(`/api/documents/${documentId}/telechargement/`);
     } catch (error) {
       console.error("Erreur lors du téléchargement :", error);
       toast.error("Erreur lors du téléchargement du fichier.");
@@ -207,7 +208,7 @@ const Documents = ({ isAdmin }) => {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center bg-transparent px-4 sm:px-6 md:px-8">
+      <div className="flex flex-col items-center justify-center bg-transparent mt-9 px-4 sm:px-6 md:px-8">
         <div>
           <SearchBar onSearch={handleSearch} />
         </div>
@@ -240,7 +241,7 @@ const Documents = ({ isAdmin }) => {
                     <td className="py-3 px-2 sm:px-4">{doc?.objet}</td>
                     <td className="py-3 px-2 sm:px-4">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs ${doc?.status !== "en_vigueur"
+                        className={`px-2 py-1 rounded-full text-xs ${doc?.status !== "En vigueur"
                           ? "bg-yellow-100 text-yellow-600"
                           : "bg-green-100 text-green-600"
                           }`}
@@ -251,6 +252,7 @@ const Documents = ({ isAdmin }) => {
                     <td className="py-3 px-2 sm:px-4">
                       {isAdmin ? (
                         <div className="flex space-x-2 sm:space-x-4">
+                          <p className="px-5">{doc.visits}<span className="text-sm">{doc.visits>=2 ? " visites ":" visite "}</span></p>
                           {doc.pdf_file || doc.fichier ? (
                             <button
                               onClick={() => {
@@ -279,7 +281,7 @@ const Documents = ({ isAdmin }) => {
                           </button>
                           <button
                             onClick={() => updateStatus(doc.id,
-                              doc.status === "en_vigueur" ? "abroge" : "en_vigueur")}
+                              doc.status === "En vigueur" ? "Abrogé" : "En vigueur")}
                             className="text-yellow-500 hover:underline"
                           >
                             <FontAwesomeIcon icon={faCashRegister} />
@@ -296,9 +298,11 @@ const Documents = ({ isAdmin }) => {
                               <FontAwesomeIcon icon={faCircleInfo} />
                             </button>
                           )}
+                          <p>{doc.telechargements}<span>{doc.telechargements>=2 ? " telechargements ":" telechargement "}</span></p>
                         </div>
                       ) : (
                         <div className="flex space-x-2 sm:space-x-4">
+                          <p className="px-5">{doc.visits}<span className="text-sm">{doc.visits>=2 ? " visites ":" visite "}</span></p>
                           {doc.pdf_file || doc.fichier ? (
                             <button
                               onClick={() => {
@@ -313,9 +317,10 @@ const Documents = ({ isAdmin }) => {
                           ) : (
                             <span className="text-gray-500">Non disponible</span>
                           )}
+                          <p>{doc.telechargements}<span>{doc.telechargements>=2 ? " telechargements ":" telechargement "}</span></p>
                           <button
                             onClick={() =>
-                              handleDownload(doc.pdf_file || doc.fichier, `document-${doc.id}.pdf`)
+                              handleDownload(doc.pdf_file || doc.fichier, `document-${doc.id}.pdf`, doc.id)
                             }
                             className="text-gray-700 hover:underline"
                           >

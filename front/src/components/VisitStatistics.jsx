@@ -102,7 +102,7 @@ const VisitStatistics = () => {
                 <>
                     <div className="mb-4 sm:mb-6 text-base sm:text-lg">
                         <p>Total visites : <span className="font-bold">{data.totalVisits}</span></p>
-                        <p>Visiteurs uniques : <span className="font-bold">{data.uniqueVisitors}</span></p>
+                        <p>Visiteurs : <span className="font-bold">{data.uniqueVisitors}</span></p>
                         <p>Le nombre de visites a augmenté de <span className={`font-bold ${(data.visitsToday * 100) / ObjectifVisitPerDay < 25
                                 ? 'text-red-500'   // Rouge si < 25
                                 : (data.visitsToday * 100) / ObjectifVisitPerDay < 50

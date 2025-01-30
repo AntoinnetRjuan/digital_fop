@@ -16,39 +16,39 @@ class Domaine(models.Model):  # ou Theme
 # Create your models here.
 class Document(models.Model):
     TYPE_CHOICES = [
-        ('constitution', 'Constitution'),
-        ('traités internationaux', 'Traités Internationaux'),
-        ('convention', 'Convention'),
-        ('lois organiques', 'Lois Organiques'),
-        ('lois ordinaires', 'Lois Ordinaires'),
-        ('ordonnances', 'Ordonnances'),
-        ('decrets', 'Décrets'),
-        ('arretes interministeriels', 'Arrêtés Interministériels'),
-        ('arretes', 'Arrêtés'),
-        ('circilaire', 'Circulaire'),
-        ('notes', 'Notes'),
+        ('Constitution', 'Constitution'),
+        ('Traités internationaux', 'Traités Internationaux'),
+        ('Convention', 'Convention'),
+        ('Lois organiques', 'Lois Organiques'),
+        ('Lois ordinaires', 'Lois Ordinaires'),
+        ('Ordonnances', 'Ordonnances'),
+        ('Décrets', 'Décrets'),
+        ('Arrêtés interministeriels', 'Arrêtés Interministériels'),
+        ('Arrêtés', 'Arrêtés'),
+        ('Circilaire', 'Circulaire'),
+        ('Notes', 'Notes'),
     ]
 
     CONSEIL_CHOICES = [
-        ('aucun', 'Aucun'),
+        ('Autre', 'Autre'),
         ('ministre', 'Ministre'),
         ('gouvernement', 'Gouvernement'),
     ]
 
     STATUS_CHOICES = [
-        ('en_vigueur', 'En vigueur'),
-        ('abroge', 'Abrogé'),
+        ('En vigueur', 'En vigueur'),
+        ('Abrogé', 'Abrogé'),
     ]
 
     type = models.CharField(max_length=50, choices=TYPE_CHOICES)
     objet = models.TextField()
     numero = models.TextField()
     date = models.DateField()
-    conseil = models.CharField(max_length=50, choices=CONSEIL_CHOICES, default='aucun')
+    conseil = models.CharField(max_length=50, choices=CONSEIL_CHOICES, default='Autre')
     domaine = models.ForeignKey('Domaine', on_delete=models.CASCADE, null=True,blank=True)
     fichier = models.FileField(upload_to='documents/')
     pdf_file = models.FileField(upload_to='pdf_documents/', null=True, blank=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='en_vigueur')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='En vigueur')
     last_modified_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -63,9 +63,13 @@ class Document(models.Model):
     numero_journal = models.CharField(max_length=20, null=True, blank=True)
     page_journal = models.CharField(max_length=20, null=True, blank=True)
     visits = models.PositiveIntegerField(default=0,verbose_name='nombre de visite')
+    telechargements = models.PositiveIntegerField(default=0)
 
     def increment_visits(self):
         self.visits += 1
+        self.save()
+    def increment_telechargements(self):
+        self.telechargements += 1
         self.save()
 
     def update_modification(self, user, details):

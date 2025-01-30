@@ -163,6 +163,16 @@ class DocumentVisitsView(APIView):
             return Response({"message": "Visite enregistrée"}, status=status.HTTP_200_OK)
         except Document.DoesNotExist:
             return Response({"error": "Document non trouvé"}, status=status.HTTP_404_NOT_FOUND)
+
+class DocumentTelechargementView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request, document_id, *args, **kwargs):
+        try:
+            document = Document.objects.get(id=document_id)
+            document.increment_telechargements()  # Incrémente le compteur de telechargements
+            return Response({"message": "Visite enregistrée"}, status=status.HTTP_200_OK)
+        except Document.DoesNotExist:
+            return Response({"error": "Document non trouvé"}, status=status.HTTP_404_NOT_FOUND)
 class MostVisitedDocumentsView(APIView):
     permission_classes = [AllowAny]
     def get(self, request, *args, **kwargs):

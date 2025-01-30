@@ -142,17 +142,17 @@ const EditDocument = () => {
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Choisissez un type</option>
-            <option value="constitution">Constitution</option>
-            <option value="traités internationaux">Traités Internationaux</option>
-            <option value="convention">Convention</option>
-            <option value="lois organiques">Lois Organiques</option>
-            <option value="lois ordinaires">Lois Ordinaires</option>
-            <option value="ordonnances">Ordonnance</option>
-            <option value="decrets">Décrets</option>
-            <option value="arretes interministeriels">Arrêtés Interministériels</option>
-            <option value="arretes">Arrêtés</option>
-            <option value="circilaire">Circulaire</option>
-            <option value="notes">Notes</option>
+            <option value="Constitution">Constitution</option>
+            <option value="Traités internationaux">Traités Internationaux</option>
+            <option value="Convention">Convention</option>
+            <option value="Lois organiques">Lois Organiques</option>
+            <option value="Lois ordinaires">Lois Ordinaires</option>
+            <option value="Ordonnances">Ordonnance</option>
+            <option value="Décrets">Décrets</option>
+            <option value="Arrêtés interministeriels">Arrêtés Interministériels</option>
+            <option value="Arrêtés">Arrêtés</option>
+            <option value="Circilaire">Circulaire</option>
+            <option value="Notes">Notes</option>
           </select>
         </div>
 
@@ -206,7 +206,7 @@ const EditDocument = () => {
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           >
-            <option value="aucun">Aucun</option>
+            <option value="Autre">Autre</option>
             <option value="ministre">Ministre</option>
             <option value="gouvernement">Gouvernement</option>
           </select>
@@ -240,8 +240,8 @@ const EditDocument = () => {
             required
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           >
-            <option value="en_vigueur">En vigueur</option>
-            <option value="abroge">Abrogé</option>
+            <option value="En vigueur">En vigueur</option>
+            <option value="Abrogé">Abrogé</option>
           </select>
         </div>
 

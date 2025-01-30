@@ -28,7 +28,7 @@ const RemarkForm = () => {
     return (
         <div className="flex flex-col items-center w-full p-3 rounded-lg max-w-4xl mx-auto">
             <h1 className="text-base sm:text-lg font-semibold text-yellow-900 mb-3 text-center">
-                Envoyer une remarque
+                Envoyer une remarque a propos de l'application
             </h1>
             <form
                 className="flex flex-col w-full gap-2"
