@@ -65,7 +65,7 @@ const Documents = ({ isAdmin }) => {
         const response = await axiosInstance.get("/api/documents/", { params });
         setDocuments(response.data.results);
         setNextPage(response.data.next);
-        setPreviousPage(response.data.previous); 
+        setPreviousPage(response.data.previous);
       } catch (error) {
         console.error("Erreur lors de la récupération des documents :", error);
       } finally {
@@ -184,7 +184,7 @@ const Documents = ({ isAdmin }) => {
     }
   };
 
-  const handleDownload = async (fileUrl, fileName,documentId) => {
+  const handleDownload = async (fileUrl, fileName, documentId) => {
     try {
       const response = await axios.get(fileUrl, {
         responseType: "blob",
@@ -252,21 +252,34 @@ const Documents = ({ isAdmin }) => {
                     <td className="py-3 px-2 sm:px-4">
                       {isAdmin ? (
                         <div className="flex space-x-2 sm:space-x-4">
-                          <p className="px-5">{doc.visits}<span className="text-sm">{doc.visits>=2 ? " visites ":" visite "}</span></p>
                           {doc.pdf_file || doc.fichier ? (
-                            <button
-                              onClick={() => {
-                                doc.pdf_file
-                                  ? handleView(doc.pdf_file, "pdf", doc.id)
-                                  : handleView(doc.fichier, "pdf", doc.id);
-                              }}
-                              className="text-blue-800 hover:underline"
-                            >
-                              <FontAwesomeIcon icon={faReadme} />
-                            </button>
+                            <div className="flex-row">
+                              <button
+                                onClick={() => {
+                                  doc.pdf_file
+                                    ? handleView(doc.pdf_file, "pdf", doc.id)
+                                    : handleView(doc.fichier, "pdf", doc.id);
+                                }}
+                                className="text-blue-800 hover:underline"
+                              >
+                                <FontAwesomeIcon icon={faReadme} />
+                              </button>
+                              <p>{doc.visits}</p>
+                            </div>
                           ) : (
                             <span className="text-gray-500">Non disponible</span>
                           )}
+                          <div className="flex-row">
+                            <button
+                              onClick={() =>
+                                handleDownload(doc.pdf_file || doc.fichier, `document-${doc.id}.pdf`, doc.id)
+                              }
+                              className="text-gray-700 hover:underline"
+                            >
+                              <FontAwesomeIcon icon={faDownload} />
+                            </button>
+                            <p>{doc.telechargements}</p>
+                          </div>
                           <button
                             onClick={() => handleEdit(doc?.id)}
                             className="text-green-500 hover:underline"
@@ -298,34 +311,37 @@ const Documents = ({ isAdmin }) => {
                               <FontAwesomeIcon icon={faCircleInfo} />
                             </button>
                           )}
-                          <p>{doc.telechargements}<span>{doc.telechargements>=2 ? " telechargements ":" telechargement "}</span></p>
                         </div>
                       ) : (
                         <div className="flex space-x-2 sm:space-x-4">
-                          <p className="px-5">{doc.visits}<span className="text-sm">{doc.visits>=2 ? " visites ":" visite "}</span></p>
                           {doc.pdf_file || doc.fichier ? (
-                            <button
-                              onClick={() => {
-                                doc.pdf_file
-                                  ? handleView(doc.pdf_file, "pdf", doc.id)
-                                  : handleView(doc.fichier, "pdf", doc.id);
-                              }}
-                              className="text-blue-800 hover:underline"
-                            >
-                              <FontAwesomeIcon icon={faReadme} />
-                            </button>
+                            <div className="flex-row">
+                              <button
+                                onClick={() => {
+                                  doc.pdf_file
+                                    ? handleView(doc.pdf_file, "pdf", doc.id)
+                                    : handleView(doc.fichier, "pdf", doc.id);
+                                }}
+                                className="text-blue-800 hover:underline"
+                              >
+                                <FontAwesomeIcon icon={faReadme} />
+                              </button>
+                              <p>{doc.visits}</p>
+                            </div>
                           ) : (
                             <span className="text-gray-500">Non disponible</span>
                           )}
-                          <p>{doc.telechargements}<span>{doc.telechargements>=2 ? " telechargements ":" telechargement "}</span></p>
-                          <button
-                            onClick={() =>
-                              handleDownload(doc.pdf_file || doc.fichier, `document-${doc.id}.pdf`, doc.id)
-                            }
-                            className="text-gray-700 hover:underline"
-                          >
-                            <FontAwesomeIcon icon={faDownload} />
-                          </button>
+                          <div className="flex-row">
+                            <button
+                              onClick={() =>
+                                handleDownload(doc.pdf_file || doc.fichier, `document-${doc.id}.pdf`, doc.id)
+                              }
+                              className="text-gray-700 hover:underline"
+                            >
+                              <FontAwesomeIcon icon={faDownload} />
+                            </button>
+                            <p>{doc.telechargements}</p>
+                          </div>
                         </div>
                       )}
                     </td>

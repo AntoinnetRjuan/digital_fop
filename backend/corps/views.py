@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny,IsAuthenticated
-from rest_framework import viewsets
+from rest_framework import viewsets,status
 from .models import TypeCorps,Corps,CorpsStats
 from .serializers import CorpsSerializer, TypeCorpsSerializer
 from django.http import JsonResponse
@@ -112,3 +112,32 @@ class FilteredCorpsAPIView(APIView):
 def corps_professionnels_list(request):
     corps_list = Corps.objects.values('id', 'nom')
     return JsonResponse(list(corps_list), safe=False)
+
+
+class CorpsVisitsView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request, document_id, *args, **kwargs):
+        try:
+            document = Corps.objects.get(id=document_id)
+            document.increment_visits()  # Incrémente le compteur de visites
+            return Response({"message": "Visite enregistrée"}, status=status.HTTP_200_OK)
+        except Corps.DoesNotExist:
+            return Response({"error": "Document non trouvé"}, status=status.HTTP_404_NOT_FOUND)
+
+class CorpsTelechargementView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request, document_id, *args, **kwargs):
+        try:
+            document = Corps.objects.get(id=document_id)
+            document.increment_telechargements()  # Incrémente le compteur de telechargements
+            return Response({"message": "Visite enregistrée"}, status=status.HTTP_200_OK)
+        except Corps.DoesNotExist:
+            return Response({"error": "Document non trouvé"}, status=status.HTTP_404_NOT_FOUND)
+        
+class MostVisitedCorpsView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, *args, **kwargs):
+        # Récupérer les 10 documents les plus visités
+        most_visited_corps = Corps.objects.order_by('-visits')[:10]
+        serializer = CorpsSerializer(most_visited_corps, many=True)
+        return Response(serializer.data)

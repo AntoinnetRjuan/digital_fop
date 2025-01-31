@@ -26,7 +26,7 @@ const CorpsFilteredList = ({ isAdmin }) => {
             .get(`http://localhost:8000/api/corps/?page=${page}`)
             .then((response) => {
                 setCorpsList(response.data.results);
-                
+
                 setTotalPages(Math.ceil(response.data.count / 10));
             })
             .catch((error) => {
@@ -102,19 +102,25 @@ const CorpsFilteredList = ({ isAdmin }) => {
         }
     }, [selectedCorps]);
 
-    const handleView = (fileUrl, fileType) => {
+    const handleView = async (fileUrl, fileType, corpsId) => {
         if (!fileUrl.startsWith("http://")) {
             fileUrl = `http://localhost:8000${fileUrl}`;
         }
 
         if (fileType === "pdf") {
             window.open(fileUrl, "_blank");
+            // Enregistrer la visite
+            try {
+                await axiosInstance.post(`/api/corps/${corpsId}/visit/`);
+            } catch (error) {
+                console.error("Erreur lors de l'enregistrement de la visite :", error);
+            }
         } else {
             alert("Ce fichier est disponible uniquement en téléchargement.");
         }
     };
 
-    const handleDownload = async (fileUrl, fileName) => {
+    const handleDownload = async (fileUrl, fileName, corpsId) => {
         try {
             const response = await axios.get(fileUrl, {
                 responseType: "blob",
@@ -129,6 +135,7 @@ const CorpsFilteredList = ({ isAdmin }) => {
 
             link.parentNode.removeChild(link);
             window.URL.revokeObjectURL(url);
+            await axiosInstance.post(`/api/corps/${corpsId}/telechargement/`);
         } catch (error) {
             console.error("Erreur lors du téléchargement :", error);
             toast.error("Erreur lors du téléchargement du fichier.");
@@ -165,7 +172,7 @@ const CorpsFilteredList = ({ isAdmin }) => {
             {/* Affichage de la liste filtrée */}
             <div>
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">Résultats :</h2>
-                <div  className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg">
+                <div className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg">
                     {corpsList.length > 0 ? (
                         <>
                             <table className="table-auto w-full text-left border-collapse">
@@ -198,20 +205,34 @@ const CorpsFilteredList = ({ isAdmin }) => {
                                             <td className="py-3 px-2 sm:px-4">
                                                 {isAdmin ? (
                                                     <div className="flex space-x-2 sm:space-x-4">
-                                                        {corps.pdf_file || corps.fichier ? (
+                                                        <div className='flex-row'>
+                                                            {corps.pdf_file || corps.fichier ? (
+                                                                <button
+                                                                    onClick={() => {
+                                                                        corps.pdf_file
+                                                                            ? handleView(corps.pdf_file, "pdf", corps.id)
+                                                                            : handleView(corps.fichier, "pdf", corps.id);
+                                                                    }}
+                                                                    className="text-blue-800 hover:underline"
+                                                                >
+                                                                    <FontAwesomeIcon icon={faReadme} />
+                                                                </button>
+                                                            ) : (
+                                                                <span className="text-gray-500">Non disponible</span>
+                                                            )}
+                                                            <p>{corps.visits}</p>
+                                                        </div>
+                                                        <div className='flex-row'>
                                                             <button
-                                                                onClick={() => {
-                                                                    corps.pdf_file
-                                                                        ? handleView(corps.pdf_file, "pdf")
-                                                                        : handleView(corps.fichier, "pdf");
-                                                                }}
-                                                                className="text-blue-800 hover:underline"
+                                                                onClick={() =>
+                                                                    handleDownload(corps.pdf_file || corps.fichier, `document-${corps.id}.pdf`, corps.id)
+                                                                }
+                                                                className="text-gray-700 hover:underline"
                                                             >
-                                                                <FontAwesomeIcon icon={faReadme} />
+                                                                <FontAwesomeIcon icon={faDownload} />
                                                             </button>
-                                                        ) : (
-                                                            <span className="text-gray-500">Non disponible</span>
-                                                        )}
+                                                            <p>{corps.telechargements}</p>
+                                                        </div>
                                                         <button
                                                             onClick={() => handleEdit(corps?.id)}
                                                             className="text-green-500 hover:underline"
@@ -238,28 +259,35 @@ const CorpsFilteredList = ({ isAdmin }) => {
                                                     </div>
                                                 ) : (
                                                     <div className="flex space-x-2 sm:space-x-4">
-                                                        {corps.pdf_file || corps.fichier ? (
+                                                        <div className='flex-row-reverse'>
+                                                            {corps.pdf_file || corps.fichier ? (
+                                                                <button
+                                                                    onClick={() => {
+                                                                        corps.pdf_file
+                                                                            ? handleView(corps.pdf_file, "pdf", corps.id)
+                                                                            : handleView(corps.fichier, "pdf", corps.id);
+                                                                    }}
+                                                                    className="text-blue-800 hover:underline"
+                                                                >
+                                                                    <FontAwesomeIcon icon={faReadme} />
+                                                                </button>
+                                                            ) : (
+                                                                <span className="text-gray-500">Non disponible</span>
+                                                            )}
+                                                            <p>{corps.visits}</p>
+                                                        </div>
+
+                                                        <div className='flex-row'>
                                                             <button
-                                                                onClick={() => {
-                                                                    corps.pdf_file
-                                                                        ? handleView(corps.pdf_file, "pdf")
-                                                                        : handleView(corps.fichier, "pdf");
-                                                                }}
-                                                                className="text-blue-800 hover:underline"
+                                                                onClick={() =>
+                                                                    handleDownload(corps.pdf_file || corps.fichier, `document-${corps.id}.pdf`, corps.id)
+                                                                }
+                                                                className="text-gray-700 hover:underline"
                                                             >
-                                                                <FontAwesomeIcon icon={faReadme} />
+                                                                <FontAwesomeIcon icon={faDownload} />
                                                             </button>
-                                                        ) : (
-                                                            <span className="text-gray-500">Non disponible</span>
-                                                        )}
-                                                        <button
-                                                            onClick={() =>
-                                                                handleDownload(corps.pdf_file || corps.fichier, `document-${corps.id}.pdf`)
-                                                            }
-                                                            className="text-gray-700 hover:underline"
-                                                        >
-                                                            <FontAwesomeIcon icon={faDownload} />
-                                                        </button>
+                                                            <p>{corps.telechargements}</p>
+                                                        </div>
                                                     </div>
                                                 )}
                                             </td>

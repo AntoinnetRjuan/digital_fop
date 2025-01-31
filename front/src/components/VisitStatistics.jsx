@@ -38,7 +38,7 @@ const VisitStatistics = () => {
     };
 
     const chartData = {
-        labels: data.totalVisitsPerDay.map((visit) => visit.day),
+        labels: data.totalVisitsPerDay.map((visit) => visit.visit_date),
         datasets: [
             {
                 label: "Visites totales",

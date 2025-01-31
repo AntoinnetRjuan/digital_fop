@@ -58,6 +58,7 @@ const DocumentStatsDropdown = () => {
     const [selectedPeriod, setSelectedPeriod] = useState('daily');
     const [startDate, setStartDate] = useState('');
     const [mostVisitedDocuments, setMostVisitedDocuments] = useState([]);
+    const [mostVisitedCorps, setMostVisitedCorps] = useState([]);
     const [endDate, setEndDate] = useState('');
     const [error, setError] = useState(null);
 
@@ -73,6 +74,18 @@ const DocumentStatsDropdown = () => {
         };
 
         fetchMostVisitedDocuments();
+    }, []);
+    useEffect(() => {
+        const fetchMostVisitedCorps = async () => {
+            try {
+                const response = await axiosInstance.get('/api/most-visited-corps/');
+                setMostVisitedCorps(response.data);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des documents les plus visités :", error);
+            }
+        };
+
+        fetchMostVisitedCorps();
     }, []);
     // Fonction pour récupérer les statistiques
     const fetchStats = async () => {
@@ -330,7 +343,7 @@ const DocumentStatsDropdown = () => {
                     </div>
                 </div>
                 <div className="bg-white shadow-md rounded-lg p-6">
-                    <h2 className="text-lg font-bold text-gray-800 mb-4">Documents les plus visités:</h2>
+                    <h2 className="text-lg font-bold text-gray-800 mb-4">Documents les plus Consultés:</h2>
                     <div className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg">
                         <table className="table-auto w-full text-left border-collapse">
                             <thead className="bg-blue-900 text-yellow-300">
@@ -346,6 +359,29 @@ const DocumentStatsDropdown = () => {
                                         <td className="py-3 px-2 sm:px-4">{doc?.type}</td>
                                         <td className="py-3 px-2 sm:px-4">{doc?.numero}</td>
                                         <td className="py-3 px-2 sm:px-4">{doc?.visits}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div className="bg-white shadow-md rounded-lg p-6">
+                    <h2 className="text-lg font-bold text-gray-800 mb-4">Corps les plus Consultés:</h2>
+                    <div className="overflow-x-auto w-full max-w-6xl bg-white shadow-md rounded-lg">
+                        <table className="table-auto w-full text-left border-collapse">
+                            <thead className="bg-blue-900 text-yellow-300">
+                                <tr>
+                                    <th className="py-3 px-2 sm:px-4">Types</th>
+                                    <th className="py-3 px-2 sm:px-4">Numero</th>
+                                    <th className="py-3 px-2 sm:px-4">Visites</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-gray-900">
+                                {mostVisitedCorps.map((corps) => (
+                                    <tr key={corps?.id} className="border-b border-gray-200 hover:bg-gray-100">
+                                        <td className="py-3 px-2 sm:px-4">{corps?.nom}</td>
+                                        <td className="py-3 px-2 sm:px-4">{corps?.numero}</td>
+                                        <td className="py-3 px-2 sm:px-4">{corps?.visits}</td>
                                     </tr>
                                 ))}
                             </tbody>

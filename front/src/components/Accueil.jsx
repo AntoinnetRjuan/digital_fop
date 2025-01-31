@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import img1 from "/1.jpg";
 import img2 from "/3.jpg";
-import img3 from "/2.png";
+import img3 from "/9.jpg";
 import Documents from './AfficherDocs';
 import AfficheActus from './AfficheActus';
 import AnimatedCard from './AnimatedCard';
+import axios from 'axios';
 
 const Accueil = () => {
   const [active, setActive] = useState(0);
   const [prev, setPrev] = useState(0);
-
+  const [data, setData] = useState({ totalVisits: 0, uniqueVisitors: 0, totalVisitsPerDay: [], uniqueVisitorsPerDay: [], visitsToday: 0 });
   // Refs
   const contentRef = useRef(null);
   const prevRef = useRef(null);
@@ -34,7 +35,14 @@ const Accueil = () => {
       Text: "Dans une démarche continue d'amélioration de la transparence et de l'accessibilité de ses services, <strong> le Ministère </strong> œuvre pour la mise en place de solutions numériques, y compris une bibliothèque numérique qui soutiendra la gestion des informations et de la diffusion des ressources publiques."
     }
   ];
-
+  const formatNumber = (num) => {
+    if (num >= 1_000_000) {
+      return (num / 1_000_000).toFixed(1) + "M";
+    } else if (num >= 1_000) {
+      return (num / 1_000).toFixed(1) + "k";
+    }
+    return num;
+  };
   const Slide = (type) => {
     let local;
     if (type === 'next') {
@@ -73,20 +81,41 @@ const Accueil = () => {
     // Cleanup interval on component unmount
     return () => clearInterval(intervalId);
   }, [active]);
+  useEffect(() => { fetchStatistics(); }, []);
+  const fetchStatistics = async () => {
+    try {
+      const { data: stats } = await axios.get("http://localhost:8000/api/visit-statistics/");
+      setData({
+        totalVisits: stats.total_visits || 0,
+        uniqueVisitors: stats.unique_visitors || 0,
+        totalVisitsPerDay: stats.total_visits_per_day || [],
+        uniqueVisitorsPerDay: stats.unique_visitors_per_day || [],
+        visitsToday: stats.visits_today || 0,
+      });
+    } catch (error) {
+      console.error("Erreur lors de la récupération des statistiques :", error);
+      setData({ totalVisits: 0, uniqueVisitors: 0, totalVisitsPerDay: [], uniqueVisitorsPerDay: [], visitsToday: 0 });
+    }
+  };
 
   return (
     <>
-      <div className="mt-24 relative shadow-lg overflow-hidden">
+      <div className="relative shadow-lg overflow-hidden ">
         {/* Slider Container */}
         <div className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] relative">
           {sliderContent.map((slide, i) => (
-            <img
-              key={i}
-              src={slide.img}
-              alt="slideImg"
-              className={`h-full w-full absolute object-cover inset-0 duration-[2.5s] ease-out transition-[clip-path] ${i === active ? "clip-visible" : "clip-hidden"}`}
-            />
+            <>
+              <img
+                key={i}
+                src={slide.img}
+                alt="slideImg"
+                className={`h-full w-full absolute object-cover inset-0 duration-[2.5s] ease-out transition-[clip-path] ${i === active ? "clip-visible" : "clip-hidden"}`}
+              />
+            </>
           ))}
+        </div>
+        <div className="fixed-visits text-white">
+          <p>Total visites : <span className="font-bold text-3xl">{formatNumber(data.totalVisits)}</span></p>
         </div>
 
         {/* Navigation Buttons */}

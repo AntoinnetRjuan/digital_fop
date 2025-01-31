@@ -56,6 +56,15 @@ class Corps(models.Model):
     status = models.CharField(max_length=50, choices=STATUS_CHOICES,null=True)
     fichier = models.FileField(upload_to='documents/',null=True)
     pdf_file = models.FileField(upload_to='pdf_documents/', null=True, blank=True)
+    visits = models.PositiveIntegerField(default=0,verbose_name='nombre de visite')
+    telechargements = models.PositiveIntegerField(default=0)
+
+    def increment_visits(self):
+        self.visits += 1
+        self.save()
+    def increment_telechargements(self):
+        self.telechargements += 1
+        self.save()
 
     def __str__(self):
         return self.nom

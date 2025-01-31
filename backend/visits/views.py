@@ -16,16 +16,15 @@ def visit_statistics(request):
     total_visits = visits.count()
 
     # Nombre de visiteurs uniques (adresses IP distinctes)
-    unique_visitors = visits.values('ip_address').distinct().count()
+    unique_visitors = visits.values('ip_address','visit_date').distinct().count()
 
-    # Visites totales par jour
-    total_visits_per_day = visits.extra({'day': "date(timestamp)"}).values('day').annotate(count=Count('id')).order_by('day')
+    total_visits_per_day = visits.values('visit_date').annotate(count=Count('id')).order_by('visit_date')
 
-    # Visiteurs uniques par jour
-    unique_visitors_per_day = visits.extra({'day': "date(timestamp)"}).values('day').annotate(count=Count('ip_address', distinct=True)).order_by('day')
+    # Visiteurs uniques par jour (nouvelle logique)
+    unique_visitors_per_day = visits.values('visit_date').annotate(count=Count('ip_address', distinct=True)).order_by('visit_date')
 
     today = timezone.now().date()  # Récupère la date d'aujourd'hui
-    visits_today = Visit.objects.filter(timestamp__date=today).count()
+    visits_today = Visit.objects.filter(visit_date=today).count()
 
     # Structure des données
     data = {
