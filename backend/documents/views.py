@@ -131,29 +131,31 @@ class DocumentViewSet(viewsets.ModelViewSet):
         if instance.fichier and instance.fichier.name.endswith('.docx'):
             instance.convert_to_pdf()
     def create(self, request, *args, **kwargs):
-        # Gérer les champs Journal Officiel
-        inclus_journal = request.data.get("inclusJournal", False)
-        if str(inclus_journal).lower() == "true":
-            request.data["inclus_journal"] = True
-            request.data["date_journal"] = request.data.get("dateJournal")
-            request.data["numero_journal"] = request.data.get("numeroJournal")
-            request.data["page_journal"] = request.data.get("pageJournal")
-        else:
-            request.data["inclus_journal"] = False
-            request.data["date_journal"] = None
-            request.data["numero_journal"] = None
-            request.data["page_journal"] = None
+        try:
+            # Gérer les champs Journal Officiel
+            inclus_journal = request.data.get("inclusJournal", False)
+            if str(inclus_journal).lower() == "true":
+                request.data["inclus_journal"] = True
+                request.data["date_journal"] = request.data.get("dateJournal")
+                request.data["numero_journal"] = request.data.get("numeroJournal")
+                request.data["page_journal"] = request.data.get("pageJournal")
+            else:
+                request.data["inclus_journal"] = False
+                request.data["date_journal"] = None
+                request.data["numero_journal"] = None
+                request.data["page_journal"] = None
 
-        today = date.today()
-        stats, created = DocumentStats.objects.get_or_create(date=today)
-        stats.daily_count += 1
-        stats.monthly_count += 1
-        stats.yearly_count += 1
-        stats.save()
+            today = date.today()
+            stats, created = DocumentStats.objects.get_or_create(date=today)
+            stats.daily_count += 1
+            stats.monthly_count += 1
+            stats.yearly_count += 1
+            stats.save()
 
 
-        return super().create(request, *args, **kwargs)
-    
+            return super().create(request, *args, **kwargs)
+        except ValueError as e:
+            return Response({"error":str(e)}, status=status.HTTP_400_BAD_REQUEST)
 class DocumentVisitsView(APIView):
     permission_classes = [AllowAny]
     def post(self, request, document_id, *args, **kwargs):

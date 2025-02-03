@@ -6,6 +6,8 @@ import win32com.client
 import pythoncom 
 import os
 from django.conf import settings
+import hashlib
+from django.core.exceptions import ValidationError
 class Domaine(models.Model):  # ou Theme
     nom = models.CharField(max_length=100, unique=True,null=True)
 
@@ -78,7 +80,38 @@ class Document(models.Model):
         self.last_modified_at = now()
         self.modification_details = details
         self.save()
+    def save(self, *args, **kwargs):
+        if self.fichier:
+            try:
+                print(f"Nom du fichier : {self.fichier.name}")  # Log pour vérifier le nom du fichier
+                print(f"Taille du fichier : {self.fichier.size}")  # Log pour vérifier la taille du fichier
 
+                # Calculer le hash du fichier
+                file_content = self.fichier.read()
+                file_hash = hashlib.sha256(file_content).hexdigest()
+                print(f"Hash calculé : {file_hash}")  # Log pour vérifier le hash
+
+                # Vérifier si un fichier avec le même hash existe déjà
+                for existing_doc in Document.objects.all():
+                    try:
+                        existing_file_content = existing_doc.fichier.read()
+                        existing_file_hash = hashlib.sha256(existing_file_content).hexdigest()
+                        print(f"Hash du fichier existant ({existing_doc.fichier.name}) : {existing_file_hash}")  # Log pour vérifier les hashs existants
+                        if file_hash == existing_file_hash:
+                            raise ValidationError("Un fichier identique existe déjà.")
+                        existing_doc.fichier.seek(0)  # Réinitialiser le fichier après la lecture
+                    except FileNotFoundError:
+                        print(f"Fichier manquant : {existing_doc.fichier.name}")  # Log pour les fichiers manquants
+                        continue  # Ignorer les fichiers manquants
+
+                # Réinitialiser le fichier après la lecture
+                self.fichier.seek(0)
+
+            except Exception as e:
+                print(f"Erreur lors de la vérification du fichier : {str(e)}")  # Log pour les erreurs
+                raise ValidationError(f"Erreur lors de la vérification du fichier : {str(e)}")
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.type} - {self.numero}"

@@ -51,26 +51,29 @@ const AjouterDocument = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
-    
+  
     Object.keys(formData).forEach((key) => {
       if (formData[key] !== null && formData[key] !== "") {
         data.append(key, formData[key]);
       }
     });
-
-    setLoading(true)
+  
+    setLoading(true);
     try {
-      await axiosInstance
-        .post("/api/documents/", data, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+      const response = await axiosInstance.post("/api/documents/", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       toast.success("Document ajouté avec succès !");
-      navigate("/dashboard")
+      navigate("/dashboard");
     } catch (error) {
-      console.error("Erreur lors de l'ajout :", error.response || error);
-      toast.error("Erreur lors de l'ajout du document.");
+      console.error("Erreur lors de l'ajout :", error.response || error);  // Log pour vérifier l'erreur
+      if (error.response && error.response.data.error) {
+        toast.error(error.response.data.error);  // Afficher l'erreur spécifique du backend
+      } else {
+        toast.error("Erreur lors de l'ajout du document.");
+      }
     } finally {
       setLoading(false);
     }

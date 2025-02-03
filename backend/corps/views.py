@@ -38,13 +38,16 @@ class CorpsViewSet(viewsets.ModelViewSet):
         self.perform_destroy(instance)
         return Response({"message": "Corps supprimé avec succès."}, status=204)
     def create(self, request, *args, **kwargs):
-        # Mettre à jour les statistiques
-        today = date.today()
-        stats, created = CorpsStats.objects.get_or_create(date=today)
-        stats.daily_count += 1
-        stats.monthly_count += 1
-        stats.yearly_count += 1
-        stats.save()
+        try:
+            # Mettre à jour les statistiques
+            today = date.today()
+            stats, created = CorpsStats.objects.get_or_create(date=today)
+            stats.daily_count += 1
+            stats.monthly_count += 1
+            stats.yearly_count += 1
+            stats.save()
+        except ValueError as e:
+            return Response({"error":str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         return super().create(request, *args, **kwargs)
 #ceci est le vue pour suivi du nombre des corps par nom
