@@ -6,6 +6,7 @@ import Documents from './AfficherDocs';
 import AfficheActus from './AfficheActus';
 import AnimatedCard from './AnimatedCard';
 import axios from 'axios';
+import AppRating from './AppRating';
 
 const Accueil = () => {
   const [active, setActive] = useState(0);
@@ -149,6 +150,9 @@ const Accueil = () => {
       </div>
       <div className='bg-gradient-to-br from-primary/70 grid place-items-center'>
         <AnimatedCard />
+      </div>
+      <div className='apprating'>
+        <AppRating/>
       </div>
     </>
   );

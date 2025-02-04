@@ -127,6 +127,7 @@ INSTALLED_APPS = [
     'documents',
     'corps',
     'visits',
+    'apprating',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
