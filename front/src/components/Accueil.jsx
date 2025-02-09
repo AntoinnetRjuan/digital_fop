@@ -7,6 +7,7 @@ import AfficheActus from './AfficheActus';
 import AnimatedCard from './AnimatedCard';
 import axios from 'axios';
 import AppRating from './AppRating';
+import { motion } from "framer-motion";
 
 const Accueil = () => {
   const [active, setActive] = useState(0);
@@ -115,10 +116,24 @@ const Accueil = () => {
             </>
           ))}
         </div>
-        <div className="fixed-visits text-white">
-          <p>Total visites : <span className="font-bold text-3xl">{formatNumber(data.totalVisits)}</span></p>
-        </div>
-
+        <motion.div
+          className="fixed-visits text-white"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, repeat: Infinity, repeatType: "mirror" }}
+          layout
+        >
+          <p>
+            Total de visites :{" "}
+            <motion.span
+              className="font-bold text-3xl"
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 1, repeat: Infinity, repeatType: "mirror" }}
+            >
+              {formatNumber(data.totalVisits)}
+            </motion.span>
+          </p>
+        </motion.div>
         {/* Navigation Buttons */}
         <div>
           <button id="back" ref={prevRef} onClick={() => Slide("prev")} className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 text-white text-3xl sm:text-4xl hover:scale-125 transition-transform">
@@ -152,7 +167,7 @@ const Accueil = () => {
         <AnimatedCard />
       </div>
       <div className='apprating'>
-        <AppRating/>
+        <AppRating />
       </div>
     </>
   );

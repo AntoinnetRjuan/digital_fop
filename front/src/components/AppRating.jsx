@@ -3,7 +3,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { FaStar } from "react-icons/fa";
 import { motion } from "framer-motion";
-import axiosInstance from "./AxiosConfig";
 
 const AppRating = () => {
     const [rating, setRating] = useState(0);

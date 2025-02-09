@@ -12,7 +12,7 @@ urlpatterns = [
     path('corps-professionnels/', corps_professionnels_list, name='corps-professionnels-list'),
     path('corps-stats/', CorpsStatsView.as_view(), name='corps-stats'),
     path('corps-stats1/', CorpsStatsAPIView.as_view(), name='corps-stats'),
-    path('corps/<int:document_id>/visit/', CorpsVisitsView.as_view(), name='corps-visit'),
-    path('corps/<int:document_id>/telechargement/', CorpsTelechargementView.as_view(), name='corps-telechargement'),
+    path('corps/<int:corps_id>/visit/', CorpsVisitsView.as_view(), name='corps-visit'),
+    path('corps/<int:corps_id>/telechargement/', CorpsTelechargementView.as_view(), name='corps-telechargement'),
     path('most-visited-corps/', MostVisitedCorpsView.as_view(), name='most-visited-corps'),
 ]

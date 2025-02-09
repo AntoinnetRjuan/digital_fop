@@ -151,9 +151,9 @@ h1{
     position: fixed;
     right: 2rem; /* Ajustez cette valeur selon vos besoins */
     top: 10rem; /* Ajustez cette valeur selon vos besoins */
-    z-index: 1000; /* Assurez-vous que le composant est au-dessus des autres éléments */
+    z-index: 9999; /* Assurez-vous que le composant est au-dessus des autres éléments */
     background-color: rgba(0, 0, 0, 0.7); /* Optionnel: Ajoutez un fond pour une meilleure lisibilité */
-    padding: 0.5rem; /* Optionnel: Ajoutez un peu de padding */
+    padding: 1rem; /* Optionnel: Ajoutez un peu de padding */
     border-radius: 0.5rem; /* Optionnel: Arrondissez les coins */
 }
 .apprating {

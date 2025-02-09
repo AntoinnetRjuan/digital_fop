@@ -119,20 +119,20 @@ def corps_professionnels_list(request):
 
 class CorpsVisitsView(APIView):
     permission_classes = [AllowAny]
-    def post(self, request, document_id, *args, **kwargs):
+    def post(self, request, corps_id, *args, **kwargs):
         try:
-            document = Corps.objects.get(id=document_id)
-            document.increment_visits()  # Incrémente le compteur de visites
+            corps = Corps.objects.get(id=corps_id)
+            corps.increment_visits()  # Incrémente le compteur de visites
             return Response({"message": "Visite enregistrée"}, status=status.HTTP_200_OK)
         except Corps.DoesNotExist:
             return Response({"error": "Document non trouvé"}, status=status.HTTP_404_NOT_FOUND)
 
 class CorpsTelechargementView(APIView):
     permission_classes = [AllowAny]
-    def post(self, request, document_id, *args, **kwargs):
+    def post(self, request, corps_id, *args, **kwargs):
         try:
-            document = Corps.objects.get(id=document_id)
-            document.increment_telechargements()  # Incrémente le compteur de telechargements
+            corps = Corps.objects.get(id=corps_id)
+            corps.increment_telechargements()  # Incrémente le compteur de telechargements
             return Response({"message": "Visite enregistrée"}, status=status.HTTP_200_OK)
         except Corps.DoesNotExist:
             return Response({"error": "Document non trouvé"}, status=status.HTTP_404_NOT_FOUND)

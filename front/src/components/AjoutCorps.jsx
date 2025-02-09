@@ -96,12 +96,12 @@ const CorpsForm = () => {
                                 <option value="Administration Publique">Administration Publique</option>
                                 <option value="Administration Judiciaire">Administration Judiciaire</option>
                                 <option value="Administration Pénitentiaire">Administration Pénitentiaire</option>
-                                <option value="Agriculture-Elevage - Pêche">Agriculture-Élevage - Pêche</option>
+                                <option value="Agriculture-Elevage-Pêche">Agriculture-Élevage-Pêche</option>
                                 <option value="Chercheur enseignant et Enseignement chercheur">Chercheur enseignant et Enseignement chercheur</option>
                                 <option value="Communication médiatisée">Communication médiatisée</option>
                                 <option value="Diplomatie">Diplomatie</option>
                                 <option value="Domaine-Topographie">Domaine-Topographie</option>
-                                <option value="Environnement - Eaux et Forêts">Environnement - Eaux et Forêts</option>
+                                <option value="Environnement Eaux et Forêts">Environnement - Eaux et Forêts</option>
                                 <option value="Éducation de base et Enseignement secondaire">Éducation de base et Enseignement secondaire</option>
                                 <option value="Énergie, Mines et Ressources">Énergie, Mines et Ressources</option>
                                 <option value="Économie, Finances et Plan">Économie, Finances et Plan</option>
