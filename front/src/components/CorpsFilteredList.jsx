@@ -161,9 +161,9 @@ const CorpsFilteredList = ({ isAdmin }) => {
                     className="w-full sm:w-64 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                     <option value="">-- Sélectionner un corps --</option>
-                    {corpsOptions.map((corps) => (
-                        <option key={corps.id} value={corps.nom}>
-                            {corps.nom}
+                    {Array.from(new Set(corpsOptions.map(corps => corps.nom))).map((nom, index) => (
+                        <option key={index} value={nom}>
+                            {nom}
                         </option>
                     ))}
                 </select>

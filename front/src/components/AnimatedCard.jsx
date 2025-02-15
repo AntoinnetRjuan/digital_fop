@@ -3,7 +3,7 @@ import photo1 from "/ANR-1.jpg";
 import img1 from "../assets/logo-madagascar.webp";
 import img2 from "../assets/MTEFOP.png";
 import img3 from "../assets/DEAJ.png";
-import photo3 from "../assets/images.jpg";
+import photo3 from "../assets/logo_6.png";
 import photo2 from "/5.jpeg";
 // import photo3 from "/2.png";
 import { Fade, Slide } from "react-awesome-reveal"
@@ -70,7 +70,7 @@ const AnimatedCard = () => {
                     CardsData.map(({ id, img, title,desc, desc1, logo_img }) => {
                         return (
                             <div key={id} className='text-white shadow-md rounded-lg overflow-hidden relative group'>
-                                <img src={img} alt="" className='w-full max-w-[400px] h-[290px] rounded-lg' />
+                                <img src={img} alt="" className='w-full max-w-[400px] h-[290px] rounded-lg bg-white' />
                                 <div className='absolute left-0 top-[-100%] opacity-0 group-hover:opacity-100 group-hover:top-[0] p-4 w-full h-full bg-black/60 group
                         group-hover:backdrop-blur-sm duration-500'>
 

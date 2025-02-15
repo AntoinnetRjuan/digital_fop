@@ -31,7 +31,7 @@ class Corps(models.Model):
         ('Éducation de base et Enseignement secondaire', 'Éducation de base et Enseignement secondaire'),
         ('Énergie, Mines et Ressources', 'Énergie-Mines-Ressources'),
         ('Économie, Finances et Plan', 'Économie, Finances et Plan'),
-        ('Inspection de l’Etat', 'Inspection de l’Etat'),
+        ('Inspection de l\'Etat', 'Inspection de l\'Etat'),
         ('Forces Armées', 'Forces Armées'),
         ('Jeunesse et Sports', 'Jeunesse et Sports'),
         ('Météorologie', 'Météorologie'),
