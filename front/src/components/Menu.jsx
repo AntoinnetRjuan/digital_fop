@@ -105,6 +105,14 @@ const Menu = ({ onSelectDomaine }) => {
                 </li>
                 <li>
                   <Link
+                    to={"/AfficherDoc"}
+                    className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
+                  >
+                    Recherche
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     to={"/dashboard"}
                     className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
                   >
@@ -151,6 +159,14 @@ const Menu = ({ onSelectDomaine }) => {
                     className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
                   >
                     Status Particuliers
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={"/AfficherDoc"}
+                    className="text-gray-700 hover:text-blue-500 font-medium transition duration-200"
+                  >
+                    Recherche
                   </Link>
                 </li>
                 <li>
