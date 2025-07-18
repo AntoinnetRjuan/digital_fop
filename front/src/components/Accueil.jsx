@@ -163,7 +163,7 @@ const Accueil = () => {
         </div>
         {/* Flèche pour descendre */}
         <motion.div
-          className="absolute bottom-0.5 sm:bottom-10 md:bottom-12 lg:bottom-16 left-1/2 transform -translate-x-1/2 cursor-pointer text-white backdrop-blur-sm sm:backdrop-blur-md md:backdrop-blur-lg lg:backdrop-blur-xl p-2 sm:p-3 md:p-4 rounded-full"
+          className="absolute bottom-0.5 sm:bottom-10 md:bottom-12 lg:bottom-16 left-1/2 transform -translate-x-1/2 cursor-pointer text-white backdrop-blur-sm sm:backdrop-blur-md md:backdrop-blur-lg lg:backdrop-blur-xl p-2 sm:p-3 md:p-4 rounded-lg"
           onClick={scrollDown}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -171,7 +171,7 @@ const Accueil = () => {
         >
           <ion-icon
             name="chevron-down-circle-outline"
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl hover:text-gray-300"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-5xl hover:text-gray-300"
           ></ion-icon>
         </motion.div>
       </div>

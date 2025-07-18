@@ -45,7 +45,7 @@ const AddActus = () => {
 
                 </div>
                 <div className='w-full md:w-1/2 p-6'>
-                    <h2 className="text-lg font-bold mb-4 text-center">Ajouter un Document</h2>
+                    <h2 className="text-lg font-bold mb-4 text-center">Ajouter de l'actualité</h2>
                     <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                         <div>
                             <label className="block text-gray-700 font-medium mb-2">

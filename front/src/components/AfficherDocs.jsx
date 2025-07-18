@@ -383,28 +383,6 @@ const Documents = ({ isAdmin }) => {
             </button>
           </div>
         </div>
-        {isAdmin && (
-          <div className="mt-5 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
-            <Link
-              to={"/AjoutDoc"}
-              className="bg-blue-900 py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 text-center"
-            >
-              <FontAwesomeIcon icon={faSquarePlus} className="mr-2" />Ajouter un document
-            </Link>
-            <Link
-              to={"/AjoutCorps"}
-              className="bg-blue-900 py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 text-center"
-            >
-              <FontAwesomeIcon icon={faSquarePlus} className="mr-2" />Ajouter un Corps
-            </Link>
-            <Link
-              to={"/AjoutActus"}
-              className="bg-blue-900 py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 text-center"
-            >
-              <FontAwesomeIcon icon={faSquarePlus} className="mr-2" />Ajouter une Actualité
-            </Link>
-          </div>
-        )}
       </div>
     </>
   );
