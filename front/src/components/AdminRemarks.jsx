@@ -39,7 +39,7 @@ const AdminRemarks = () => {
     };
 
     return (
-        <div className="flex flex-col items-center p-6 bg-white shadow-lg rounded-lg max-w-4xl mx-auto">
+        <div className="flex flex-col items-center p-6 bg-white shadow-lg rounded-lg max-w-4xl mx-auto max-h-96 overflow-y-auto">
             <h1 className="text-2xl font-semibold text-gray-800 mb-6">Remarques des visiteurs</h1>
             <div className="w-full">
                 {remarks.length > 0 ? (
@@ -48,7 +48,7 @@ const AdminRemarks = () => {
                             <div className="flex justify-between items-center">
                                 <p className="text-lg font-medium"><strong>Email:</strong> {remark.email}</p>
                                 <FaReply
-                                    className="text-blue-500 cursor-pointer"
+                                    className="text-blue-800 cursor-pointer"
                                     onClick={() => setSelectedRemark(selectedRemark === remark.id ? null : remark.id)}
                                 />
                             </div>
@@ -63,7 +63,7 @@ const AdminRemarks = () => {
                                         onChange={handleResponseChange}
                                     />
                                     <button
-                                        className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md"
+                                        className="mt-2 px-4 py-2 bg-blue-800 text-white rounded-md"
                                         onClick={() => handleSendResponse(remark)}
                                     >
                                         Envoyer la réponse

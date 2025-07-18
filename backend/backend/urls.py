@@ -32,6 +32,7 @@ urlpatterns = [
     path('',include('visits.urls')),
     path('api/token-auth/', obtain_auth_token, name='api_token_auth'),
     path('api/send-response/', send_response, name='send_response'),
+    path('', include('apprating.urls')),
 ]
 
 if settings.DEBUG:

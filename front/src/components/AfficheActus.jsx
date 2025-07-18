@@ -12,14 +12,20 @@ const Modal = ({ show, onClose, actu, onUpdate, onDelete, isAdmin }) => {
     const [updatedActu, setUpdatedActu] = useState(actu);
 
     const handleUpdate = () => {
+        const updatedData = {
+            ...updatedActu,
+            conseil: actu.conseil  // Ajoutez le champ conseil si nécessaire
+        };
+        console.log('Données envoyées:', updatedData);
         axiosInstance
-            .put(`/api/actualites/${actu.id}/`, updatedActu)
+            .put(`/api/actualites/${actu.id}/`, updatedData)
             .then((response) => {
                 toast.success('Actualité mise à jour avec succès');
                 onUpdate(response.data);
                 onClose();
             })
-            .catch(() => {
+            .catch((error) => {
+                console.error('Erreur lors de la mise à jour de l\'actualité:', error.response);
                 toast.error('Erreur lors de la mise à jour de l\'actualité');
             });
     };
@@ -60,6 +66,16 @@ const Modal = ({ show, onClose, actu, onUpdate, onDelete, isAdmin }) => {
 
                 {isAdmin && (
                     <div className="mt-4">
+                        <select
+                                name="conseil"
+                                value={updatedActu.conseil}
+                                onChange={(e) => setUpdatedActu({ ...updatedActu, conseil: e.target.value })}
+                                required
+                                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                            >
+                                <option value="CONSEIL DES MINISTRES">Conseil des ministres</option>
+                                <option value="CONSEIL DU GOUVERNEMENT">Conseil du Gouvernement</option>
+                            </select>
                         <input
                             type="text"
                             value={updatedActu.titre}
@@ -120,8 +136,8 @@ const AfficheActus = ({ isAdminE }) => {
             });
     }, []);
 
-    const conseilMinistre = actualite.filter((actus) => actus.conseil === 'CONSEIL DE MINISTRE');
-    const conseilGouvernement = actualite.filter((actus) => actus.conseil === 'CONSEIL DE GOUVERNEMENT');
+    const conseilMinistre = actualite.filter((actus) => actus.conseil === 'CONSEIL DES MINISTRES');
+    const conseilGouvernement = actualite.filter((actus) => actus.conseil === 'CONSEIL DU GOUVERNEMENT');
 
     const openModal = (id) => {
         axiosInstance

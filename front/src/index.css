@@ -12,10 +12,9 @@ h1{
     @apply mt-1.5 text-sm;
  }
 
-.clip-hidden{
+.clip-hidden {
     clip-path: ellipse(0 0 at 0% 0%);
     opacity: 0;
-    
 }
 .product-image {
     /* position: absolute; */
@@ -30,18 +29,18 @@ h1{
     
 }
 
-.clip-visible{
+.clip-visible {
     clip-path: ellipse(1900px 1900px at 0% 0%);
-
 }
 #back,
 #forward{
     @apply absolute z-[5]  -translate-y-2/4 text-gray-100 hover:scale-125 cursor-pointer duration-[0.4s] ease-out px-0 py-2.5
     border-0 top-2/4;
 }
-.content{
-    @apply text-[aliceblue] absolute w-[420px] z-[5] text-center  backdrop-blur-[3px] duration-[1s] px-0 py-[15px]  bottom-0 top-40;
-    /* background: #ffffff22; */
+.content {
+    @apply text-white absolute w-[90%] sm:w-[420px] md:w-[500px] lg:w-[600px] z-[5] text-left backdrop-blur-[9px] duration-[1s] px-4 py-6 top-1/2 transform -translate-y-1/2 left-4 sm:left-8;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
 }
 /* .content{
     @apply text-[aliceblue] absolute w-[400px] z-[5] text-center backdrop-blur-[2px] duration-[1s] px-0 py-[15px] left-0 bottom-0 top-20;
@@ -147,4 +146,23 @@ h1{
 }
 .slide1.active-slide .slide-part-inner::before{
     opacity: 1;
+}
+.fixed-visits {
+    position: fixed;
+    right: 2rem; /* Ajustez cette valeur selon vos besoins */
+    top: 10rem; /* Ajustez cette valeur selon vos besoins */
+    z-index: 9999; /* Assurez-vous que le composant est au-dessus des autres éléments */
+    background-color: rgba(0, 0, 0, 0.7); /* Optionnel: Ajoutez un fond pour une meilleure lisibilité */
+    padding: 1rem; /* Optionnel: Ajoutez un peu de padding */
+    border-radius: 0.5rem; /* Optionnel: Arrondissez les coins */
+}
+.apprating {
+    position: fixed;
+    right: 2rem; /* Ajustez cette valeur selon vos besoins */
+    top: 35rem; /* Ajustez cette valeur selon vos besoins */
+    z-index: 1000; /* Assurez-vous que le composant est au-dessus des autres éléments */
+    background-color: rgba(0, 0, 0, 0.7); /* Optionnel: Ajoutez un fond pour une meilleure lisibilité */
+    padding: 0.5rem; /* Optionnel: Ajoutez un peu de padding */
+    border-radius: 0.5rem; /* Optionnel: Arrondissez les coins */
+    color: white;
 }

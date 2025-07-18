@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { getCsrfToken } from './Utils';
 import axiosInstance from './AxiosConfig';
 import { ThreeDots } from 'react-loader-spinner';
+import { useNavigate } from 'react-router-dom';
 
 const CorpsForm = () => {
     const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ const CorpsForm = () => {
     });
     const [typeCorps, setTypeCorps] = useState([])
     const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/typecorps/')
@@ -55,6 +57,7 @@ const CorpsForm = () => {
                 },
             });
             toast.success('Corps ajouté avec succès!');
+            navigate("/dashboard")
         } catch (error) {
             toast.error("Erreur lors de l'ajout du corps:", error);
         } finally {
@@ -93,16 +96,16 @@ const CorpsForm = () => {
                                 <option value="Administration Publique">Administration Publique</option>
                                 <option value="Administration Judiciaire">Administration Judiciaire</option>
                                 <option value="Administration Pénitentiaire">Administration Pénitentiaire</option>
-                                <option value="Agriculture-Elevage - Pêche">Agriculture-Élevage - Pêche</option>
+                                <option value="Agriculture-Elevage-Pêche">Agriculture-Élevage-Pêche</option>
                                 <option value="Chercheur enseignant et Enseignement chercheur">Chercheur enseignant et Enseignement chercheur</option>
                                 <option value="Communication médiatisée">Communication médiatisée</option>
                                 <option value="Diplomatie">Diplomatie</option>
                                 <option value="Domaine-Topographie">Domaine-Topographie</option>
-                                <option value="Environnement - Eaux et Forêts">Environnement - Eaux et Forêts</option>
+                                <option value="Environnement Eaux et Forêts">Environnement - Eaux et Forêts</option>
                                 <option value="Éducation de base et Enseignement secondaire">Éducation de base et Enseignement secondaire</option>
                                 <option value="Énergie, Mines et Ressources">Énergie, Mines et Ressources</option>
                                 <option value="Économie, Finances et Plan">Économie, Finances et Plan</option>
-                                <option value="Inspection de l'Etat">Inspection de l'État</option>
+                                <option value="Inspection de l'Etat">Inspection de l'Etat</option>
                                 <option value="Forces Armées">Forces Armées</option>
                                 <option value="Jeunesse et Sports">Jeunesse et Sports</option>
                                 <option value="Météorologie">Météorologie</option>

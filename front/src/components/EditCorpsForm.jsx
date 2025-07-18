@@ -70,11 +70,11 @@ const EditCorpsForm = () => {
         }
 
         try {
-            const token = localStorage.getItem("access_token");
+            const user = JSON.parse(localStorage.getItem("user"));
+            const token = user?.access;
             await axios.put(`http://localhost:8000/api/corps/${corpsId}/`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    "X-CSRFToken": getCsrfToken(),
                     "Content-Type": "multipart/form-data",
                 },
             });
@@ -115,7 +115,7 @@ const EditCorpsForm = () => {
                     <option value="Éducation de base et Enseignement secondaire">Éducation de base et Enseignement secondaire</option>
                     <option value="Énergie, Mines et Ressources">Énergie, Mines et Ressources</option>
                     <option value="Économie, Finances et Plan">Économie, Finances et Plan</option>
-                    <option value="Inspection de l'Etat">Inspection de l'État</option>
+                    <option value="Inspection de l'Etat">Inspection de l'Etat</option>
                     <option value="Forces Armées">Forces Armées</option>
                     <option value="Jeunesse et Sports">Jeunesse et Sports</option>
                     <option value="Météorologie">Météorologie</option>

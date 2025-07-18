@@ -29,7 +29,7 @@ const AddActus = () => {
             toast.success("ajout de l'actualité est effectué avec succes")
             navigate("/dashboard")
         } catch (error) {
-            //console.log("Erreur:", error.response || error);
+            console.log("Erreur:", error.response || error);
             toast.error("un erreur est survenue lors de l'ajout de l'actualité")
         }
     }
@@ -45,7 +45,7 @@ const AddActus = () => {
 
                 </div>
                 <div className='w-full md:w-1/2 p-6'>
-                    <h2 className="text-lg font-bold mb-4 text-center">Ajouter un Document</h2>
+                    <h2 className="text-lg font-bold mb-4 text-center">Ajouter de l'actualité</h2>
                     <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                         <div>
                             <label className="block text-gray-700 font-medium mb-2">
@@ -59,7 +59,7 @@ const AddActus = () => {
                                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                             >
                                 <option value="CONSEIL DES MINISTRES">Conseil des ministres</option>
-                                <option value="CONSEIL DE GOUVERNEMENT">Conseil du Gouvernement</option>
+                                <option value="CONSEIL DU GOUVERNEMENT">Conseil du Gouvernement</option>
                             </select>
                         </div>
                         <div>

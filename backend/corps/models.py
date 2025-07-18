@@ -4,6 +4,9 @@ import docx
 import win32com.client
 import pythoncom 
 import os
+from django.utils.timezone import now
+import hashlib
+from django.core.exceptions import ValidationError
 class TypeCorps(models.Model):
     nom = models.CharField(max_length=100,unique=True,null=True)
 
@@ -20,24 +23,24 @@ class Corps(models.Model):
         ('Administration Judiciaire', 'Administration Judiciaire'),
         ('Administration Pénitentiaire', 'Administration Pénitentiaire'),
         ('Agriculture-Elevage-Pêche', 'Agriculture-Elevage-Pêche'),
-        ('Chercheur Enseignant', 'Chercheur Enseignant'),
+        ('Chercheur enseignant et Enseignement chercheur', 'Chercheur Enseignant et Enseignement chercheur'),
         ('Communication médiatisée', 'Communication médiatisée'),
         ('Diplomatie', 'Diplomatie'),
         ('Domaine-Topographie', 'Domaine-Topographie'),
-        ('Environnement-Eaux-Forêts', 'Environnement-Eaux-Forêts'),
+        ('Environnement Eaux et Forêts', 'Environnement Eaux et Forêts'),
         ('Éducation de base et Enseignement secondaire', 'Éducation de base et Enseignement secondaire'),
-        ('Énergie-Mines-Ressources', 'Énergie-Mines-Ressources'),
-        ('Économie-Finances-Plan', 'Économie-Finances-Plan'),
-        ('Inspection de l’Etat', 'Inspection de l’Etat'),
+        ('Énergie, Mines et Ressources', 'Énergie-Mines-Ressources'),
+        ('Économie, Finances et Plan', 'Économie, Finances et Plan'),
+        ('Inspection de l\'Etat', 'Inspection de l\'Etat'),
         ('Forces Armées', 'Forces Armées'),
-        ('Jeunesse-Sports', 'Jeunesse-Sports'),
+        ('Jeunesse et Sports', 'Jeunesse et Sports'),
         ('Météorologie', 'Météorologie'),
         ('Planification', 'Planification'),
         ('Police nationale', 'Police nationale'),
-        ('Poste-Télécommunications', 'Poste-Télécommunications'),
-        ('Travail-Lois Sociales', 'Travail-Lois Sociales'),
+        ('Poste et Télécommunications', 'Poste et Télécommunications'),
+        ('Travail et Lois Sociales', 'Travail et Lois Sociales'),
         ('Corps transversaux', 'Corps transversaux'),
-        ('Travaux publics-Habitat-Aménagement', 'Travaux publics-Habitat-Aménagement'),
+        ('Travaux publics, Habitat et Aménagement', 'Travaux publics, Habitat et Aménagement'),
         ('Transports', 'Transports'),
         ('Santé Publique', 'Santé Publique'),
     ]
@@ -55,6 +58,49 @@ class Corps(models.Model):
     status = models.CharField(max_length=50, choices=STATUS_CHOICES,null=True)
     fichier = models.FileField(upload_to='documents/',null=True)
     pdf_file = models.FileField(upload_to='pdf_documents/', null=True, blank=True)
+    visits = models.PositiveIntegerField(default=0,verbose_name='nombre de visite')
+    telechargements = models.PositiveIntegerField(default=0)
+
+    def increment_visits(self):
+        Corps.objects.filter(id=self.id).update(visits=models.F('visits') + 1)
+
+    def increment_telechargements(self):
+        Corps.objects.filter(id=self.id).update(telechargements=models.F('telechargements') + 1)
+    def save(self, *args, **kwargs):
+        # Vérifier si l'objet est en cours de création (pas de modification)
+        if not self.pk:  # self.pk est None lors de la création
+            if self.fichier:
+                try:
+                    print(f"Nom du fichier : {self.fichier.name}")  # Log pour vérifier le nom du fichier
+                    print(f"Taille du fichier : {self.fichier.size}")  # Log pour vérifier la taille du fichier
+
+                    # Calculer le hash du fichier
+                    file_content = self.fichier.read()
+                    file_hash = hashlib.sha256(file_content).hexdigest()
+                    print(f"Hash calculé : {file_hash}")  # Log pour vérifier le hash
+
+                    # Vérifier si un fichier avec le même hash existe déjà
+                    for existing_doc in Corps.objects.all():
+                        try:
+                            existing_file_content = existing_doc.fichier.read()
+                            existing_file_hash = hashlib.sha256(existing_file_content).hexdigest()
+                            print(f"Hash du fichier existant ({existing_doc.fichier.name}) : {existing_file_hash}")  # Log pour vérifier les hashs existants
+                            if file_hash == existing_file_hash:
+                                raise ValidationError("Un fichier identique existe déjà.")
+                            existing_doc.fichier.seek(0)  # Réinitialiser le fichier après la lecture
+                        except FileNotFoundError:
+                            print(f"Fichier manquant : {existing_doc.fichier.name}")  # Log pour les fichiers manquants
+                            continue  # Ignorer les fichiers manquants
+
+                    # Réinitialiser le fichier après la lecture
+                    self.fichier.seek(0)
+
+                except Exception as e:
+                    print(f"Erreur lors de la vérification du fichier : {str(e)}")  # Log pour les erreurs
+                    raise ValidationError(f"Erreur lors de la vérification du fichier : {str(e)}")
+
+        # Appeler la méthode save() de la classe parente
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.nom
@@ -103,4 +149,13 @@ class Corps(models.Model):
             except Exception as e:
                 return f"Error reading DOC/DOCX: {e}"
         return "Unsupported file type."
+
+class CorpsStats(models.Model):
+    date = models.DateField(default=now)  # Date de l'ajout
+    daily_count = models.IntegerField(default=0)  # Nombre d'ajouts par jour
+    monthly_count = models.IntegerField(default=0)  # Nombre d'ajouts par mois
+    yearly_count = models.IntegerField(default=0)  # Nombre d'ajouts par année
+
+    class Meta:
+        verbose_name_plural = "Corps Statistics"
 

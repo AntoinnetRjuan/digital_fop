@@ -51,26 +51,29 @@ const AjouterDocument = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
-    
+  
     Object.keys(formData).forEach((key) => {
       if (formData[key] !== null && formData[key] !== "") {
         data.append(key, formData[key]);
       }
     });
-
-    setLoading(true)
+  
+    setLoading(true);
     try {
-      await axiosInstance
-        .post("/api/documents/", data, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+      const response = await axiosInstance.post("/api/documents/", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       toast.success("Document ajouté avec succès !");
-      navigate("/dashboard")
+      navigate("/dashboard");
     } catch (error) {
-      console.error("Erreur lors de l'ajout :", error.response || error);
-      toast.error("Erreur lors de l'ajout du document.");
+      console.error("Erreur lors de l'ajout :", error.response || error);  // Log pour vérifier l'erreur
+      if (error.response && error.response.data.error) {
+        toast.error(error.response.data.error);  // Afficher l'erreur spécifique du backend
+      } else {
+        toast.error("Erreur lors de l'ajout du document.");
+      }
     } finally {
       setLoading(false);
     }
@@ -109,17 +112,17 @@ const AjouterDocument = () => {
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Choisissez un type</option>
-                <option value="constitution">Constitution</option>
-                <option value="traités internationaux">Traités Internationaux</option>
-                <option value="convention">Convention</option>
-                <option value="lois organiques">Lois Organiques</option>
-                <option value="lois ordinaires">Lois Ordinaires</option>
-                <option value="ordonnances">Ordonnance</option>
-                <option value="decrets">Décrets</option>
-                <option value="arretes interministeriels">Arrêtés Interministériels</option>
-                <option value="arretes">Arrêtés</option>
-                <option value="circilaire">Circulaire</option>
-                <option value="notes">Notes</option>
+                <option value="Constitution">Constitution</option>
+                <option value="Traités internationaux">Traités Internationaux</option>
+                <option value="Convention">Convention</option>
+                <option value="Lois organiques">Lois Organiques</option>
+                <option value="Lois ordinaires">Lois Ordinaires</option>
+                <option value="Ordonnances">Ordonnance</option>
+                <option value="Décrets">Décrets</option>
+                <option value="Arrêtés interministeriels">Arrêtés Interministériels</option>
+                <option value="Arrêtés">Arrêtés</option>
+                <option value="Circilaire">Circulaire</option>
+                <option value="Notes">Notes</option>
               </select>
             </div>
 
@@ -181,7 +184,7 @@ const AjouterDocument = () => {
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
               >
-                <option value="aucun">Aucun</option>
+                <option value="Autre">Autre</option>
                 <option value="ministre">Ministre</option>
                 <option value="gouvernement">Gouvernement</option>
               </select>
@@ -219,8 +222,8 @@ const AjouterDocument = () => {
                 required
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
               >
-                <option value="en_vigueur">En vigueur</option>
-                <option value="abroge">Abrogé</option>
+                <option value="En vigueur">En vigueur</option>
+                <option value="Abrogé">Abrogé</option>
               </select>
             </div>
 
@@ -310,8 +313,8 @@ const AjouterDocument = () => {
             >
               {loading ? (<ThreeDots
                 visible={true}
-                height="50"
-                width="50"
+                height="40"
+                width="40"
                 color="#ffffff"
                 radius="9"
                 ariaLabel="three-dots-loading"

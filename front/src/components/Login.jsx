@@ -61,20 +61,20 @@ function Login() {
                 }
             }
         }
-       
+
         dispatch(reset());
     }, [isError, isSuccess, user, message, navigate]);
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-transparent ">
-            <div className="flex flex-wrap bg-white rounded-lg shadow-lg overflow-hidden md:w-1/2 w-full lg:w-1/2">
+        <div className="flex items-center justify-center min-h-screen bg-transparent">
+            <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden w-full md:w-1/2 lg:w-1/2">
 
-                <div className="hidden md:block w-1/2 bg-cover bg-center animate__animated animate__flipInY"
-                    style={{ backgroundImage: "url('../../public/login2.jpg')",width: "45%",
-                        height: "auto",backgroundSize: "cover",
-                        backgroundPosition: "center", }}>
+                {/* Image Section */}
+                <div className="w-full md:w-1/2 bg-cover bg-center animate__animated animate__flipInY lg:mt-5"
+                    style={{ backgroundImage: "url('../../public/login2.jpg')", height: "300px", backgroundSize: "cover", backgroundPosition: "center" }}>
                 </div>
 
+                {/* Form Section */}
                 <div className="w-full md:w-1/2 p-6 animate__animated animate__jackInTheBox">
                     <h1 className="text-2xl font-semibold text-center text-gray-800 mb-4">Se connecter</h1>
                     <form onSubmit={handleSubmit}>

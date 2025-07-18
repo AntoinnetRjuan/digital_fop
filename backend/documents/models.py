@@ -6,6 +6,8 @@ import win32com.client
 import pythoncom 
 import os
 from django.conf import settings
+import hashlib
+from django.core.exceptions import ValidationError
 class Domaine(models.Model):  # ou Theme
     nom = models.CharField(max_length=100, unique=True,null=True)
 
@@ -16,39 +18,39 @@ class Domaine(models.Model):  # ou Theme
 # Create your models here.
 class Document(models.Model):
     TYPE_CHOICES = [
-        ('constitution', 'Constitution'),
-        ('traités internationaux', 'Traités Internationaux'),
-        ('convention', 'Convention'),
-        ('lois organiques', 'Lois Organiques'),
-        ('lois ordinaires', 'Lois Ordinaires'),
-        ('ordonnances', 'Ordonnances'),
-        ('decrets', 'Décrets'),
-        ('arretes interministeriels', 'Arrêtés Interministériels'),
-        ('arretes', 'Arrêtés'),
-        ('circilaire', 'Circulaire'),
-        ('notes', 'Notes'),
+        ('Constitution', 'Constitution'),
+        ('Traités internationaux', 'Traités Internationaux'),
+        ('Convention', 'Convention'),
+        ('Lois organiques', 'Lois Organiques'),
+        ('Lois ordinaires', 'Lois Ordinaires'),
+        ('Ordonnances', 'Ordonnances'),
+        ('Décrets', 'Décrets'),
+        ('Arrêtés interministeriels', 'Arrêtés Interministériels'),
+        ('Arrêtés', 'Arrêtés'),
+        ('Circilaire', 'Circulaire'),
+        ('Notes', 'Notes'),
     ]
 
     CONSEIL_CHOICES = [
-        ('aucun', 'Aucun'),
+        ('Autre', 'Autre'),
         ('ministre', 'Ministre'),
         ('gouvernement', 'Gouvernement'),
     ]
 
     STATUS_CHOICES = [
-        ('en_vigueur', 'En vigueur'),
-        ('abroge', 'Abrogé'),
+        ('En vigueur', 'En vigueur'),
+        ('Abrogé', 'Abrogé'),
     ]
 
     type = models.CharField(max_length=50, choices=TYPE_CHOICES)
     objet = models.TextField()
     numero = models.TextField()
     date = models.DateField()
-    conseil = models.CharField(max_length=50, choices=CONSEIL_CHOICES, default='aucun')
+    conseil = models.CharField(max_length=50, choices=CONSEIL_CHOICES, default='Autre')
     domaine = models.ForeignKey('Domaine', on_delete=models.CASCADE, null=True,blank=True)
     fichier = models.FileField(upload_to='documents/')
     pdf_file = models.FileField(upload_to='pdf_documents/', null=True, blank=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='en_vigueur')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='En vigueur')
     last_modified_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -62,7 +64,20 @@ class Document(models.Model):
     date_journal = models.DateField(null=True, blank=True)
     numero_journal = models.CharField(max_length=20, null=True, blank=True)
     page_journal = models.CharField(max_length=20, null=True, blank=True)
+    visits = models.PositiveIntegerField(default=0,verbose_name='nombre de visite')
+    telechargements = models.PositiveIntegerField(default=0)
 
+    # def increment_visits(self):
+    #     self.visits += 1
+    #     self.save()
+    # def increment_telechargements(self):
+    #     self.telechargements += 1
+    #     self.save()
+    def increment_visits(self):
+        Document.objects.filter(id=self.id).update(visits=models.F('visits') + 1)
+
+    def increment_telechargements(self):
+        Document.objects.filter(id=self.id).update(telechargements=models.F('telechargements') + 1)
     def update_modification(self, user, details):
         """Mise à jour des informations de modification."""
         self.last_modified_by = user
@@ -70,7 +85,41 @@ class Document(models.Model):
         self.modification_details = details
         self.save()
 
+    def save(self, *args, **kwargs):
+        # Vérifier si l'objet est en cours de création (pas de modification)
+        if not self.pk:  # self.pk est None lors de la création
+            if self.fichier:
+                try:
+                    print(f"Nom du fichier : {self.fichier.name}")  # Log pour vérifier le nom du fichier
+                    print(f"Taille du fichier : {self.fichier.size}")  # Log pour vérifier la taille du fichier
 
+                    # Calculer le hash du fichier
+                    file_content = self.fichier.read()
+                    file_hash = hashlib.sha256(file_content).hexdigest()
+                    print(f"Hash calculé : {file_hash}")  # Log pour vérifier le hash
+
+                    # Vérifier si un fichier avec le même hash existe déjà
+                    for existing_doc in Document.objects.all():
+                        try:
+                            existing_file_content = existing_doc.fichier.read()
+                            existing_file_hash = hashlib.sha256(existing_file_content).hexdigest()
+                            print(f"Hash du fichier existant ({existing_doc.fichier.name}) : {existing_file_hash}")  # Log pour vérifier les hashs existants
+                            if file_hash == existing_file_hash:
+                                raise ValidationError("Un fichier identique existe déjà.")
+                            existing_doc.fichier.seek(0)  # Réinitialiser le fichier après la lecture
+                        except FileNotFoundError:
+                            print(f"Fichier manquant : {existing_doc.fichier.name}")  # Log pour les fichiers manquants
+                            continue  # Ignorer les fichiers manquants
+
+                    # Réinitialiser le fichier après la lecture
+                    self.fichier.seek(0)
+
+                except Exception as e:
+                    print(f"Erreur lors de la vérification du fichier : {str(e)}")  # Log pour les erreurs
+                    raise ValidationError(f"Erreur lors de la vérification du fichier : {str(e)}")
+
+        # Appeler la méthode save() de la classe parente
+        super().save(*args, **kwargs)
     def __str__(self):
         return f"{self.type} - {self.numero}"
     
@@ -121,11 +170,18 @@ class Document(models.Model):
         return "Unsupported file type."
     class Meta:
         indexes = [
-            models.Index(fields=['objet']),
-            models.Index(fields=['numero']),
+            models.Index(fields=['objet'],name='objet_idx'),
+            models.Index(fields=['numero'],name='numero_idx'),
         ]
 
+class DocumentStats(models.Model):
+    date = models.DateField(default=now)  # Date de l'ajout
+    daily_count = models.IntegerField(default=0)  # Nombre d'ajouts par jour
+    monthly_count = models.IntegerField(default=0)  # Nombre d'ajouts par mois
+    yearly_count = models.IntegerField(default=0)  # Nombre d'ajouts par année
 
+    class Meta:
+        verbose_name_plural = "Document Statistics"
 class Actualite(models.Model):
     CONSEIL_CHOICES = [
         ('CONSEIL DES MINISTRES', 'Ministre'),

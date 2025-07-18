@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getCsrfToken } from "./Utils";
 import axiosInstance from "./AxiosConfig";
 
 const EditDocument = () => {
-    const { id: documentId } = useParams();
-    const navigate = useNavigate();
+  const { id: documentId } = useParams();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     type: "",
     objet: "",
@@ -34,13 +34,13 @@ const EditDocument = () => {
   // Récupérer les données actuelles du document
   useEffect(() => {
     if (documentId) {
-        axios
-          .get(`http://localhost:8000/api/documents/${documentId}/`)
-          .then((response) => setFormData(response.data))
-          .catch((error) =>
-            console.error("Erreur lors de la récupération du document :", error)
-          );
-      }
+      axios
+        .get(`http://localhost:8000/api/documents/${documentId}/`)
+        .then((response) => setFormData(response.data))
+        .catch((error) =>
+          console.error("Erreur lors de la récupération du document :", error)
+        );
+    }
   }, [documentId]);
 
   // Gérer les changements dans les champs du formulaire
@@ -63,16 +63,16 @@ const EditDocument = () => {
   // Soumettre le formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const user = JSON.parse(localStorage.getItem("user"));
     const token = user?.access;
     if (!token) {
       toast.error("Vous n'êtes pas connecté. Veuillez vous connecter.");
       return;
     }
-  
+
     const formDataToSend = new FormData();
-  
+
     // Ajoutez les champs
     formDataToSend.append("type", formData.type);
     formDataToSend.append("objet", formData.objet);
@@ -81,7 +81,7 @@ const EditDocument = () => {
     formDataToSend.append("conseil", formData.conseil);
     formDataToSend.append("domaine", formData.domaine);
     formDataToSend.append("status", formData.status);
-  
+
     // Ajoutez le fichier
     if (formData.fichier) {
       formDataToSend.append("fichier", formData.fichier);
@@ -90,12 +90,12 @@ const EditDocument = () => {
       toast.error("Aucun fichier sélectionné.");
       return;
     }
-  
+
     // Debug : Affichez le contenu de FormData
     for (let pair of formDataToSend.entries()) {
       console.log(`${pair[0]}:`, pair[1]);
     }
-  
+
     try {
       const response = await axiosInstance.patch(
         `/api/documents/${documentId}/`,
@@ -112,15 +112,14 @@ const EditDocument = () => {
     } catch (error) {
       console.error("Détails de l'erreur :", error.response?.data || error.message);
       toast.error(
-        `Erreur : ${
-          error.response?.data?.pdf_file?.[0] || "Un problème est survenu."
+        `Erreur : ${error.response?.data?.pdf_file?.[0] || "Un problème est survenu."
         }`
       );
     }
   };
-  
-  
-  
+
+
+
 
   return (
     <div className="w-full max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6 mt-40">
@@ -143,13 +142,17 @@ const EditDocument = () => {
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Choisissez un type</option>
-            <option value="constitution">Constitution</option>
-            <option value="traités internationaux">Traité Internationaux</option>
-            <option value="convention">Convention</option>
-            <option value="lois organiques">Lois Organiques</option>
-            <option value="lois ordinaires">Lois Ordinaires</option>
-            <option value="ordonnances">Ordonnances</option>
-            <option value="decrets">Décrets</option>
+            <option value="Constitution">Constitution</option>
+            <option value="Traités internationaux">Traités Internationaux</option>
+            <option value="Convention">Convention</option>
+            <option value="Lois organiques">Lois Organiques</option>
+            <option value="Lois ordinaires">Lois Ordinaires</option>
+            <option value="Ordonnances">Ordonnance</option>
+            <option value="Décrets">Décrets</option>
+            <option value="Arrêtés interministeriels">Arrêtés Interministériels</option>
+            <option value="Arrêtés">Arrêtés</option>
+            <option value="Circilaire">Circulaire</option>
+            <option value="Notes">Notes</option>
           </select>
         </div>
 
@@ -203,7 +206,7 @@ const EditDocument = () => {
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           >
-            <option value="aucun">Aucun</option>
+            <option value="Autre">Autre</option>
             <option value="ministre">Ministre</option>
             <option value="gouvernement">Gouvernement</option>
           </select>
@@ -237,14 +240,14 @@ const EditDocument = () => {
             required
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           >
-            <option value="en_vigueur">En vigueur</option>
-            <option value="abroge">Abrogé</option>
+            <option value="En vigueur">En vigueur</option>
+            <option value="Abrogé">Abrogé</option>
           </select>
         </div>
 
         {/* Fichier */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">Fichier</label> 
+          <label className="block text-gray-700 font-medium mb-2">Fichier</label>
           <input
             type="file"
             name="fichier"
